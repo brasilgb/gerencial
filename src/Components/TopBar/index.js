@@ -1,20 +1,40 @@
 import React, { Fragment, useRef, useState } from 'react';
 import { IconContext } from 'react-icons';
 import { IoLogOutOutline, IoPersonCircleSharp, IoPersonOutline } from "react-icons/io5";
+import { Link, useLocation } from 'react-router-dom';
 import useOnClickOutside from '../ClickOutside';
 const TopBar = ({ logout, user }) => {
+    const location = useLocation();
+    const { pathname } = location;
+    const splitLocation = pathname.split('/')[pathname.split('/').length - 1];
 
     const ref = useRef();
     const [openMenu, setOpenMenu] = useState(false);
     useOnClickOutside(ref, () => setOpenMenu(false));
+
     return (
         <Fragment>
             <div className="bg-solar-blue-200 border-b-2 border-white shadow">
                 <div className="flex items-center justify-between">
-                    <div className="px-2 py-1">
+                    <div className="px-2 py-1 w-40">
                         <img className="w-32" src="/images/logo-solar.png" alt="Logo" />
                     </div>
-                    <div className="px-2">
+                    <div className="w-full pl-10">
+
+                        <Link
+                            className={`${splitLocation === "" ? "bg-white text-gray-600" : "text-gray-100"} uppercase text-sm font-medium px-2 py-5 mr-2`}
+                            to="/">
+                            <span>Análise de Vencidos</span>
+                        </Link>
+
+                        <Link
+                            className={`${splitLocation === "gerencial" ? "bg-white text-gray-600" : "text-gray-100"} uppercase text-sm font-medium px-2 py-5 mr-2 `}
+                            to="/gerencial">
+                            <span>Gerencial</span>
+                        </Link>
+
+                    </div>
+                    <div className="px-2 w-14">
                         <button
                             onClick={() => setOpenMenu(!openMenu)}
                             className="relative z-10 block bg-gray-50 rounded-full">
@@ -48,6 +68,7 @@ const TopBar = ({ logout, user }) => {
                         }
                     </div>
                 </div>
+
             </div>
         </Fragment>
 

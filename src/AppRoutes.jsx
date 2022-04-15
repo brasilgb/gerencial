@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { IconContext } from 'react-icons';
 import { FaSpinner } from 'react-icons/fa';
 import {
@@ -12,6 +12,7 @@ import Login from './Pages/Login';
 import Register from './Pages/Register';
 import Home from './Pages/Home';
 import { AuthProvider, AuthContext } from './contexts/auth';
+import Gerencial from './Pages/Gerencial';
 
 const AppRoutes = () => {
 
@@ -29,6 +30,7 @@ const AppRoutes = () => {
             </div>;
 
         }
+
         if (!authenticated) {
             return <Navigate to="/login" />;
         }
@@ -52,6 +54,7 @@ const AppRoutes = () => {
                             <Route exact path="/register" element={<LoggedIn><Register /></LoggedIn>} />
                             <Route exact path="/login" element={<LoggedIn><Login /></LoggedIn>} />
                             <Route exact path="/" element={<Private><Home /></Private>} />
+                            <Route exact path="/gerencial" element={<Private><Gerencial /></Private>} />
                         </Routes>
                     {/* </CSSTransition>
                 </TransitionGroup> */}
