@@ -30,7 +30,13 @@ const TopBar = ({ logout, user }) => {
                         <Link
                             className={`${splitLocation === "gerencial" ? "bg-white text-gray-600" : "text-gray-100"} uppercase text-sm font-medium px-2 py-5 mr-2 `}
                             to="/gerencial">
-                            <span>Gerencial</span>
+                            <span>Análise Gerencial</span>
+                        </Link>
+
+                        <Link
+                            className={`${splitLocation === "desempenho" ? "bg-white text-gray-600" : "text-gray-100"} uppercase text-sm font-medium px-2 py-5 mr-2 `}
+                            to="/desempenho">
+                            <span>Melhor desempenho</span>
                         </Link>
 
                     </div>

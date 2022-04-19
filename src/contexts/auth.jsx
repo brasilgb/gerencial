@@ -21,6 +21,12 @@ export const AuthProvider = ({ children }) => {
     const [numFilial, setNumFilial] = useState();
     const [redLogin, setRedLogin] = useState(false);
     const [allFiliais, setAllFiliais] = useState([]);
+
+    const [analiseFiliaisKpis, setAnaliseFiliaisKpis] = useState([]);
+    const [inadimplenciaKpis, setInadimplenciaKpis] = useState([]);
+    const [giroEstoqueKpis, setGiroEstoqueKpis] = useState([]);
+    const [conversaoKpis, setConversaoKpis] = useState([]);
+
     useEffect(() => {
         const recoveredUser = localStorage.getItem("user");
 
@@ -223,6 +229,69 @@ export const AuthProvider = ({ children }) => {
         getProjecoesTotal();
     }, [numFilial]);
 
+    // Gerencial analise de filiais
+    useEffect(() => {
+        async function getAnaliseFiliais() {
+            await api.get('analisefiliais')
+                .then((analisefiliais) => {
+                    const venc = analisefiliais.data.filter((analise) => (parseInt(analise.CodFilial) === parseInt(numFilial)));
+                    venc.sort((a, b) => parseInt(a.uid) > parseInt(b.uid) ? 1 : -1);
+                    setAnaliseFiliaisKpis(venc);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+        getAnaliseFiliais();
+    }, [numFilial]);
+
+
+    // Gerencial Inadimplencia
+    useEffect(() => {
+        async function getInadimplencia() {
+            await api.get('inadimplencia')
+                .then((inadimplencia) => {
+                    const inad = inadimplencia.data.filter((analise) => (parseInt(analise.CodFilial) === parseInt(numFilial)));
+                    inad.sort((a, b) => parseInt(a.uid) > parseInt(b.uid) ? 1 : -1);
+                    setInadimplenciaKpis(inad);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+        getInadimplencia();
+    }, [numFilial]);
+
+    // Gerencial Giro Estoque
+    useEffect(() => {
+        async function getGiroEstoque() {
+            await api.get('giroestoque')
+                .then((giro) => {
+                    const gir = giro.data.filter((g) => (parseInt(g.CodFilial) === parseInt(numFilial)));
+                    gir.sort((a, b) => parseInt(a.uid) > parseInt(b.uid) ? 1 : -1);
+                    setGiroEstoqueKpis(gir);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+        getGiroEstoque();
+    }, [numFilial]);
+
+    // Gerencial Melhor Conversão
+    useEffect(() => {
+        async function getConversao() {
+            await api.get('conversaofiliais')
+                .then((conversao) => {
+                    setConversaoKpis(conversao.data);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+        getConversao();
+    }, [numFilial]);
+
     return (
         <AuthContext.Provider value={{
             authenticated:
@@ -244,7 +313,11 @@ export const AuthProvider = ({ children }) => {
             graficoVencidos,
             totalGraficoVencidos,
             graficoProjecao,
-            totalGraficoProjecao
+            totalGraficoProjecao,
+            analiseFiliaisKpis,
+            inadimplenciaKpis,
+            giroEstoqueKpis,
+            conversaoKpis
         }}>
             {children}
         </AuthContext.Provider>

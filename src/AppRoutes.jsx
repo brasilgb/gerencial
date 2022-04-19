@@ -13,6 +13,7 @@ import Register from './Pages/Register';
 import Home from './Pages/Home';
 import { AuthProvider, AuthContext } from './contexts/auth';
 import Gerencial from './Pages/Gerencial';
+import Desempenho from './Pages/Desempenho';
 
 const AppRoutes = () => {
 
@@ -55,6 +56,7 @@ const AppRoutes = () => {
                             <Route exact path="/login" element={<LoggedIn><Login /></LoggedIn>} />
                             <Route exact path="/" element={<Private><Home /></Private>} />
                             <Route exact path="/gerencial" element={<Private><Gerencial /></Private>} />
+                            <Route exact path="/desempenho" element={<Private><Desempenho /></Private>} />
                         </Routes>
                     {/* </CSSTransition>
                 </TransitionGroup> */}

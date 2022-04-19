@@ -15,10 +15,6 @@ const Home = () => {
     const [currentFilial, setCurrentFilial] = useState(user.Filial);
     const [analiseRede, setAnaliseRede] = useState(false);
 
-    // const [analiseKpis, setAnaliseKpis] = useState(valuesKpis);
-    // const [analiseVencidos, setAnaliseVencidos] = useState(graficoVencidos);
-    // const [analiseProjecao, setAnaliseProjecao] = useState(graficoProjecao);
-
     useEffect(() => {
         filialuser(currentFilial);
     });
@@ -39,7 +35,7 @@ const Home = () => {
                         :
 
                         <div className="w-2/5 text-md text-gray-500 px-4 rounded text-shadow">
-                            Análise de Crédito para a filial:
+                            Análise para a filial:
 
                             {user.Type === "S" ?
                                 <select
