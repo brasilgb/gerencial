@@ -12,8 +12,11 @@ import Login from './Pages/Login';
 import Register from './Pages/Register';
 import Home from './Pages/Home';
 import { AuthProvider, AuthContext } from './contexts/auth';
-import Gerencial from './Pages/Gerencial';
-import Desempenho from './Pages/Desempenho';
+import Gerencial from './Pages/Analise/Filiais';
+import DesempenhoFiliais from './Pages/Desempenho/Filiais';
+import DesempenhoVendedores from './Pages/Desempenho/Vendedores';
+import AnaliseFiliais from './Pages/Analise/Filiais';
+import AnaliseVendedores from './Pages/Analise/Vendedores';
 
 const AppRoutes = () => {
 
@@ -49,17 +52,17 @@ const AppRoutes = () => {
     return (
         <Router>
             <AuthProvider>
-                {/* <TransitionGroup>
-                    <CSSTransition> */}
+                
                         <Routes>
                             <Route exact path="/register" element={<LoggedIn><Register /></LoggedIn>} />
                             <Route exact path="/login" element={<LoggedIn><Login /></LoggedIn>} />
                             <Route exact path="/" element={<Private><Home /></Private>} />
-                            <Route exact path="/gerencial" element={<Private><Gerencial /></Private>} />
-                            <Route exact path="/desempenho" element={<Private><Desempenho /></Private>} />
+                            <Route exact path="/analisefiliais" element={<Private><AnaliseFiliais /></Private>} />
+                            <Route exact path="/desempenhofiliais" element={<Private><DesempenhoFiliais /></Private>} />
+                            <Route exact path="/analisevendedores" element={<Private><AnaliseVendedores /></Private>} />
+                            <Route exact path="/desempenhovendedores" element={<Private><DesempenhoVendedores /></Private>} />
                         </Routes>
-                    {/* </CSSTransition>
-                </TransitionGroup> */}
+
             </AuthProvider>
         </Router>
     )

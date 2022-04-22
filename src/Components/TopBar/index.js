@@ -28,16 +28,28 @@ const TopBar = ({ logout, user }) => {
                         </Link>
 
                         <Link
-                            className={`${splitLocation === "gerencial" ? "bg-white text-gray-600" : "text-gray-100"} uppercase text-sm font-medium px-2 py-5 mr-2 `}
-                            to="/gerencial">
-                            <span>Análise Gerencial</span>
+                            className={`${splitLocation === "analisefiliais" ? "bg-white text-gray-600" : "text-gray-100"} uppercase text-sm font-medium px-2 py-5 mr-2 `}
+                            to="/analisefiliais">
+                            <span>Análise de Filiais</span>
                         </Link>
 
                         <Link
-                            className={`${splitLocation === "desempenho" ? "bg-white text-gray-600" : "text-gray-100"} uppercase text-sm font-medium px-2 py-5 mr-2 `}
-                            to="/desempenho">
-                            <span>Melhor desempenho</span>
+                            className={`${splitLocation === "desempenhofiliais" ? "bg-white text-gray-600" : "text-gray-100"} uppercase text-sm font-medium px-2 py-5 mr-2 `}
+                            to="/desempenhofiliais">
+                            <span>Desempenho de Filiais</span>
                         </Link>
+                        
+                        <Link
+                            className={`${splitLocation === "analisevendedores" ? "bg-white text-gray-600" : "text-gray-100"} uppercase text-sm font-medium px-2 py-5 mr-2 `}
+                            to="/analisevendedores">
+                            <span>Análise de Vendedores</span>
+                        </Link>
+
+                        {/* <Link
+                            className={`${splitLocation === "desempenhovendedores" ? "bg-white text-gray-600" : "text-gray-100"} uppercase text-sm font-medium px-2 py-5 mr-2 `}
+                            to="/desempenhovendedores">
+                            <span>Desempenho de Vendedores</span>
+                        </Link> */}
 
                     </div>
                     <div className="px-2 w-14">

@@ -4,8 +4,8 @@ import { IoClose, IoKey, IoKeypadSharp, IoPerson, IoStorefrontSharp, IoWarning }
 import { CgSpinner } from 'react-icons/cg';
 import { AuthContext } from '../../contexts/auth';
 import { useForm } from "react-hook-form";
-import BoxError from '../../Components/BoxError';
-import BoxLoginRegister from '../../Components/BoxLoginRegister';
+import BoxError from '../../Components/Boxes/BoxError';
+import BoxLoginRegister from '../../Components/Boxes/BoxLoginRegister';
 import { Link } from 'react-router-dom';
 import 'animate.css';
 

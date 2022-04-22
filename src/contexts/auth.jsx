@@ -26,7 +26,9 @@ export const AuthProvider = ({ children }) => {
     const [inadimplenciaKpis, setInadimplenciaKpis] = useState([]);
     const [giroEstoqueKpis, setGiroEstoqueKpis] = useState([]);
     const [conversaoKpis, setConversaoKpis] = useState([]);
-
+    const [analiseVendedoresKpis, setAnaliseVendedoresKpis] = useState([]);
+    const [conversaoVendedoresKpis, setConversaoVendedoresKpis] = useState([]);
+    
     useEffect(() => {
         const recoveredUser = localStorage.getItem("user");
 
@@ -93,6 +95,7 @@ export const AuthProvider = ({ children }) => {
 
                 if (usuario.data.sigIn.success) {
                     let udata = {
+                        IdUsuario: usuario.data.sigIn.user.idusuario,
                         Name: usuario.data.sigIn.user.name,
                         Filial: usuario.data.sigIn.user.filial,
                         Type: usuario.data.sigIn.user.type,
@@ -245,7 +248,6 @@ export const AuthProvider = ({ children }) => {
         getAnaliseFiliais();
     }, [numFilial]);
 
-
     // Gerencial Inadimplencia
     useEffect(() => {
         async function getInadimplencia() {
@@ -290,7 +292,40 @@ export const AuthProvider = ({ children }) => {
                 })
         }
         getConversao();
+    }, []);
+
+    // Gerencial analise de vendedores
+    useEffect(() => {
+        async function getAnaliseVendedores() {
+            await api.get('analisevendedores')
+                .then((analisevendedores) => {
+                    const vend = analisevendedores.data.filter((aven) => (parseInt(aven.Filial) === parseInt(numFilial)));
+                    vend.sort((a, b) => parseInt(a.ValorVenda) < parseInt(b.ValorVenda) ? 1 : -1);
+                    setAnaliseVendedoresKpis(vend);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+        getAnaliseVendedores();
     }, [numFilial]);
+    
+    // Gerencial Melhor Conversão de vendedores
+    useEffect(() => {
+        async function getConversaoVendedores() {
+            await api.get('conversaovendedores')
+                .then((cvendedores) => {
+                    const vend = cvendedores.data.filter((cven) => (parseInt(cven.CodigoFilial) === parseInt(numFilial)));
+                    vend.sort((a, b) => parseInt(a.ValorVenda) < parseInt(b.ValorVenda) ? 1 : -1);
+                    setConversaoVendedoresKpis(vend);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+        getConversaoVendedores();
+    }, [numFilial]);
+
 
     return (
         <AuthContext.Provider value={{
@@ -317,7 +352,9 @@ export const AuthProvider = ({ children }) => {
             analiseFiliaisKpis,
             inadimplenciaKpis,
             giroEstoqueKpis,
-            conversaoKpis
+            conversaoKpis,
+            analiseVendedoresKpis,
+            conversaoVendedoresKpis
         }}>
             {children}
         </AuthContext.Provider>

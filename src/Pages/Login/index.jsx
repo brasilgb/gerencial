@@ -4,10 +4,10 @@ import { IoClose, IoKey, IoKeypadSharp, IoWarning } from 'react-icons/io5';
 import { CgSpinner } from 'react-icons/cg';
 import { AuthContext } from '../../contexts/auth';
 import { useForm } from "react-hook-form";
-import BoxError from '../../Components/BoxError';
+import BoxError from '../../Components/Boxes/BoxError';
 import 'animate.css';
 import { Link } from 'react-router-dom';
-import BoxLoginRegister from '../../Components/BoxLoginRegister';
+import BoxLoginRegister from '../../Components/Boxes/BoxLoginRegister';
 
 const Login = () => {
 

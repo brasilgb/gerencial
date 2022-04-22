@@ -5,7 +5,7 @@ const Kpi = ({ title, value, valColor, titleColor, rotulo }) => {
     return (
         <Fragment>
 
-            <div className="flex flex-col items-center justify-center py-6 bg-white rounded-md shadow">
+            <div className="flex flex-col items-center justify-center py-8 bg-white rounded-md border-gray-300 border">
                 <div className="">
                     <h1 className={`${titleColor} font-normal text-lg pb-2`}>{title}</h1>
                 </div>
