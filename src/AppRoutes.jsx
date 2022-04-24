@@ -12,7 +12,6 @@ import Login from './Pages/Login';
 import Register from './Pages/Register';
 import Home from './Pages/Home';
 import { AuthProvider, AuthContext } from './contexts/auth';
-import Gerencial from './Pages/Analise/Filiais';
 import DesempenhoFiliais from './Pages/Desempenho/Filiais';
 import DesempenhoVendedores from './Pages/Desempenho/Vendedores';
 import AnaliseFiliais from './Pages/Analise/Filiais';

@@ -43,7 +43,7 @@ const AnaliseVendedores = () => {
                             </select>
                             :
                             <span className="mx-2 px-8 py-1 rounded text-white text-sm border border-rose-600 bg-rose-500">
-                                {analiseVendedoresKpis.map((value) => (value.Filial))}
+                                {conversaoVendedoresKpis.map((value) => (value.DescricaoFilial))}
                             </span>
                         }
 

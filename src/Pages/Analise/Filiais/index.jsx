@@ -58,23 +58,39 @@ const AnaliseFiliais = () => {
                     </div>
 
                 </div>
-
-                <BoxAnalise title="Faturamento e Projeção Mensal" textColor="text-gray-500" borderColor="border-gray-200">
-                    <div className="grid gap-2 grid-cols-6">
-                        {
-                            analiseFiliaisKpis.map((value, key) => (
-                                <Fragment key={key}>
-                                    <Kpi title="Valor Faturado" value={<FormatMoney value={value.Valor_Faturado} />} titleColor="text-gray-500" valColor="text-blue-600" />
-                                    <Kpi title="Valor Meta" value={<FormatMoney value={value.Valor_Meta} />} titleColor="text-gray-500" valColor="text-green-600" />
-                                    <Progress value={((value.Meta_Vendas) * 100).toFixed(2)} title="Meta" colorBar="#1a95fa" colorText="#4fb6fa" />
-                                    <Progress value={((value.Margem) * 100).toFixed(2)} title="Margem" colorBar="#e4a548" colorText="#f0c129" />
-                                    <Kpi title="Projeção Venda" value={<FormatMoney value={value.ValorProjecaoVenda} />} titleColor="text-gray-500" valColor="text-red-400" />
-                                    <Progress value={((value.PercentProjecaoVenda) * 100).toFixed(2)} title="Projeção" colorBar="#248f20" colorText="#5ab44e" />
-                                </Fragment>
-                            ))
-                        }
+                <div className="grid gap-2 grid-cols-3">
+                <div className="col-span-2">
+                        <BoxAnalise title="Faturamento" textColor="text-gray-500" borderColor="border-gray-200">
+                            <div className="grid gap-2 grid-cols-4">
+                                {
+                                    analiseFiliaisKpis.map((value, key) => (
+                                        <Fragment key={key}>
+                                            <Kpi title="Valor Faturado" value={<FormatMoney value={value.Valor_Faturado} />} titleColor="text-gray-500" valColor="text-blue-600" />
+                                            <Kpi title="Valor Meta" value={<FormatMoney value={value.Valor_Meta} />} titleColor="text-gray-500" valColor="text-green-600" />
+                                            <Progress value={((value.Meta_Vendas) * 100).toFixed(2)} title="Alcançada" colorBar="#1a95fa" colorText="#4fb6fa" />
+                                            <Progress value={((value.Margem) * 100).toFixed(2)} title="Margem" colorBar="#e4a548" colorText="#f0c129" />
+                                            </Fragment>
+                                    ))
+                                }
+                            </div>
+                        </BoxAnalise>
                     </div>
-                </BoxAnalise>
+                    <div>
+                        <BoxAnalise title="Projeção" textColor="text-gray-500" borderColor="border-gray-200">
+                            <div className="grid gap-2 grid-cols-2">
+                                {
+                                    analiseFiliaisKpis.map((value, key) => (
+                                        <Fragment key={key}>
+                                            <Kpi title="Projeção Venda" value={<FormatMoney value={value.ValorProjecaoVenda} />} titleColor="text-gray-500" valColor="text-red-400" />
+                                            <Progress value={((value.PercentProjecaoVenda) * 100).toFixed(2)} title="Alcançado" colorBar="#248f20" colorText="#5ab44e" />
+                                        </Fragment>
+                                    ))
+                                }
+                            </div>
+                        </BoxAnalise>
+                    </div>
+                    
+                </div>
 
                 <div className="grid gap-2 grid-cols-3">
                     <div className="col-span-2">

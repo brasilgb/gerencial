@@ -28,7 +28,9 @@ export const AuthProvider = ({ children }) => {
     const [conversaoKpis, setConversaoKpis] = useState([]);
     const [analiseVendedoresKpis, setAnaliseVendedoresKpis] = useState([]);
     const [conversaoVendedoresKpis, setConversaoVendedoresKpis] = useState([]);
-    
+
+    const [loadList, setLoadList] = useState(true);
+
     useEffect(() => {
         const recoveredUser = localStorage.getItem("user");
 
@@ -297,11 +299,13 @@ export const AuthProvider = ({ children }) => {
     // Gerencial analise de vendedores
     useEffect(() => {
         async function getAnaliseVendedores() {
+            setLoadList(true);
             await api.get('analisevendedores')
                 .then((analisevendedores) => {
                     const vend = analisevendedores.data.filter((aven) => (parseInt(aven.Filial) === parseInt(numFilial)));
                     vend.sort((a, b) => parseInt(a.ValorVenda) < parseInt(b.ValorVenda) ? 1 : -1);
                     setAnaliseVendedoresKpis(vend);
+                        setLoadList(false);
                 })
                 .catch(err => {
                     console.log(err);
@@ -309,15 +313,17 @@ export const AuthProvider = ({ children }) => {
         }
         getAnaliseVendedores();
     }, [numFilial]);
-    
+
     // Gerencial Melhor Conversão de vendedores
     useEffect(() => {
         async function getConversaoVendedores() {
+            setLoadList(true);
             await api.get('conversaovendedores')
                 .then((cvendedores) => {
                     const vend = cvendedores.data.filter((cven) => (parseInt(cven.CodigoFilial) === parseInt(numFilial)));
                     vend.sort((a, b) => parseInt(a.ValorVenda) < parseInt(b.ValorVenda) ? 1 : -1);
                     setConversaoVendedoresKpis(vend);
+                        setLoadList(false);
                 })
                 .catch(err => {
                     console.log(err);
@@ -354,7 +360,8 @@ export const AuthProvider = ({ children }) => {
             giroEstoqueKpis,
             conversaoKpis,
             analiseVendedoresKpis,
-            conversaoVendedoresKpis
+            conversaoVendedoresKpis,
+            loadList
         }}>
             {children}
         </AuthContext.Provider>

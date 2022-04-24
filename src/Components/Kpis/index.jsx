@@ -1,11 +1,11 @@
 
 import React, { Fragment } from 'react';
-const Kpi = ({ title, value, valColor, titleColor, rotulo }) => {
+const Kpi = ({ title, value, valColor, titleColor, rotulo, padding }) => {
 
     return (
         <Fragment>
 
-            <div className="flex flex-col items-center justify-center py-8 bg-white rounded-md border-gray-300 border">
+            <div className={`flex flex-col items-center justify-center bg-white rounded-md border-gray-300 border ${padding?padding:"py-8"}`}>
                 <div className="">
                     <h1 className={`${titleColor} font-normal text-lg pb-2`}>{title}</h1>
                 </div>
