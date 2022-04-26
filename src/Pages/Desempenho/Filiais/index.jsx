@@ -11,6 +11,18 @@ const DesempenhoFiliais = () => {
 
     const { user, logout, conversaoKpis } = useContext(AuthContext);
 
+    const colorBar = ((value) => {
+        if (value <= 90) return "#DC2626";
+        if (value <= 98) return "#FB923C";
+        if (value > 90) return "#10B981";
+    });
+
+    const colorKpi = ((value) => {
+        if (value <= 90) return "bg-red-600";
+        if (value <= 98) return "bg-orange-400";
+        if (value > 90) return "bg-emerald-500";
+    });
+
     return (
         <Fragment>
             <TopBar user={user} logout={logout} />
@@ -20,7 +32,7 @@ const DesempenhoFiliais = () => {
                         Melhor Desempenho da Rede
                     </div>
                     <div className="w-2/5 text-md text-gray-500 px-4 rounded text-shadow">
-                        
+
                     </div>
                     <div className="w-1/5">
 
@@ -39,10 +51,26 @@ const DesempenhoFiliais = () => {
                                 {
                                     conversaoKpis.map((value, key) => (
                                         <Fragment key={key}>
-
-                                            <Kpi title="Maior Faturamento" rotulo={value.RotuloFaturado} value={<FormatMoney value={value.MelhorFaturado} />} titleColor="text-gray-500" valColor="text-blue-500" />
-                                            <Kpi title="Valor Meta" rotulo="" value={<FormatMoney value={value.ValorMeta} />} titleColor="text-gray-500" valColor="text-blue-500" />
-                                            <Progress value={((value.MetaAlcancada) * 100).toFixed(2)} title="Alcançado" colorBar="#1a95fa" colorText="#4fb6fa" />
+                                            <Kpi
+                                                title="Maior Faturamento"
+                                                rotulo={value.RotuloFaturado}
+                                                value={<FormatMoney value={value.MelhorFaturado} />}
+                                                titleColor="text-gray-500"
+                                                valColor="text-blue-500"
+                                            />
+                                            <Kpi
+                                                title="Valor Meta"
+                                                rotulo=""
+                                                value={<FormatMoney value={value.ValorMeta} />}
+                                                titleColor="text-gray-500"
+                                                valColor="text-blue-500"
+                                            />
+                                            <Progress
+                                                value={((value.MetaAlcancada) * 100).toFixed(2)}
+                                                title="Alcançado"
+                                                colorBar="#1a95fa"
+                                                colorText="#4fb6fa"
+                                            />
                                         </Fragment>
                                     ))
                                 }
@@ -128,20 +156,6 @@ const DesempenhoFiliais = () => {
 
                 <div className="grid gap-2 grid-cols-5">
                     <div className="col-span-2">
-                        <BoxAnalise title="Taxa de Juros" textColor="text-gray-500" borderColor="border-gray-200">
-                            <div className="grid gap-2 grid-cols-2">
-                                {
-                                    conversaoKpis.map((value, key) => (
-                                        <Fragment key={key}>
-                                            <Kpi title="Taxa de Juros" rotulo={value.RotuloTaxaJuros} value={`${((value.ValorTaxaJuros) * 100).toFixed(2).replace('.', ',')}%`} titleColor="text-gray-500" valColor="text-yellow-500" />
-                                            <Progress value={((value.MediaTaxaJuros) * 100).toFixed(2)} title="Média" colorBar="#e4a548" colorText="#f0c129" />
-                                        </Fragment>
-                                    ))
-                                }
-                            </div>
-                        </BoxAnalise>
-                    </div>
-                    <div className="col-span-2">
                         <BoxAnalise title="Projeção" textColor="text-gray-500" borderColor="border-gray-200">
                             <div className="grid gap-2 grid-cols-2">
                                 {
@@ -149,6 +163,20 @@ const DesempenhoFiliais = () => {
                                         <Fragment key={key}>
                                             <Kpi title="Melhor Projeção" rotulo={value.RotuloProjecao} value={`${((value.ValorProjecao) * 100).toFixed(2).replace('.', ',')}%`} titleColor="text-gray-500" valColor="text-green-600" />
                                             <Progress value={((value.MediaProjecao) * 100).toFixed(2)} title="Média" colorBar="#248f20" colorText="#5ab44e" />
+                                        </Fragment>
+                                    ))
+                                }
+                            </div>
+                        </BoxAnalise>
+                    </div>
+                    <div className="col-span-2">
+                        <BoxAnalise title="Taxa de Juros" textColor="text-gray-500" borderColor="border-gray-200">
+                            <div className="grid gap-2 grid-cols-2">
+                                {
+                                    conversaoKpis.map((value, key) => (
+                                        <Fragment key={key}>
+                                            <Kpi title="Taxa de Juros" rotulo={value.RotuloTaxaJuros} value={`${((value.ValorTaxaJuros) * 100).toFixed(2).replace('.', ',')}%`} titleColor="text-gray-500" valColor="text-yellow-500" />
+                                            <Progress value={((value.MediaTaxaJuros) * 100).toFixed(2)} title="Média" colorBar="#e4a548" colorText="#f0c129" />
                                         </Fragment>
                                     ))
                                 }

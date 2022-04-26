@@ -40,7 +40,6 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
     }, []);
 
-
     function filialuser(fil) {
         setNumFilial(fil);
     }
@@ -54,6 +53,7 @@ export const AuthProvider = ({ children }) => {
             setErrorMessage(false);
         }, time);
     }
+    
     function clearReload(reset, time) {
         setTimeout(() => {
             setErrorMessage(false);

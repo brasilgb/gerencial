@@ -16,12 +16,13 @@ import DesempenhoFiliais from './Pages/Desempenho/Filiais';
 import DesempenhoVendedores from './Pages/Desempenho/Vendedores';
 import AnaliseFiliais from './Pages/Analise/Filiais';
 import AnaliseVendedores from './Pages/Analise/Vendedores';
+import SessionTimeOut from './Components/SessionTimeOut';
 
 const AppRoutes = () => {
 
     const Private = ({ children }) => {
         const { authenticated, loading } = useContext(AuthContext);
-
+        
         if (loading) {
 
             return <div className="max-h-screen flex-grow flex items-center justify-center">

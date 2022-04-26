@@ -3,7 +3,10 @@ import { IconContext } from 'react-icons';
 import { IoLogOutOutline, IoPersonCircleSharp, IoPersonOutline } from "react-icons/io5";
 import { Link, useLocation } from 'react-router-dom';
 import useOnClickOutside from '../ClickOutside';
+import SessionTimeOut from '../SessionTimeOut';
+
 const TopBar = ({ logout, user }) => {
+
     const location = useLocation();
     const { pathname } = location;
     const splitLocation = pathname.split('/')[pathname.split('/').length - 1];
@@ -14,6 +17,7 @@ const TopBar = ({ logout, user }) => {
 
     return (
         <Fragment>
+            {/* <SessionTimeOut /> */}
             <div className="bg-solar-blue-200 border-b-2 border-white shadow">
                 <div className="flex items-center justify-between">
                     <div className="px-2 py-1 w-40">
@@ -38,13 +42,12 @@ const TopBar = ({ logout, user }) => {
                             to="/desempenhofiliais">
                             <span>Desempenho de Filiais</span>
                         </Link>
-                        
+
                         <Link
                             className={`${splitLocation === "analisevendedores" ? "bg-white text-gray-600" : "text-gray-100"} uppercase text-sm font-medium px-2 py-5 mr-2 `}
                             to="/analisevendedores">
                             <span>Análise de Vendedores</span>
                         </Link>
-
                         {/* <Link
                             className={`${splitLocation === "desempenhovendedores" ? "bg-white text-gray-600" : "text-gray-100"} uppercase text-sm font-medium px-2 py-5 mr-2 `}
                             to="/desempenhovendedores">
