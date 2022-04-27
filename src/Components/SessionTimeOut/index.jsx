@@ -30,7 +30,7 @@ const SessionTimeOut = () => {
             const diff = moment.duration(moment().diff(moment(timeString)));
             const minPast = diff.minutes();
             const leftSecond = 60 - diff.seconds();
-                console.log(minPast + ' - ' + maxTime);
+
             if (minPast === popTime) {
                 setSecond(leftSecond);
             }

@@ -10,6 +10,7 @@ export const AuthProvider = ({ children }) => {
 
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
+    const [userAccess, setUserAccess] = useState([]);
     const [valuesKpis, setValuesKpis] = useState([]);
     const [totalValuesKpis, setTotalValuesKpis] = useState([]);
     const [graficoVencidos, setGraficoVencidos] = useState([]);
@@ -53,7 +54,7 @@ export const AuthProvider = ({ children }) => {
             setErrorMessage(false);
         }, time);
     }
-    
+
     function clearReload(reset, time) {
         setTimeout(() => {
             setErrorMessage(false);
@@ -139,6 +140,20 @@ export const AuthProvider = ({ children }) => {
                 })
         }
         getAllFiliais();
+    }, []);
+
+    useEffect(() => {
+        async function getUserAccess() {
+            await api.get('listusersaccess')
+                .then((access) => {
+                    const ac = access.data.sort((a, b) => a.usuario.created_at > b.usuario.created_at ? 1 : -1);
+                    setUserAccess(ac);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+        getUserAccess();
     }, []);
 
     // Kpis por filial
@@ -305,7 +320,7 @@ export const AuthProvider = ({ children }) => {
                     const vend = analisevendedores.data.filter((aven) => (parseInt(aven.Filial) === parseInt(numFilial)));
                     vend.sort((a, b) => parseInt(a.ValorVenda) < parseInt(b.ValorVenda) ? 1 : -1);
                     setAnaliseVendedoresKpis(vend);
-                        setLoadList(false);
+                    setLoadList(false);
                 })
                 .catch(err => {
                     console.log(err);
@@ -323,7 +338,7 @@ export const AuthProvider = ({ children }) => {
                     const vend = cvendedores.data.filter((cven) => (parseInt(cven.CodigoFilial) === parseInt(numFilial)));
                     vend.sort((a, b) => parseInt(a.ValorVenda) < parseInt(b.ValorVenda) ? 1 : -1);
                     setConversaoVendedoresKpis(vend);
-                        setLoadList(false);
+                    setLoadList(false);
                 })
                 .catch(err => {
                     console.log(err);
@@ -338,6 +353,7 @@ export const AuthProvider = ({ children }) => {
             authenticated:
                 !!user,
             user,
+            userAccess,
             loading,
             setErrorMessage,
             filialuser,

@@ -17,10 +17,17 @@ const AnaliseVendedores = () => {
         filialuser(currentFilial);
     });
 
+    const colorKpi = ((value) => {
+        if (value <= 90) return "bg-red-600";
+        if (value <= 98) return "bg-orange-400";
+        if (value > 90) return "bg-emerald-500";
+    });
+
     return (
         <Fragment>
             <TopBar user={user} logout={logout} />
             <div className="flex flex-col flex-grow px-2">
+
                 <div className="flex items-center justify-between my-2">
                     <div className=" w-1/5 text-md text-gray-50 bg-solar-blue-200 px-4 py-1 rounded text-shadow text-md">
                         Análise Gerencial
@@ -57,14 +64,33 @@ const AnaliseVendedores = () => {
                     </div>
 
                 </div>
+                
                 <BoxAnalise title="Desempenho" textColor="text-gray-500" borderColor="border-gray-200">
+                    
                     <div className="grid gap-2 grid-cols-3 mb-2">
                         {
                             conversaoVendedoresKpis.map((value, key) => (
                                 <Fragment key={key}>
-                                    <Kpi title="Melhor Conversão" rotulo={value.RotuloMelhorVenda} value={`${((value.ValorMelhorVenda) * 100).toFixed(2)}%`} titleColor="text-gray-500" valColor="text-blue-500" />
-                                    <Kpi title="Melhor GE" rotulo={value.ValorMelhorGE > 0 ? value.RotuloMelhorGE : '-'} value={`${((value.ValorMelhorGE) * 100).toFixed(2)}%`} titleColor="text-gray-500" valColor="text-blue-500" />
-                                    <Kpi title="Melhor PP" rotulo={value.ValorMelhorPP > 0 ? value.RotuloMelhorPP : '-'} value={`${((value.ValorMelhorPP) * 100).toFixed(2)}%`} titleColor="text-gray-500" valColor="text-blue-500" />
+                                    <Kpi 
+                                    title="Melhor Conversão" 
+                                    rotulo={value.RotuloMelhorVenda} value={`${((value.ValorMelhorVenda) * 100).toFixed(2)}%`} 
+                                    titleColor="text-gray-500" 
+                                    valColor="text-green-500" 
+                                    />
+                                     <Kpi 
+                                    title="Melhor Taxa Juros" 
+                                    rotulo={value.ValorMelhorJuro > 0 ? value.RotuloMelhorJuro : '-'} 
+                                    value={`${((value.ValorMelhorJuro) * 100).toFixed(2)}%`} 
+                                    titleColor="text-gray-500" 
+                                    valColor="text-green-500" 
+                                    />
+                                    <Kpi 
+                                    title="Melhor PP" 
+                                    rotulo={value.ValorMelhorPP > 0 ? value.RotuloMelhorPP : '-'} 
+                                    value={`${((value.ValorMelhorPP) * 100).toFixed(2)}%`} 
+                                    titleColor="text-gray-500" 
+                                    valColor="text-green-500" 
+                                    />
                                 </Fragment>
                             ))
                         }
@@ -75,21 +101,69 @@ const AnaliseVendedores = () => {
                     analiseVendedoresKpis.map((value, key) => (
                         <Fragment key={key}>
                             <BoxAnalise title={value.NomeVendedor} textColor="text-gray-500" borderColor="border-gray-200">
-                                <div className="grid gap-2 grid-cols-11">
-                                    <KpiList title="Valor Faturado" value={<FormatMoney value={value.ValorVenda} />} titleColor="text-gray-500" valColor="text-gray-50" bgColor="bg-blue-500" />
-                                    <KpiList title="Valor Meta" value={<FormatMoney value={value.MetaVenda} />} titleColor="text-gray-500" valColor="text-gray-50" bgColor="bg-blue-500" />
-                                    <KpiList title="Meta" value={`${((value.PercentualVenda) * 100).toFixed(2)}%`} titleColor="text-gray-500" valColor="text-gray-50" bgColor="bg-blue-500" />
-
+                                <div className="grid gap-2 grid-cols-8">
+                                    <KpiList
+                                        title="Valor Faturado"
+                                        value={<FormatMoney value={value.ValorVenda} />}
+                                        titleColor="text-gray-500"
+                                        valColor="text-gray-50"
+                                        bgColor={colorKpi(((value.PercentualVenda) * 100).toFixed())}
+                                    />
+                                    <KpiList
+                                        title="Valor Meta"
+                                        value={<FormatMoney value={value.MetaVenda} />}
+                                        titleColor="text-gray-500"
+                                        valColor="text-gray-50"
+                                        bgColor="bg-blue-500"
+                                    />
+                                    <KpiList
+                                        title="Meta"
+                                        value={`${((value.PercentualVenda) * 100).toFixed(2)}%`}
+                                        titleColor="text-gray-500"
+                                        valColor="text-gray-50"
+                                        bgColor={colorKpi(((value.PercentualVenda) * 100).toFixed())}
+                                    />
+                                    {/* 
                                     <KpiList title="Valor GE" value={value.ValorGE} titleColor="text-gray-500" valColor="text-gray-50" bgColor="bg-orange-400" />
                                     <KpiList title="Meta GE" value={value.MetaGE} titleColor="text-gray-500" valColor="text-gray-50" bgColor="bg-orange-400" />
-                                    <KpiList title="Rep. GE" value={`${((value.PercentualGE) * 100).toFixed(2)}%`} titleColor="text-gray-500" valColor="text-gray-50" bgColor="bg-orange-400" />
+                                    <KpiList title="Rep. GE" value={`${((value.PercentualGE) * 100).toFixed(2)}%`} titleColor="text-gray-500" valColor="text-gray-50" bgColor="bg-orange-400" /> */}
 
-                                    <KpiList title="Valor PP" value={value.ValorPP} titleColor="text-gray-500" valColor="text-gray-50" bgColor="bg-emerald-500" />
-                                    <KpiList title="Meta PP" value={value.MetaPP} titleColor="text-gray-500" valColor="text-gray-50" bgColor="bg-emerald-500" />
-                                    <KpiList title="Rep. PP" value={`${((value.PercentualPP) * 100).toFixed(2)}%`} titleColor="text-gray-500" valColor="text-gray-50" bgColor="bg-emerald-500" />
+                                    <KpiList
+                                        title="Valor PP"
+                                        value={value.ValorPP}
+                                        titleColor="text-gray-500"
+                                        valColor="text-gray-50"
+                                        bgColor={colorKpi(((value.PercentualPP) * 100).toFixed())}
+                                    />
+                                    <KpiList
+                                        title="Meta PP"
+                                        value={value.MetaPP}
+                                        titleColor="text-gray-500"
+                                        valColor="text-gray-50"
+                                        bgColor="bg-blue-500"
+                                    />
+                                    <KpiList
+                                        title="Rep. PP"
+                                        value={`${((value.PercentualPP) * 100).toFixed(2)}%`}
+                                        titleColor="text-gray-500"
+                                        valColor="text-gray-50"
+                                        bgColor={colorKpi(((value.PercentualPP) * 100).toFixed())}
+                                    />
 
-                                    <KpiList title="Juros Vendidos" value={<FormatMoney value={value.ValorJurosVendidos} />} titleColor="text-gray-500" valColor="text-gray-50" bgColor="bg-red-600" />
-                                    <KpiList title="Rep. Juros" value={`${((value.PercentJurosVendidos) * 100).toFixed(2)}%`} titleColor="text-gray-500" valColor="text-gray-50" bgColor="bg-red-600" />
+                                    <KpiList
+                                        title="Juros Vendidos"
+                                        value={<FormatMoney value={value.ValorJurosVendidos} />}
+                                        titleColor="text-gray-500"
+                                        valColor="text-gray-50"
+                                        bgColor={colorKpi(((value.PercentJurosVendidos) * 100).toFixed())}
+                                    />
+                                    <KpiList
+                                        title="Rep. Juros"
+                                        value={`${((value.PercentJurosVendidos) * 100).toFixed(2)}%`}
+                                        titleColor="text-gray-500"
+                                        valColor="text-gray-50"
+                                        bgColor={colorKpi(((value.PercentJurosVendidos) * 100).toFixed())}
+                                    />
                                 </div>
                             </BoxAnalise>
                         </Fragment>

@@ -16,7 +16,7 @@ import DesempenhoFiliais from './Pages/Desempenho/Filiais';
 import DesempenhoVendedores from './Pages/Desempenho/Vendedores';
 import AnaliseFiliais from './Pages/Analise/Filiais';
 import AnaliseVendedores from './Pages/Analise/Vendedores';
-import SessionTimeOut from './Components/SessionTimeOut';
+import UserAccess from './Pages/UserAccess';
 
 const AppRoutes = () => {
 
@@ -61,6 +61,7 @@ const AppRoutes = () => {
                             <Route exact path="/desempenhofiliais" element={<Private><DesempenhoFiliais /></Private>} />
                             <Route exact path="/analisevendedores" element={<Private><AnaliseVendedores /></Private>} />
                             <Route exact path="/desempenhovendedores" element={<Private><DesempenhoVendedores /></Private>} />
+                            <Route exact path="/logacesso" element={<Private><UserAccess /></Private>} />
                         </Routes>
 
             </AuthProvider>

@@ -1,6 +1,6 @@
 import React, { Fragment, useRef, useState } from 'react';
 import { IconContext } from 'react-icons';
-import { IoLogOutOutline, IoPersonCircleSharp, IoPersonOutline } from "react-icons/io5";
+import { IoLogOutOutline, IoPersonCircleSharp, IoPersonOutline, IoTimeOutline } from "react-icons/io5";
 import { Link, useLocation } from 'react-router-dom';
 import useOnClickOutside from '../ClickOutside';
 import SessionTimeOut from '../SessionTimeOut';
@@ -17,7 +17,7 @@ const TopBar = ({ logout, user }) => {
 
     return (
         <Fragment>
-            {/* <SessionTimeOut /> */}
+            <SessionTimeOut />
             <div className="bg-solar-blue-200 border-b-2 border-white shadow">
                 <div className="flex items-center justify-between">
                     <div className="px-2 py-1 w-40">
@@ -48,12 +48,7 @@ const TopBar = ({ logout, user }) => {
                             to="/analisevendedores">
                             <span>Análise de Vendedores</span>
                         </Link>
-                        {/* <Link
-                            className={`${splitLocation === "desempenhovendedores" ? "bg-white text-gray-600" : "text-gray-100"} uppercase text-sm font-medium px-2 py-5 mr-2 `}
-                            to="/desempenhovendedores">
-                            <span>Desempenho de Vendedores</span>
-                        </Link> */}
-
+                       
                     </div>
                     <div className="px-2 w-14">
                         <button
@@ -67,7 +62,7 @@ const TopBar = ({ logout, user }) => {
                         </button>
                         {openMenu &&
                             <div ref={ref} className="absolute right-2 z-20 w-56 mt-2 overflow-hidden bg-white rounded-md shadow-xl dark:bg-gray-700">
-                                <span className="flex items-baseline px-4 py-2 text-gray-800 transition-colors duration-200 transform border-b dark:text-gray-200 dark:border-gray-500 hover:bg-gray-200 dark:hover:bg-gray-600">
+                                <span className="flex items-baseline px-4 py-2 text-gray-800 border-b">
                                     <IconContext.Provider value={{ className: "text-sm text-gray-500" }}>
                                         <div>
                                             <IoPersonOutline />
@@ -75,6 +70,14 @@ const TopBar = ({ logout, user }) => {
                                     </IconContext.Provider>
                                     <span className="text-md px-2 text-gray-500">{user.Name}</span>
                                 </span>
+                                <Link to="/logacesso" className="flex items-baseline px-4 py-2 text-gray-800 transition-colors duration-200 transform border-b dark:text-gray-200 dark:border-gray-500 hover:bg-gray-200 dark:hover:bg-gray-600">
+                                    <IconContext.Provider value={{ className: "text-sm text-gray-500" }}>
+                                        <div>
+                                            <IoTimeOutline />
+                                        </div>
+                                    </IconContext.Provider>
+                                    <span className="text-md px-2 text-gray-500">Log de Acesso</span>
+                                </Link>
                                 <button
                                     onClick={logout}
                                     className="w-full flex items-center px-4 py-2 text-gray-800 transition-colors duration-200 transform dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600">
