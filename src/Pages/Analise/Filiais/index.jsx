@@ -48,7 +48,7 @@ const AnaliseFiliais = () => {
                                 id="filiais"
                                 value={currentFilial}
                                 onChange={(e) => setCurrentFilial(e.target.value)}
-                                className="bg-white border mx-2 px-4 py-1 rounded-md text-sm"
+                                className="bg-white border mx-2 px-4 pt-2 py-1 rounded-md text-sm shadow"
                             >
                                 {allFiliais.map((value, key) => (
                                     <option key={key} value={value.CodFilial}>{value.Filial} - {value.CodFilial}</option>

@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from '../services/api';
+import moment from "moment";
 // import iscobol from '../services/login';
 // import axios from 'axios';
 
@@ -31,6 +32,20 @@ export const AuthProvider = ({ children }) => {
     const [conversaoVendedoresKpis, setConversaoVendedoresKpis] = useState([]);
 
     const [loadList, setLoadList] = useState(true);
+
+    const [dataFiltroIni, setDataFiltroIni] = useState(moment(new Date()).format('YYYY-MM-DD'));
+    const [dataFiltroFin, setDataFiltroFin] = useState(moment(new Date()).format('YYYY-MM-DD'));
+
+    function calendarDate(inicial, final) {
+
+        setDataFiltroIni(inicial);
+        setDataFiltroFin(final);
+        // setLoadingCalendar(true);
+    }
+
+    function dateFormat(date) {
+        return moment(date).format('YYYY-MM-DD');
+    }
 
     useEffect(() => {
         const recoveredUser = localStorage.getItem("user");
@@ -146,17 +161,16 @@ export const AuthProvider = ({ children }) => {
         async function getUserAccess() {
             await api.get('listusersaccess')
                 .then((access) => {
-                    const ac = access.data.sort((a, b) => a.usuario.created_at > b.usuario.created_at ? 1 : -1);
-                    setUserAccess(ac);
+                    const validUser = access.data.filter((fu) => (dateFormat(fu.created_at) >= dataFiltroIni & dateFormat(fu.created_at) <= dataFiltroFin || fu.Filial === numFilial));
+                    setUserAccess(validUser);
                 })
                 .catch(err => {
                     console.log(err);
                 })
         }
         getUserAccess();
-    }, []);
+    }, [dataFiltroIni, dataFiltroFin, numFilial]);
 
-    // Kpis por filial
     useEffect(() => {
         async function getKpis() {
             await api.get('analisekpis')
@@ -364,6 +378,7 @@ export const AuthProvider = ({ children }) => {
             logout,
             redLogin,
             setRedLogin,
+            calendarDate,
             allFiliais,
             valuesKpis,
             totalValuesKpis,

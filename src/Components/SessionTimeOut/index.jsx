@@ -38,8 +38,7 @@ const SessionTimeOut = () => {
             if (minPast === maxTime) {
                 clearInterval(warningInactiveInterval.current);
                 sessionStorage.removeItem('lastTimeStamp');
-                logout();
-                console.log('saiu');
+                // logout();
             }
         }, 1000);
     };
