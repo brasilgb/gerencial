@@ -8,7 +8,7 @@ const InputSearch = ({ refInput, disabled }) => {
         if (disabled) {
             setCleanText(refInput.current.value = "");
         }
-    });
+    },[disabled]);
 
     return (
         <Fragment>
