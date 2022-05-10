@@ -17,9 +17,10 @@ import DesempenhoVendedores from './Pages/Desempenho/Vendedores';
 import AnaliseFiliais from './Pages/Analise/Filiais';
 import AnaliseVendedores from './Pages/Analise/Vendedores';
 import UserAccess from './Pages/UserAccess';
+import GiroSubGrupo from './Pages/Giro';
 
 const AppRoutes = () => {
-
+  
     const Private = ({ children }) => {
         const { authenticated, loading } = useContext(AuthContext);
         
@@ -52,18 +53,17 @@ const AppRoutes = () => {
     return (
         <Router>
             <AuthProvider>
-                
                         <Routes>
-                            <Route exact path="/register" element={<LoggedIn><Register /></LoggedIn>} />
-                            <Route exact path="/login" element={<LoggedIn><Login /></LoggedIn>} />
-                            <Route exact path="/" element={<Private><Home /></Private>} />
-                            <Route exact path="/analisefiliais" element={<Private><AnaliseFiliais /></Private>} />
-                            <Route exact path="/desempenhofiliais" element={<Private><DesempenhoFiliais /></Private>} />
-                            <Route exact path="/analisevendedores" element={<Private><AnaliseVendedores /></Private>} />
-                            <Route exact path="/desempenhovendedores" element={<Private><DesempenhoVendedores /></Private>} />
-                            <Route exact path="/logacesso" element={<Private><UserAccess /></Private>} />
+                            <Route  path="/register" element={<LoggedIn><Register /></LoggedIn>} />
+                            <Route  path="/login" element={<LoggedIn><Login /></LoggedIn>} />
+                            <Route  path="/" element={<Private><Home /></Private>} />
+                            <Route  path="/analisefiliais" element={<Private><AnaliseFiliais /></Private>} />
+                            <Route  path="/desempenhofiliais" element={<Private><DesempenhoFiliais /></Private>} />
+                            <Route  path="/analisevendedores" element={<Private><AnaliseVendedores /></Private>} />
+                            <Route  path="/desempenhovendedores" element={<Private><DesempenhoVendedores /></Private>} />
+                            <Route  path="/giroestoque" element={<Private><GiroSubGrupo /></Private>} />
+                            <Route  path="/logacesso" element={<Private><UserAccess /></Private>} />
                         </Routes>
-
             </AuthProvider>
         </Router>
     )

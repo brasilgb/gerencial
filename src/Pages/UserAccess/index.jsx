@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useEffect, useRef, useState } from 'react'
+import React, { Fragment, useContext, useRef, useState } from 'react'
 import BoxAnalise from '../../Components/Boxes/BoxAnalise';
 import Footer from '../../Components/Footer'
 
@@ -7,35 +7,23 @@ import { AuthContext } from '../../contexts/auth';
 
 import DateTimePicker from 'react-datetime-picker';
 import 'react-datetime-picker/dist/DateTimePicker.css';
-import { Pagination } from '../../Components/Pagination';
+import { Pagination } from '../../Components/Pagination/Users';
 import moment from 'moment';
+
+import ButtonSearch from '../../Components/Forms/Buttons';
 
 const UserAccess = () => {
 
-    const { user, logout, conversaoKpis, userAccess, allFiliais, calendarDate, filialuser } = useContext(AuthContext);
+    const { user, logout, conversaoKpis, userAccess, allFiliais, dataSearch, loadButton } = useContext(AuthContext);
 
-    const [valueInicial, onChangeInicial] = useState(new Date());
-    const [valueFinal, onChangeFinal] = useState(new Date());
+    const [dateInicial, setDateInicial] = useState(new Date());
+    const [dateFinal, setDateFinal] = useState(new Date());
+    const refSearchFilial = useRef();
 
-    // const [currentFilial, setCurrentFilial] = useState('');
-    const refFilial = useRef();
-
-    // useEffect(() => {
-    //     filialuser(currentFilial);
-    // });
-
-    const filialName = ((numFilial) => {
-        const fil = allFiliais.filter((cven) => (parseInt(cven.CodFilial) === parseInt(numFilial)));
-        return fil[0].Filial;
-    });
-
-    useEffect(() => {
-        calendarDate(moment(valueInicial).format('YYYY-MM-DD'), moment(valueFinal).format('YYYY-MM-DD'));
-    }, [valueInicial, valueFinal])
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        alert('Um nome foi enviado: ' + refFilial.current.value);
+        dataSearch(moment(dateInicial).format('YYYY-MM-DD'), moment(dateFinal).format('YYYY-MM-DD'), refSearchFilial.current.value);
     }
 
     return (
@@ -56,8 +44,8 @@ const UserAccess = () => {
                                 </label>
 
                                 <DateTimePicker
-                                    onChange={onChangeInicial}
-                                    value={valueInicial}
+                                    onChange={setDateInicial}
+                                    value={dateInicial}
                                     disableClock={true}
                                     format="dd/MM/yyyy"
                                     className="w-56 mr-2 border border-gray-200 rounded text-sm"
@@ -67,8 +55,8 @@ const UserAccess = () => {
                                 />
 
                                 <DateTimePicker
-                                    onChange={onChangeFinal}
-                                    value={valueFinal}
+                                    onChange={setDateFinal}
+                                    value={dateFinal}
                                     disableClock={true}
                                     format="dd/MM/yyyy"
                                     className="w-56 mr-2 border border-gray-200 rounded text-sm"
@@ -79,23 +67,18 @@ const UserAccess = () => {
 
                                 <div>
                                     <select
-                                        name="filiais"
-                                        id="filiais"
-                                        // value={refFilial}
-                                        ref={refFilial}
-                                        className="w-56 bg-white border px-2 pt-2 py-2 rounded-md text-sm shadow"
+                                        ref={refSearchFilial}
+                                        className="w-56 bg-white border rounded-md text-sm shadow"
+                                        style={{padding: "8px"}}
+                                        value={user.Filial}
                                     >
-                                        <option value={false}>Selecione a Filial</option>
+                                        <option value="false">Selecione a Filial</option>
                                         {allFiliais.map((value, key) => (
                                             <option key={key} value={value.CodFilial}>{value.Filial} - {value.CodFilial}</option>
                                         ))}
                                     </select>
                                 </div>
-                                <button
-                                    className="mx-2 py-2 px-4 border border-gray-200 rounded text-sm shadow"
-                                >
-                                    Pesquisar
-                                </button>
+                                <ButtonSearch loadButton={loadButton} />
                             </div>
                         </form>
 

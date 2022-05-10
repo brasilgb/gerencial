@@ -1,21 +1,17 @@
-import React, { Fragment, useContext, useEffect, useState } from 'react';
+import React, { Fragment, useContext } from 'react';
 import BoxAnalise from '../../../Components/Boxes/BoxAnalise';
 import Footer from '../../../Components/Footer';
 import FormatMoney from '../../../Components/FormatMoney';
+import SSelect from '../../../Components/Forms/SSelect';
 import KpiList from '../../../Components/KpiList';
 import Kpi from '../../../Components/Kpis';
+import NoSelect from '../../../Components/NoSelect';
 import TopBar from '../../../Components/TopBar';
 import { AuthContext } from '../../../contexts/auth';
 
 const AnaliseVendedores = () => {
 
-    const { user, logout, analiseVendedoresKpis, conversaoVendedoresKpis, filialuser, allFiliais } = useContext(AuthContext);
-
-    const [currentFilial, setCurrentFilial] = useState(user.Filial);
-
-    useEffect(() => {
-        filialuser(currentFilial);
-    });
+    const { user, logout, analiseVendedoresKpis, conversaoVendedoresKpis } = useContext(AuthContext);
 
     const colorKpi = ((value) => {
         if (value <= 90) return "bg-red-600";
@@ -37,21 +33,11 @@ const AnaliseVendedores = () => {
                         Análise para a filial:
 
                         {user.Type === "S" ?
-                            <select
-                                name="filiais"
-                                id="filiais"
-                                value={currentFilial}
-                                onChange={(e) => setCurrentFilial(e.target.value)}
-                                className="bg-white border mx-2 px-4 pt-2 py-1 rounded-md text-sm shadow"
-                            >
-                                {allFiliais.map((value, key) => (
-                                    <option key={key} value={value.CodFilial}>{value.Filial} - {value.CodFilial}</option>
-                                ))}
-                            </select>
+                            <SSelect />
                             :
-                            <span className="mx-2 px-8 py-1 rounded text-white text-sm border border-rose-600 bg-rose-500">
+                            <NoSelect>
                                 {conversaoVendedoresKpis.map((value) => (value.DescricaoFilial))}
-                            </span>
+                            </NoSelect>
                         }
 
                     </div>
@@ -64,32 +50,32 @@ const AnaliseVendedores = () => {
                     </div>
 
                 </div>
-                
+
                 <BoxAnalise title="Desempenho" textColor="text-gray-500" borderColor="border-gray-200">
-                    
+
                     <div className="grid gap-2 grid-cols-3 mb-2">
                         {
                             conversaoVendedoresKpis.map((value, key) => (
                                 <Fragment key={key}>
-                                    <Kpi 
-                                    title="Melhor Conversão" 
-                                    rotulo={value.RotuloMelhorVenda} value={`${((value.ValorMelhorVenda) * 100).toFixed(2)}%`} 
-                                    titleColor="text-gray-500" 
-                                    valColor="text-green-500" 
+                                    <Kpi
+                                        title="Melhor Conversão"
+                                        rotulo={value.RotuloMelhorVenda} value={`${((value.ValorMelhorVenda > 0 ? value.ValorMelhorVenda : 0) * 100).toFixed(2)}%`}
+                                        titleColor="text-gray-500"
+                                        valColor="text-green-500"
                                     />
-                                     <Kpi 
-                                    title="Melhor Taxa Juros" 
-                                    rotulo={value.ValorMelhorJuro > 0 ? value.RotuloMelhorJuro : '-'} 
-                                    value={`${((value.ValorMelhorJuro) * 100).toFixed(2)}%`} 
-                                    titleColor="text-gray-500" 
-                                    valColor="text-green-500" 
+                                    <Kpi
+                                        title="Melhor Taxa Juros"
+                                        rotulo={value.ValorMelhorJuro > 0 ? value.RotuloMelhorJuro : '-'}
+                                        value={`${((value.ValorMelhorJuro > 0 ? value.ValorMelhorJuro : 0) * 100).toFixed(2)}%`}
+                                        titleColor="text-gray-500"
+                                        valColor="text-green-500"
                                     />
-                                    <Kpi 
-                                    title="Melhor PP" 
-                                    rotulo={value.ValorMelhorPP > 0 ? value.RotuloMelhorPP : '-'} 
-                                    value={`${((value.ValorMelhorPP) * 100).toFixed(2)}%`} 
-                                    titleColor="text-gray-500" 
-                                    valColor="text-green-500" 
+                                    <Kpi
+                                        title="Melhor PP"
+                                        rotulo={value.ValorMelhorPP > 0 ? value.RotuloMelhorPP : '-'}
+                                        value={`${((value.ValorMelhorPP > 0 ? value.ValorMelhorPP : 0) * 100).toFixed(2)}%`}
+                                        titleColor="text-gray-500"
+                                        valColor="text-green-500"
                                     />
                                 </Fragment>
                             ))

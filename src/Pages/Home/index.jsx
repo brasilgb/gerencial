@@ -7,17 +7,14 @@ import TopBar from '../../Components/TopBar';
 import Footer from '../../Components/Footer';
 import { IconContext } from 'react-icons';
 import { IoBarChart, IoStorefrontSharp } from 'react-icons/io5';
+import SSelect from '../../Components/Forms/SSelect';
+import NoSelect from '../../Components/NoSelect';
 
 const Home = () => {
 
-    const { user, logout, valuesKpis, graficoVencidos, graficoProjecao, totalValuesKpis, totalGraficoVencidos, totalGraficoProjecao, filialuser, allFiliais } = useContext(AuthContext);
+    const { user, logout, valuesKpis, graficoVencidos, graficoProjecao, totalValuesKpis, totalGraficoVencidos, totalGraficoProjecao } = useContext(AuthContext);
 
-    const [currentFilial, setCurrentFilial] = useState(user.Filial);
     const [analiseRede, setAnaliseRede] = useState(false);
-
-    useEffect(() => {
-        filialuser(currentFilial);
-    });
 
     return (
         <Fragment>
@@ -38,19 +35,22 @@ const Home = () => {
                             Análise para a filial:
 
                             {user.Type === "S" ?
-                                <select
-                                    name="filiais"
-                                    id="filiais"
-                                    value={currentFilial}
-                                    onChange={(e) => setCurrentFilial(e.target.value)}
-                                    className="bg-white border mx-2 px-4 py-1 rounded-md text-sm"
-                                >
-                                    {allFiliais.map((value, key) => (
-                                        <option key={key} value={value.CodFilial}>{value.Filial} - {value.CodFilial}</option>
-                                    ))}
-                                </select>
+                            <SSelect/>
+                                // <select
+                                //     name="filiais"
+                                //     id="filiais"
+                                //     value={currentFilial}
+                                //     onChange={(e) => setCurrentFilial(e.target.value)}
+                                //     className="bg-white border mx-2 px-4 py-1 rounded-md text-sm"
+                                // >
+                                //     {allFiliais.map((value, key) => (
+                                //         <option key={key} value={value.CodFilial}>{value.Filial} - {value.CodFilial}</option>
+                                //     ))}
+                                // </select>
                                 :
-                                <span className="mx-2 px-8 py-1 rounded text-white text-sm border border-rose-600 bg-rose-500">{(analiseRede ? totalValuesKpis : valuesKpis).map((value) => (value.Filial))}</span>
+                                <NoSelect>
+                                    {(analiseRede ? totalValuesKpis : valuesKpis).map((value) => (value.Filial))}
+                                </NoSelect>
                             }
 
                         </div>

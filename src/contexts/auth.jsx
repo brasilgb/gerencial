@@ -27,20 +27,30 @@ export const AuthProvider = ({ children }) => {
     const [analiseFiliaisKpis, setAnaliseFiliaisKpis] = useState([]);
     const [inadimplenciaKpis, setInadimplenciaKpis] = useState([]);
     const [giroEstoqueKpis, setGiroEstoqueKpis] = useState([]);
+    const [giroSubGrupo, setGiroSubGrupo] = useState([]);
     const [conversaoKpis, setConversaoKpis] = useState([]);
     const [analiseVendedoresKpis, setAnaliseVendedoresKpis] = useState([]);
     const [conversaoVendedoresKpis, setConversaoVendedoresKpis] = useState([]);
 
     const [loadList, setLoadList] = useState(true);
+    const [loadButton, setLoadButton] = useState(false)
 
     const [dataFiltroIni, setDataFiltroIni] = useState(moment(new Date()).format('YYYY-MM-DD'));
     const [dataFiltroFin, setDataFiltroFin] = useState(moment(new Date()).format('YYYY-MM-DD'));
+    const [searchFilial, setSearchFilial] = useState("false");
+    const [searchSubGrupo, setSearchSubGrupo] = useState("false");
+    const [searchGiro, setSearchGiro] = useState("false");
 
-    function calendarDate(inicial, final) {
-
+    function dataSearch(inicial, final, filial) {
         setDataFiltroIni(inicial);
         setDataFiltroFin(final);
-        // setLoadingCalendar(true);
+        setSearchFilial(filial);
+    }
+
+    function giroSearch(filial, subgrupo, giro) {
+        setSearchFilial(filial);
+        setSearchSubGrupo(subgrupo);
+        setSearchGiro(giro);
     }
 
     function dateFormat(date) {
@@ -49,9 +59,9 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const recoveredUser = localStorage.getItem("user");
-
         if (recoveredUser) {
             setUser(JSON.parse(recoveredUser));
+            setNumFilial(JSON.parse(recoveredUser).Filial);
         }
         setLoading(false);
     }, []);
@@ -104,7 +114,6 @@ export const AuthProvider = ({ children }) => {
                 console.log(err);
             });
     }
-
 
     async function login(code, password, reset) {
         setLoading(true);
@@ -159,17 +168,27 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         async function getUserAccess() {
+            setLoadButton(true);
             await api.get('listusersaccess')
                 .then((access) => {
-                    const validUser = access.data.filter((fu) => (dateFormat(fu.created_at) >= dataFiltroIni & dateFormat(fu.created_at) <= dataFiltroFin || fu.Filial === numFilial));
-                    setUserAccess(validUser);
+                    if (searchFilial === "false") {
+                        const userAccess = access.data.filter((fu) => (dateFormat(fu.created_at) >= dataFiltroIni & dateFormat(fu.created_at) <= dataFiltroFin));
+                        userAccess.sort((a, b) => parseInt(a.uid) < parseInt(b.uid) ? 1 : -1);
+                        setUserAccess(userAccess);
+                        setLoadButton(false);
+                    } else {
+                        const userAccess = access.data.filter((fu) => (dateFormat(fu.created_at) >= dataFiltroIni & dateFormat(fu.created_at) <= dataFiltroFin & fu.usuario.Filial === searchFilial));
+                        userAccess.sort((a, b) => parseInt(a.uid) < parseInt(b.uid) ? 1 : -1);
+                        setUserAccess(userAccess);
+                        setLoadButton(false);
+                    }
                 })
                 .catch(err => {
                     console.log(err);
                 })
         }
         getUserAccess();
-    }, [dataFiltroIni, dataFiltroFin, numFilial]);
+    }, [dataFiltroIni, dataFiltroFin, searchFilial]);
 
     useEffect(() => {
         async function getKpis() {
@@ -311,6 +330,64 @@ export const AuthProvider = ({ children }) => {
         getGiroEstoque();
     }, [numFilial]);
 
+    // Gerencial Giro Estoque
+    useEffect(() => {
+        async function getGiroSubGrupo() {
+            setLoadButton(true);
+            await api.get('girosubgrupo')
+
+                .then((girosub) => {
+
+                    if (searchFilial !== false & searchSubGrupo === '' & !searchGiro) {
+
+                        const girsub = girosub.data.filter((gs) => (
+                            parseInt(gs.CodFilial) === parseInt(searchFilial) &
+                            parseInt(gs.GiroFilial) !== 0 &
+                            parseInt(gs.GiroRede) !== 0
+                        )).sort((a, b) => parseInt(a.CodSubGrupo) > parseInt(b.CodSubGrupo) ? 1 : -1);
+                        setGiroSubGrupo(girsub);
+                        setLoadButton(false);
+
+                    } else if (searchFilial !== false & searchSubGrupo !== '' & !searchGiro) {
+
+                        const girsub = girosub.data.filter((gs) => (
+                            parseInt(gs.CodFilial) === parseInt(searchFilial) &
+                            (parseInt(gs.CodSubGrupo) === parseInt(searchSubGrupo) || (gs.SubGrupo.toUpperCase()).includes(searchSubGrupo.toUpperCase())) &
+                            parseInt(gs.GiroFilial) !== 0 &
+                            parseInt(gs.GiroRede) !== 0
+                        )).sort((a, b) => parseInt(a.CodSubGrupo) > parseInt(b.CodSubGrupo) ? 1 : -1);
+                        setGiroSubGrupo(girsub);
+                        setLoadButton(false);
+
+                    } else if (searchFilial !== false & searchGiro === true) {
+
+                        const girsub = girosub.data.filter((gs) => (
+                            parseInt(gs.CodFilial) === parseInt(searchFilial)
+                        )).sort((a, b) => parseInt(a.CodSubGrupo) > parseInt(b.CodSubGrupo) ? 1 : -1);
+                        setGiroSubGrupo(girsub);
+                        setLoadButton(false);
+
+                    } else {
+
+                        const girsub = girosub.data.filter((gs) => (
+                            parseInt(gs.CodFilial) === parseInt(numFilial) &
+                            parseInt(gs.GiroFilial) !== 0 &
+                            parseInt(gs.GiroRede) !== 0
+                        )).sort((a, b) => parseInt(a.CodSubGrupo) > parseInt(b.CodSubGrupo) ? 1 : -1);
+                        setGiroSubGrupo(girsub);
+                        setLoadButton(false);
+                    }
+
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+        getGiroSubGrupo();
+    }, [searchFilial, searchSubGrupo, searchGiro, numFilial]);
+    /**
+     * searchGiro === true
+     */
     // Gerencial Melhor Conversão
     useEffect(() => {
         async function getConversao() {
@@ -372,14 +449,17 @@ export const AuthProvider = ({ children }) => {
             setErrorMessage,
             filialuser,
             setNumFilial,
+            setSearchFilial,
             errorMessage,
             registerUser,
             login,
             logout,
             redLogin,
             setRedLogin,
-            calendarDate,
+            dataSearch,
+            giroSearch,
             allFiliais,
+            numFilial,
             valuesKpis,
             totalValuesKpis,
             graficoVencidos,
@@ -389,10 +469,12 @@ export const AuthProvider = ({ children }) => {
             analiseFiliaisKpis,
             inadimplenciaKpis,
             giroEstoqueKpis,
+            giroSubGrupo,
             conversaoKpis,
             analiseVendedoresKpis,
             conversaoVendedoresKpis,
-            loadList
+            loadList,
+            loadButton
         }}>
             {children}
         </AuthContext.Provider>

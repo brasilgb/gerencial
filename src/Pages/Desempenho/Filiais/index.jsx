@@ -57,7 +57,7 @@ const DesempenhoFiliais = () => {
                                                 rotulo={value.RotuloFaturado}
                                                 value={<FormatMoney value={value.MelhorFaturado} />}
                                                 titleColor="text-gray-500"
-                                                valColor={colorKpi(((value.MetaAlcancada) * 100).toFixed(2))}
+                                                valColor={colorKpi(((value.MetaAlcancada>0?value.MetaAlcancada:0) * 100).toFixed(2))}
                                             />
                                             <Kpi
                                                 title="Valor Meta"
@@ -67,10 +67,10 @@ const DesempenhoFiliais = () => {
                                                 valColor="text-blue-500"
                                             />
                                             <Progress
-                                                value={((value.MetaAlcancada) * 100).toFixed(2)}
+                                                value={((value.MetaAlcancada>0?value.MetaAlcancada:0) * 100).toFixed(2)}
                                                 title="Alcançado"
-                                                colorBar={colorBar(((value.MetaAlcancada) * 100).toFixed(2))}
-                                                colorText={colorBar(((value.MetaAlcancada) * 100).toFixed(2))}
+                                                colorBar={colorBar(((value.MetaAlcancada>0?value.MetaAlcancada:0) * 100).toFixed(2))}
+                                                colorText={colorBar(((value.MetaAlcancada>0?value.MetaAlcancada:0) * 100).toFixed(2))}
                                             />
                                         </Fragment>
                                     ))
@@ -87,12 +87,12 @@ const DesempenhoFiliais = () => {
                                             <Kpi
                                                 title="Melhor PP"
                                                 rotulo={value.RotuloMelhorPP}
-                                                value={`${((value.ValorMelhorPP) * 100).toFixed(2).replace('.', ',')}%`}
+                                                value={`${((value.ValorMelhorPP>0?value.ValorMelhorPP:0) * 100).toFixed(2).replace('.', ',')}%`}
                                                 titleColor="text-gray-500"
-                                                valColor={colorKpi(((value.ValorMelhorPP) * 100).toFixed(2))}
+                                                valColor={colorKpi(((value.ValorMelhorPP>0?value.ValorMelhorPP:0) * 100).toFixed(2))}
                                             />
                                             <Progress
-                                                value={((value.MediaMelhorPP) * 100).toFixed(2)}
+                                                value={((value.MediaMelhorPP>0?value.MediaMelhorPP:0) * 100).toFixed(2)}
                                                 title="Média"
                                                 colorBar="#e4a548"
                                                 colorText="#f0c129"
@@ -130,12 +130,12 @@ const DesempenhoFiliais = () => {
                                             <Kpi
                                                 title="Melhor Desempenho"
                                                 rotulo={value.RotuloMelhorVenda}
-                                                value={`${((value.ValorMelhorVenda) * 100).toFixed(2).replace('.', ',')}%`}
+                                                value={`${((value.ValorMelhorVenda>0?value.ValorMelhorVenda:0) * 100).toFixed(2).replace('.', ',')}%`}
                                                 titleColor="text-gray-500"
-                                                valColor={colorKpi(((value.ValorMelhorVenda) * 100).toFixed())}
+                                                valColor={colorKpi(((value.ValorMelhorVenda>0?value.ValorMelhorVenda:0) * 100).toFixed())}
                                             />
                                             <Progress
-                                                value={((value.MediaMelhorVenda) * 100).toFixed(2)}
+                                                value={((value.MediaMelhorVenda>0?value.MediaMelhorVenda:0) * 100).toFixed(2)}
                                                 title="Média"
                                                 colorBar="#e4a548"
                                                 colorText="#f0c129"
@@ -155,12 +155,12 @@ const DesempenhoFiliais = () => {
                                             <Kpi
                                                 title="Melhor AP"
                                                 rotulo={value.RotuloMelhorAP}
-                                                value={`${((value.ValorMelhorAP) * 100).toFixed(2).replace('.', ',')}%`}
+                                                value={`${((value.ValorMelhorAP>0?value.ValorMelhorAP:0) * 100).toFixed(2).replace('.', ',')}%`}
                                                 titleColor="text-gray-500"
-                                                valColor={colorKpi(((value.ValorMelhorAP) * 100).toFixed())}
+                                                valColor={colorKpi(((value.ValorMelhorAP>0?value.ValorMelhorAP:0) * 100).toFixed())}
                                             />
                                             <Progress
-                                                value={((value.MediaMelhorAP) * 100).toFixed(2)}
+                                                value={((value.MediaMelhorAP>0?value.MediaMelhorAP:0) * 100).toFixed(2)}
                                                 title="Média"
                                                 colorBar="#e4a548"
                                                 colorText="#f0c129"
@@ -181,12 +181,12 @@ const DesempenhoFiliais = () => {
                                             <Kpi
                                                 title="Melhor EP"
                                                 rotulo={value.RotuloMelhorEP}
-                                                value={`${((value.ValorMelhorEP) * 100).toFixed(2).replace('.', ',')}%`}
+                                                value={`${((value.ValorMelhorEP>0?value.ValorMelhorEP:0) * 100).toFixed(2).replace('.', ',')}%`}
                                                 titleColor="text-gray-500"
-                                                valColor={colorKpi(((value.ValorMelhorEP) * 100).toFixed())}
+                                                valColor={colorKpi(((value.ValorMelhorEP>0?value.ValorMelhorEP:0) * 100).toFixed())}
                                             />
                                             <Progress
-                                                value={((value.MediaMelhorEP) * 100).toFixed(2)}
+                                                value={((value.MediaMelhorEP>0?value.MediaMelhorEP:0) * 100).toFixed(2)}
                                                 title="Média"
                                                 colorBar="#e4a548"
                                                 colorText="#f0c129"
@@ -209,12 +209,12 @@ const DesempenhoFiliais = () => {
                                             <Kpi
                                                 title="Melhor Projeção"
                                                 rotulo={value.RotuloProjecao}
-                                                value={`${((value.ValorProjecao) * 100).toFixed(2).replace('.', ',')}%`}
+                                                value={`${((value.ValorProjecao>0?value.ValorProjecao:0) * 100).toFixed(2).replace('.', ',')}%`}
                                                 titleColor="text-gray-500"
-                                                valColor={colorKpi(((value.ValorProjecao) * 100).toFixed())}
+                                                valColor={colorKpi(((value.ValorProjecao>0?value.ValorProjecao:0) * 100).toFixed())}
                                             />
                                             <Progress
-                                                value={((value.MediaProjecao) * 100).toFixed(2)}
+                                                value={((value.MediaProjecao>0?value.MediaProjecao:0) * 100).toFixed(2)}
                                                 title="Média"
                                                 colorBar="#e4a548"
                                                 colorText="#f0c129"
@@ -234,12 +234,12 @@ const DesempenhoFiliais = () => {
                                             <Kpi
                                                 title="Taxa de Juros"
                                                 rotulo={value.RotuloTaxaJuros}
-                                                value={`${((value.ValorTaxaJuros) * 100).toFixed(2).replace('.', ',')}%`}
+                                                value={`${((value.ValorTaxaJuros>0?value.ValorTaxaJuros:0) * 100).toFixed(2).replace('.', ',')}%`}
                                                 titleColor="text-gray-500"
-                                                valColor={colorKpi(((value.ValorTaxaJuros) * 100).toFixed())}
+                                                valColor={colorKpi(((value.ValorTaxaJuros>0?value.ValorTaxaJuros:0) * 100).toFixed())}
                                             />
                                             <Progress
-                                                value={((value.MediaTaxaJuros) * 100).toFixed(2)}
+                                                value={((value.MediaTaxaJuros>0?value.MediaTaxaJuros:0) * 100).toFixed(2)}
                                                 title="Média"
                                                 colorBar="#e4a548"
                                                 colorText="#f0c129"
@@ -259,9 +259,9 @@ const DesempenhoFiliais = () => {
                                             <Kpi
                                                 title="Meta Dia"
                                                 rotulo={value.RotuloMetaDia}
-                                                value={`${((value.MetaAlcancadaDia) * 100).toFixed(2).replace('.', ',')}%`}
+                                                value={`${((value.MetaAlcancadaDia>0?value.MetaAlcancadaDia:0) * 100).toFixed(2).replace('.', ',')}%`}
                                                 titleColor="text-gray-500"
-                                                valColor={colorKpi(((value.MetaAlcancadaDia) * 100).toFixed())}
+                                                valColor={colorKpi(((value.MetaAlcancadaDia>0?value.MetaAlcancadaDia:0) * 100).toFixed())}
                                                 padding="pb-14 pt-12"
                                             />
                                         </Fragment>

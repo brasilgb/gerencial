@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useEffect, useState } from 'react';
+import React, { Fragment, useContext } from 'react';
 import Kpi from '../../../Components/Kpis';
 import { AuthContext } from '../../../contexts/auth';
 import TopBar from '../../../Components/TopBar';
@@ -7,16 +7,12 @@ import Progress from '../../../Components/Charts/Progress';
 import FormatMoney from '../../../Components/FormatMoney';
 import ProgressBar from '../../../Components/Charts/ProgressBar';
 import BoxAnalise from '../../../Components/Boxes/BoxAnalise';
+import SSelect from '../../../Components/Forms/SSelect';
+import NoSelect from '../../../Components/NoSelect';
 
 const AnaliseFiliais = () => {
 
-    const { user, logout, analiseFiliaisKpis, inadimplenciaKpis, giroEstoqueKpis, filialuser, allFiliais } = useContext(AuthContext);
-
-    const [currentFilial, setCurrentFilial] = useState(user.Filial);
-
-    useEffect(() => {
-        filialuser(currentFilial);
-    });
+    const { user, logout, analiseFiliaisKpis, inadimplenciaKpis, giroEstoqueKpis } = useContext(AuthContext);
 
     const colorBar = ((value) => {
         if (value <= 90) return "#DC2626";
@@ -41,23 +37,12 @@ const AnaliseFiliais = () => {
 
                     <div className="w-2/5 text-md text-gray-500 px-4 rounded text-shadow">
                         Análise para a filial:
-
                         {user.Type === "S" ?
-                            <select
-                                name="filiais"
-                                id="filiais"
-                                value={currentFilial}
-                                onChange={(e) => setCurrentFilial(e.target.value)}
-                                className="bg-white border mx-2 px-4 pt-2 py-1 rounded-md text-sm shadow"
-                            >
-                                {allFiliais.map((value, key) => (
-                                    <option key={key} value={value.CodFilial}>{value.Filial} - {value.CodFilial}</option>
-                                ))}
-                            </select>
+                            <SSelect />
                             :
-                            <span className="mx-2 px-8 py-1 rounded text-white text-sm border border-rose-600 bg-rose-500">
+                            <NoSelect>
                                 {analiseFiliaisKpis.map((value) => (value.Filial))}
-                            </span>
+                            </NoSelect>
                         }
 
                     </div>
@@ -70,7 +55,7 @@ const AnaliseFiliais = () => {
                     </div>
 
                 </div>
-                
+
                 <div className="grid gap-2 grid-cols-3">
                     <div className="col-span-2">
                         <BoxAnalise title="Faturamento" textColor="text-gray-500" borderColor="border-gray-200">
@@ -112,16 +97,15 @@ const AnaliseFiliais = () => {
                                         <Fragment key={key}>
                                             <Kpi
                                                 title="Projeção Venda"
-                                                value={<FormatMoney
-                                                    value={value.ValorProjecaoVenda} />}
+                                                value={<FormatMoney value={value.ValorProjecaoVenda > 0 ? value.ValorProjecaoVenda : 0} />}
                                                 titleColor="text-gray-500"
-                                                valColor={colorKpi(((value.PercentProjecaoVenda) * 100).toFixed())}
+                                                valColor={colorKpi(((value.ValorProjecaoVenda > 0 ? value.PercentProjecaoVenda : 0) * 100).toFixed())}
                                             />
                                             <Progress
-                                                value={((value.PercentProjecaoVenda) * 100).toFixed(2)}
+                                                value={((value.ValorProjecaoVenda > 0 ? value.PercentProjecaoVenda : 0) * 100).toFixed(2)}
                                                 title="Projeção"
-                                                colorBar={colorBar(((value.PercentProjecaoVenda) * 100).toFixed())}
-                                                colorText={colorBar(((value.PercentProjecaoVenda) * 100).toFixed())}
+                                                colorBar={colorBar(((value.ValorProjecaoVenda > 0 ? value.PercentProjecaoVenda : 0) * 100).toFixed())}
+                                                colorText={colorBar(((value.ValorProjecaoVenda > 0 ? value.PercentProjecaoVenda : 0) * 100).toFixed())}
                                             />
                                         </Fragment>
                                     ))
@@ -143,11 +127,11 @@ const AnaliseFiliais = () => {
                                                 title="Faturamento Dia"
                                                 value={<FormatMoney value={value.ValorFaturamentoDia} />}
                                                 titleColor="text-gray-500"
-                                                valColor={colorKpi(((value.ValorAlcancadoDia) * 100).toFixed())}
+                                                valColor={colorKpi(((value.ValorAlcancadoDia > 0 ? value.ValorAlcancadoDia : 0) * 100).toFixed())}
                                             />
                                             <Kpi
                                                 title="Meta Dia"
-                                                value={<FormatMoney value={value.ValorMetaDia} />}
+                                                value={<FormatMoney value={value.ValorMetaDia > 0 ? value.ValorMetaDia : 0} />}
                                                 titleColor="text-gray-500"
                                                 valColor="text-blue-500"
                                             />
@@ -200,7 +184,7 @@ const AnaliseFiliais = () => {
                                         <ProgressBar
                                             value={((value.PercentInadimplencia) * 100).toFixed(2)}
                                             title="Inadimplência"
-                                            colorBar={((value.PercentInadimplencia) * 100).toFixed() < 2 ?"#10B981":"#DC2626"}
+                                            colorBar={((value.PercentInadimplencia) * 100).toFixed() < 2 ? "#10B981" : "#DC2626"}
                                             colorText="#241d09"
                                         />
                                     </Fragment>
@@ -286,29 +270,29 @@ const AnaliseFiliais = () => {
                         {
                             analiseFiliaisKpis.map((value, key) => (
                                 <Fragment key={key}>
-                                    <Kpi 
-                                    title="Valor AP" 
-                                    value={<FormatMoney value={value.ValorAP} />} 
-                                    titleColor="text-gray-500" 
-                                    valColor={colorKpi(((value.Meta_AP_Atingida) * 100).toFixed())} 
+                                    <Kpi
+                                        title="Valor AP"
+                                        value={<FormatMoney value={value.ValorAP} />}
+                                        titleColor="text-gray-500"
+                                        valColor={colorKpi(((value.Meta_AP_Atingida) * 100).toFixed())}
                                     />
-                                    <Kpi 
-                                    title="Meta AP" 
-                                    value={<FormatMoney value={value.MetaAP} />} 
-                                    titleColor="text-gray-500" 
-                                    valColor="text-blue-500" 
+                                    <Kpi
+                                        title="Meta AP"
+                                        value={<FormatMoney value={value.MetaAP} />}
+                                        titleColor="text-gray-500"
+                                        valColor="text-blue-500"
                                     />
-                                    <Kpi 
-                                    title="Vendas AP" 
-                                    value={`${value.VendasAP}`} 
-                                    titleColor="text-gray-500" 
-                                    valColor={colorKpi(((value.Meta_AP_Atingida) * 100).toFixed())} 
+                                    <Kpi
+                                        title="Vendas AP"
+                                        value={`${value.VendasAP}`}
+                                        titleColor="text-gray-500"
+                                        valColor={colorKpi(((value.Meta_AP_Atingida) * 100).toFixed())}
                                     />
-                                    <ProgressBar 
-                                    value={((value.Meta_AP_Atingida) * 100).toFixed(2)} 
-                                    title="% AP Atingida" 
-                                    colorBar={colorBar(((value.Meta_AP_Atingida) * 100).toFixed())} 
-                                    colorText="#241d09" 
+                                    <ProgressBar
+                                        value={((value.Meta_AP_Atingida) * 100).toFixed(2)}
+                                        title="% AP Atingida"
+                                        colorBar={colorBar(((value.Meta_AP_Atingida) * 100).toFixed())}
+                                        colorText="#241d09"
                                     />
                                 </Fragment>
                             ))
@@ -321,41 +305,41 @@ const AnaliseFiliais = () => {
                         {
                             analiseFiliaisKpis.map((value, key) => (
                                 <Fragment key={key}>
-                                    <Kpi 
-                                    title="Valor PP" 
-                                    value={<FormatMoney value={value.ValorPP} />} 
-                                    titleColor="text-gray-500" 
-                                    valColor={colorKpi(((value.Meta_PP_Atingida) * 100).toFixed())} 
+                                    <Kpi
+                                        title="Valor PP"
+                                        value={<FormatMoney value={value.ValorPP} />}
+                                        titleColor="text-gray-500"
+                                        valColor={colorKpi(((value.Meta_PP_Atingida) * 100).toFixed())}
                                     />
-                                    <Kpi 
-                                    title="Meta PP" 
-                                    value={<FormatMoney value={value.MetaPP} />} 
-                                    titleColor="text-gray-500" 
-                                    valColor="text-blue-500" 
+                                    <Kpi
+                                        title="Meta PP"
+                                        value={<FormatMoney value={value.MetaPP} />}
+                                        titleColor="text-gray-500"
+                                        valColor="text-blue-500"
                                     />
-                                    <Kpi 
-                                    title="Elegiveis PP" 
-                                    value={`${value.ElegiveisPP}`} 
-                                    titleColor="text-gray-500" 
-                                    valColor="text-blue-500" 
+                                    <Kpi
+                                        title="Elegiveis PP"
+                                        value={`${value.ElegiveisPP}`}
+                                        titleColor="text-gray-500"
+                                        valColor="text-blue-500"
                                     />
-                                    <Kpi 
-                                    title="Vendas PP" 
-                                    value={`${value.VendasPP}`} 
-                                    titleColor="text-gray-500" 
-                                    valColor={colorKpi(((value.Meta_PP_Atingida) * 100).toFixed())} 
+                                    <Kpi
+                                        title="Vendas PP"
+                                        value={`${value.VendasPP}`}
+                                        titleColor="text-gray-500"
+                                        valColor={colorKpi(((value.Meta_PP_Atingida) * 100).toFixed())}
                                     />
-                                    <ProgressBar 
-                                    value={((value.Meta_PP_Atingida) * 100).toFixed(2)} 
-                                    title="% PP Atingida" 
-                                    colorBar={colorBar(((value.Meta_PP_Atingida) * 100).toFixed())} 
-                                    colorText="#241d09" 
+                                    <ProgressBar
+                                        value={((value.Meta_PP_Atingida) * 100).toFixed(2)}
+                                        title="% PP Atingida"
+                                        colorBar={colorBar(((value.Meta_PP_Atingida) * 100).toFixed())}
+                                        colorText="#241d09"
                                     />
-                                    <ProgressBar 
-                                    value={((value.PP_Convertida) * 100).toFixed(2)} 
-                                    title="% PP Convertida" 
-                                    colorBar={colorBar(((value.PP_Convertida) * 100).toFixed())}
-                                    colorText="#241d09" 
+                                    <ProgressBar
+                                        value={((value.PP_Convertida) * 100).toFixed(2)}
+                                        title="% PP Convertida"
+                                        colorBar={colorBar(((value.PP_Convertida) * 100).toFixed())}
+                                        colorText="#241d09"
                                     />
                                 </Fragment>
                             ))

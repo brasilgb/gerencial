@@ -1,8 +1,8 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
-import { STable, STd, STh, STr } from '../../Components/Tables';
+import { STable, STd, STh, STr } from '../../Tables';
 import moment from 'moment';
-import { AuthContext } from '../../contexts/auth';
+import { AuthContext } from '../../../contexts/auth';
 
 export const Pagination = ({data}) => {
 

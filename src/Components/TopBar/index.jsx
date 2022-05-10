@@ -49,6 +49,12 @@ const TopBar = ({ logout, user }) => {
                             <span>Análise de Vendedores</span>
                         </Link>
                        
+                        <Link
+                            className={`${splitLocation === "giroestoque" ? "bg-white text-gray-600" : "text-gray-100"} uppercase text-sm font-medium px-2 py-5 mr-2 `}
+                            to="/giroestoque">
+                            <span>Giro de Estoque</span>
+                        </Link>
+                       
                     </div>
                     <div className="px-2 w-14">
                         <button
