@@ -31,6 +31,7 @@ export const AuthProvider = ({ children }) => {
     const [conversaoKpis, setConversaoKpis] = useState([]);
     const [analiseVendedoresKpis, setAnaliseVendedoresKpis] = useState([]);
     const [conversaoVendedoresKpis, setConversaoVendedoresKpis] = useState([]);
+    const [margemVendedor, setMargemVendedor] = useState([]);
 
     const [loadList, setLoadList] = useState(true);
     const [loadButton, setLoadButton] = useState(false)
@@ -438,6 +439,22 @@ export const AuthProvider = ({ children }) => {
         getConversaoVendedores();
     }, [numFilial]);
 
+    // Gerencial analise de vendedores
+    useEffect(() => {
+        async function getMargemVendedor() {
+            setLoadList(true);
+            await api.get('margemvendedor')
+                .then((margemvendedor) => {
+                    const vend = margemvendedor.data.filter((aven) => (parseInt(aven.filial) === parseInt(numFilial)));
+                    setMargemVendedor(vend);
+                    setLoadList(false);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+        getMargemVendedor();
+    }, [numFilial]);
 
     return (
         <AuthContext.Provider value={{
@@ -473,6 +490,7 @@ export const AuthProvider = ({ children }) => {
             conversaoKpis,
             analiseVendedoresKpis,
             conversaoVendedoresKpis,
+            margemVendedor,
             loadList,
             loadButton
         }}>

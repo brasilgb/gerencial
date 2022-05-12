@@ -11,13 +11,17 @@ import { AuthContext } from '../../../contexts/auth';
 
 const AnaliseVendedores = () => {
 
-    const { user, logout, analiseVendedoresKpis, conversaoVendedoresKpis } = useContext(AuthContext);
+    const { user, logout, analiseVendedoresKpis, conversaoVendedoresKpis, margemVendedor } = useContext(AuthContext);
 
     const colorKpi = ((value) => {
         if (value <= 90) return "bg-red-600";
         if (value <= 98) return "bg-orange-400";
         if (value > 90) return "bg-emerald-500";
     });
+
+    // const filterVendedor = (idvendedor) => {
+    //     return margemVendedor.filter((m) => (parseInt(m.vendedor) === parseInt(idvendedor))).map((i) => (i.margem));
+    // } 
 
     return (
         <Fragment>
@@ -86,8 +90,8 @@ const AnaliseVendedores = () => {
                 {
                     analiseVendedoresKpis.map((value, key) => (
                         <Fragment key={key}>
-                            <BoxAnalise title={value.NomeVendedor} textColor="text-gray-500" borderColor="border-gray-200">
-                                <div className="grid gap-2 grid-cols-8">
+                            <BoxAnalise title={value.CodigoVendedor + ' - ' + value.NomeVendedor} textColor="text-gray-500" borderColor="border-gray-200">
+                                <div className="grid gap-2 grid-cols-9">
                                     <KpiList
                                         title="Valor Faturado"
                                         value={<FormatMoney value={value.ValorVenda} />}
@@ -109,11 +113,14 @@ const AnaliseVendedores = () => {
                                         valColor="text-gray-50"
                                         bgColor={colorKpi(((value.PercentualVenda) * 100).toFixed())}
                                     />
-                                    {/* 
-                                    <KpiList title="Valor GE" value={value.ValorGE} titleColor="text-gray-500" valColor="text-gray-50" bgColor="bg-orange-400" />
-                                    <KpiList title="Meta GE" value={value.MetaGE} titleColor="text-gray-500" valColor="text-gray-50" bgColor="bg-orange-400" />
-                                    <KpiList title="Rep. GE" value={`${((value.PercentualGE) * 100).toFixed(2)}%`} titleColor="text-gray-500" valColor="text-gray-50" bgColor="bg-orange-400" /> */}
-
+                                   <KpiList
+                                        title="Margem"
+                                        value={`${( ( margemVendedor.filter((m) => (parseInt(m.vendedor) === parseInt(value.CodigoVendedor))).map((i) => (i.margem)) ) * 1).toFixed()}%`}
+                                        titleColor="text-gray-500"
+                                        valColor="text-gray-50"
+                                        bgColor={colorKpi(( ( margemVendedor.filter((m) => (parseInt(m.vendedor) === parseInt(value.CodigoVendedor))).map((i) => (i.margem)) ) * 1).toFixed())}
+                                    />
+                                   
                                     <KpiList
                                         title="Valor PP"
                                         value={value.ValorPP}
