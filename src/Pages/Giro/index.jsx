@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useRef, useState } from 'react'
+import React, { Fragment, useContext, useEffect, useRef, useState } from 'react'
 import BoxAnalise from '../../Components/Boxes/BoxAnalise';
 import Footer from '../../Components/Footer'
 
@@ -14,7 +14,12 @@ import { IconContext } from 'react-icons';
 
 const GiroSubGrupo = () => {
 
-    const { user, logout, analiseFiliaisKpis, giroSubGrupo, giroSearch, loadButton, allFiliais } = useContext(AuthContext);
+    const { user, logout, analiseFiliaisKpis, giroSubGrupo, giroSearch, loadButton, allFiliais, numFilial } = useContext(AuthContext);
+    const [currentFilial, setCurrentFilial] = useState(numFilial);
+
+    useEffect(() => {
+        setCurrentFilial(numFilial);
+    },[numFilial]);
 
     const refFilial = useRef();
     const refSub = useRef();
@@ -44,7 +49,7 @@ const GiroSubGrupo = () => {
                                     ref={refFilial}
                                     className="w-56 bg-white border rounded-md text-sm shadow"
                                     style={{ padding: "8px" }}
-                                    defaultValue={user.Filial}
+                                    defaultValue={currentFilial}
                                 >
                                     {allFiliais.map((value, key) => (
                                         <option key={key} value={value.CodFilial}>{value.Filial} - {value.CodFilial}</option>
@@ -75,7 +80,7 @@ const GiroSubGrupo = () => {
 
                         <div className="w-1/5 text-md text-gray-50 bg-solar-blue-200 px-4 py-1 rounded text-shadow text-md">
                             Atualização de dados:&nbsp;
-                            {analiseFiliaisKpis.map((value) => (value.Atualizacao))}
+                            {giroSubGrupo.map((value) => (value.Atualizacao)).filter((value, index, self) => self.indexOf(value) === index)}
                         </div>
 
                     </div>

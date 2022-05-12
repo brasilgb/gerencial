@@ -206,7 +206,7 @@ const AnaliseFiliais = () => {
                                             />
                                             <Kpi
                                                 title="Giro estoque Rede"
-                                                value={`${value.GiroEstoqueRede}`}
+                                                value={`${(value.GiroEstoqueRede * 1).toFixed()}`}
                                                 titleColor="text-gray-500"
                                                 valColor="text-green-600"
                                             />

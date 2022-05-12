@@ -2,29 +2,29 @@ import React, { Fragment, useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import { STable, STd, STh, STr } from '../../Tables';
 
-export const Pagination = ({data}) => {
+export const Pagination = ({ data }) => {
 
-    const [giro, setGiros] = useState(data.slice(0, 10000));
+    const [giro, setGiros] = useState(data.slice(0, 5000));
 
     useEffect(() => {
-      setGiros(data.slice(0, 10000));
+        setGiros(data.slice(0, 1000));
     }, [data])
-    
+
     const [pageNumber, setPageNumber] = useState(0);
 
     const giroPerPage = 20;
     const pagesVisited = pageNumber * giroPerPage;
     const displayGiros = giro
         .slice(pagesVisited, pagesVisited + giroPerPage)
-        .map((user, index) => {
+        .map((gir, index) => {
             return (
                 <STr key={index} colorRow={(index % 2)}>
-                    <STd>{user.CodSubGrupo}</STd>
-                    <STd>{user.SubGrupo}</STd>
-                    <STd>{user.ValorEstoque}</STd>
-                    <STd>{user.ValorAtual}</STd>
-                    <STd>{user.GiroFilial}</STd>
-                    <STd>{user.GiroRede}</STd>
+                    <STd>{gir.CodSubGrupo}</STd>
+                    <STd>{gir.SubGrupo}</STd>
+                    <STd>{gir.ValorEstoque}</STd>
+                    <STd>{gir.ValorAtual}</STd>
+                    <STd>{gir.GiroFilial}</STd>
+                    <STd>{gir.GiroRede}</STd>
                 </STr>
             );
         });
@@ -38,7 +38,7 @@ export const Pagination = ({data}) => {
         <Fragment>
             <STable>
                 <STr thead={true}>
-                <STh>
+                    <STh>
                         Cód. Subgrupo
                     </STh>
                     <STh>

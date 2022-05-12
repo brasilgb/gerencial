@@ -344,7 +344,7 @@ export const AuthProvider = ({ children }) => {
                             parseInt(gs.CodFilial) === parseInt(searchFilial) &
                             parseInt(gs.GiroFilial) !== 0 &
                             parseInt(gs.GiroRede) !== 0
-                        )).sort((a, b) => parseInt(a.CodSubGrupo) > parseInt(b.CodSubGrupo) ? 1 : -1);
+                        )).sort((a, b) => parseInt(a.SubGrupo) > parseInt(b.SubGrupo) ? 1 : -1);
                         setGiroSubGrupo(girsub);
                         setLoadButton(false);
 
@@ -355,15 +355,17 @@ export const AuthProvider = ({ children }) => {
                             (parseInt(gs.CodSubGrupo) === parseInt(searchSubGrupo) || (gs.SubGrupo.toUpperCase()).includes(searchSubGrupo.toUpperCase())) &
                             parseInt(gs.GiroFilial) !== 0 &
                             parseInt(gs.GiroRede) !== 0
-                        )).sort((a, b) => parseInt(a.CodSubGrupo) > parseInt(b.CodSubGrupo) ? 1 : -1);
+                        )).sort((a, b) => parseInt(a.SubGrupo) > parseInt(b.SubGrupo) ? 1 : -1);
                         setGiroSubGrupo(girsub);
                         setLoadButton(false);
 
                     } else if (searchFilial !== false & searchGiro === true) {
 
                         const girsub = girosub.data.filter((gs) => (
-                            parseInt(gs.CodFilial) === parseInt(searchFilial)
-                        )).sort((a, b) => parseInt(a.CodSubGrupo) > parseInt(b.CodSubGrupo) ? 1 : -1);
+                            parseInt(gs.CodFilial) === parseInt(searchFilial) &
+                            parseInt(gs.GiroFilial) === 0 &
+                            parseInt(gs.GiroRede) === 0
+                        )).sort((a, b) => parseInt(a.SubGrupo) > parseInt(b.SubGrupo) ? 1 : -1);
                         setGiroSubGrupo(girsub);
                         setLoadButton(false);
 
@@ -385,9 +387,7 @@ export const AuthProvider = ({ children }) => {
         }
         getGiroSubGrupo();
     }, [searchFilial, searchSubGrupo, searchGiro, numFilial]);
-    /**
-     * searchGiro === true
-     */
+
     // Gerencial Melhor Conversão
     useEffect(() => {
         async function getConversao() {

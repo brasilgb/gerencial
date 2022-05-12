@@ -38,7 +38,7 @@ const SessionTimeOut = () => {
             if (minPast === maxTime) {
                 clearInterval(warningInactiveInterval.current);
                 sessionStorage.removeItem('lastTimeStamp');
-                logout();
+                // logout();
             }
         }, 1000);
     };
