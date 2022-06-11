@@ -1,35 +1,74 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useMemo, useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import { STable, STd, STh, STr } from '../../Tables';
 
+const useSortableData = (items, config = null) => {
+    
+    const [sortConfig, setSortConfig] = useState(config);
+  
+    const sortedItems = useMemo(() => {
+      let sortableItems = items;
+      if (sortConfig !== null) {
+        sortableItems.sort((a, b) => {
+          if (a[sortConfig.key] < b[sortConfig.key]) {
+            return sortConfig.direction === 'ascending' ? -1 : 1;
+          }
+          if (a[sortConfig.key] > b[sortConfig.key]) {
+            return sortConfig.direction === 'ascending' ? 1 : -1;
+          }
+          return 0;
+        });
+      }
+      return sortableItems;
+    }, [items, sortConfig]);
+  
+    const requestSort = (key) => {
+      let direction = 'ascending';
+      if (
+        sortConfig &&
+        sortConfig.key === key &&
+        sortConfig.direction === 'ascending'
+      ) {
+        direction = 'descending';
+      }
+      setSortConfig({ key, direction });
+    };
+  
+    return { items: sortedItems, requestSort, sortConfig };
+  };
+
 export const Pagination = ({ data }) => {
 
-    const [giro, setGiros] = useState(data.slice(0, 5000));
+    const { items, requestSort, sortConfig } = useSortableData(data);
 
-    useEffect(() => {
-        setGiros(data.slice(0, 1000));
-    }, [data])
+  const getClassNamesFor = (name) => {
+
+    if (!sortConfig) {
+        return 'default';
+    }
+    return sortConfig.key === name ? sortConfig.direction : ' default ';
+  };
 
     const [pageNumber, setPageNumber] = useState(0);
 
     const giroPerPage = 20;
     const pagesVisited = pageNumber * giroPerPage;
-    const displayGiros = giro
+    const displayGiros = items
         .slice(pagesVisited, pagesVisited + giroPerPage)
         .map((gir, index) => {
             return (
                 <STr key={index} colorRow={(index % 2)}>
                     <STd>{gir.CodSubGrupo}</STd>
                     <STd>{gir.SubGrupo}</STd>
-                    <STd>{gir.ValorEstoque}</STd>
-                    <STd>{gir.ValorAtual}</STd>
+                    <STd>{parseFloat(((gir.ValorEstoque)*1).toString().slice(0, -2) + '.' + ((gir.ValorEstoque)*1).toString().slice(-2)).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</STd>
+                    <STd>{parseFloat(((gir.ValorAtual)*1).toString().slice(0, -2) + '.' + ((gir.ValorAtual)*1).toString().slice(-2)).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</STd>
                     <STd>{gir.GiroFilial}</STd>
                     <STd>{gir.GiroRede}</STd>
                 </STr>
             );
         });
 
-    const pageCount = Math.ceil(giro.length / giroPerPage);
+    const pageCount = Math.ceil(items.length / giroPerPage);
     const changePage = ({ selected }) => {
         setPageNumber(selected);
     };
@@ -38,22 +77,62 @@ export const Pagination = ({ data }) => {
         <Fragment>
             <STable>
                 <STr thead={true}>
-                    <STh>
-                        Cód. Subgrupo
+                    <STh largura="w-44">
+                    <button 
+                        type="button" 
+                        onClick={() => requestSort('CodSubGrupo')}
+                        className={`${getClassNamesFor('CodSubGrupo')}`}
+                        >
+                            <span className="text-gray-600 text-shadow-md py-2 text-sm font-bold uppercase">
+                            Cód. Subgrupo
+                            </span>
+                        </button>
                     </STh>
-                    <STh>
-                        Subgrupo
+                    <STh largura="w-96">
+                        <button 
+                        type="button" 
+                        onClick={() => requestSort('SubGrupo')}
+                        className={getClassNamesFor('SubGrupo')}
+                        >
+                            <span className="text-gray-600 text-shadow-md py-2 text-sm font-bold uppercase w-">
+                                Subgrupo
+                            </span>
+                        </button>
                     </STh>
-                    <STh>
-                        Valor Estoque
+                    <STh largura="w-56">
+                        <button 
+                        type="button" 
+                        onClick={() => requestSort('ValorEstoque')}
+                        className={getClassNamesFor('ValorEstoque')}
+                        >
+                            <span className="text-gray-600 text-shadow-md py-2 text-sm font-bold uppercase">
+                                Valor Estoque
+                            </span>
+                        </button>
                     </STh>
-                    <STh>
-                        Valor Atual
+                    <STh largura="w-56">
+                        <button 
+                        type="button" 
+                        onClick={() => requestSort('ValorAtual')}
+                        className={getClassNamesFor('ValorAtual')}
+                        >
+                            <span className="text-gray-600 text-shadow-md py-2 text-sm font-bold uppercase">
+                                Valor Atual
+                            </span>
+                        </button>
                     </STh>
-                    <STh>
-                        Giro Filial
+                    <STh largura="w-56">
+                        <button 
+                        type="button" 
+                        onClick={() => requestSort('GiroFilial')}
+                        className={getClassNamesFor('GiroFilial')}
+                        >
+                            <span className="text-gray-600 text-shadow-md px-2 py-2 text-sm font-bold uppercase">
+                                Giro Filial
+                            </span>
+                        </button>
                     </STh>
-                    <STh>
+                    <STh largura="w-56">
                         Giro Rede
                     </STh>
                 </STr>

@@ -32,12 +32,12 @@ export const STr = ({ thead, children, colorRow }) => {
     );
 };
 
-export const STh = ({ children, colspan }) => {
+export const STh = ({ children, colspan, largura }) => {
     return (
         <Fragment>
             <th
                 colSpan={colspan}
-                className="text-left bg-gray-200 text-gray-600 text-shadow-md px-2 py-2 text-sm uppercase"
+                className={`${largura} text-left bg-gray-200 text-gray-600 text-shadow-md px-2 py-2 text-sm uppercase`}
                 // style={{ textShadow: "#888 1px 1px 4px", color: "#333" }}
             >
                 {children}

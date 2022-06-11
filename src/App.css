@@ -1,17 +1,42 @@
+@import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css');
+
 #container {
-    max-width: 99%;
-    min-width: 320px;
-    height: 400px;
-    width: 99%;
+  max-width: 99%;
+  min-width: 320px;
+  height: 400px;
+  width: 99%;
 }
+
 .paginationButtns a {
-    padding: 10px;
-    margin-right: 2px;
-    margin-left: 2px;
-  }
-  .react-datetime-picker__wrapper {
-    padding: 4px;
-    border: 1px solid #ddd!important;
-    border-radius: 4px;
-    box-shadow: rgba(160, 159, 159, 0.3) 1px 1px 4px;
-  }
+  padding: 10px;
+  margin-right: 2px;
+  margin-left: 2px;
+}
+
+.react-datetime-picker__wrapper {
+  padding: 4px;
+  border: 1px solid #ddd !important;
+  border-radius: 4px;
+  box-shadow: rgba(160, 159, 159, 0.3) 1px 1px 4px;
+}
+
+thead button.default::after {
+  font-family: FontAwesome;
+  content: '\f0dc';
+  display: inline-block;
+  margin-left: 1em;
+}
+
+thead button.ascending::after {
+  font-family: FontAwesome;
+  content: '\f0de';
+  display: inline-block;
+  margin-left: 1em;
+}
+
+thead button.descending::after {
+  font-family: FontAwesome;
+  content: '\f0dd';
+  display: inline-block;
+  margin-left: 1em;
+}

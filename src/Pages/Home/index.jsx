@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useEffect, useState } from 'react';
+import React, { Fragment, useContext, useState } from 'react';
 import AnaliseVencidos from '../../Components/Charts/Combinations/AnaliseVencidos';
 import ProjecaoVencidos from '../../Components/Charts/Lines/ProjecaoVencidos';
 import Kpi from '../../Components/Kpis';

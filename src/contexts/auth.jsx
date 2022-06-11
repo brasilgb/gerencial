@@ -28,6 +28,7 @@ export const AuthProvider = ({ children }) => {
     const [inadimplenciaKpis, setInadimplenciaKpis] = useState([]);
     const [giroEstoqueKpis, setGiroEstoqueKpis] = useState([]);
     const [giroSubGrupo, setGiroSubGrupo] = useState([]);
+    const [giroSubGrupoFilial, setGiroSubGrupoFilial] = useState([]);
     const [conversaoKpis, setConversaoKpis] = useState([]);
     const [analiseVendedoresKpis, setAnaliseVendedoresKpis] = useState([]);
     const [conversaoVendedoresKpis, setConversaoVendedoresKpis] = useState([]);
@@ -46,12 +47,14 @@ export const AuthProvider = ({ children }) => {
         setDataFiltroIni(inicial);
         setDataFiltroFin(final);
         setSearchFilial(filial);
+        setNumFilial(filial);
     }
 
     function giroSearch(filial, subgrupo, giro) {
         setSearchFilial(filial);
         setSearchSubGrupo(subgrupo);
         setSearchGiro(giro);
+        setNumFilial(filial);
     }
 
     function dateFormat(date) {
@@ -87,6 +90,7 @@ export const AuthProvider = ({ children }) => {
             reset();
         }, time);
     }
+
 
     async function registerUser(name, code, filial, password, reset) {
         setLoading(true);
@@ -133,6 +137,7 @@ export const AuthProvider = ({ children }) => {
                     localStorage.setItem("user", JSON.stringify(udata));
                     setLoading(false);
                     navigate("/");
+                    window.location.reload();
                 } else {
                     let udata = {
                         Message: usuario.data.sigIn.message
@@ -333,6 +338,23 @@ export const AuthProvider = ({ children }) => {
 
     // Gerencial Giro Estoque
     useEffect(() => {
+        async function getGiroSubGrupoFilial() {
+            await api.get('girosubgrupo')
+                .then((giro) => {
+                    
+                        const gir = giro.data.filter((g) => (parseInt(g.CodFilial) === parseInt(numFilial)));
+                        setGiroSubGrupoFilial(gir);
+
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+        getGiroSubGrupoFilial();
+    }, [numFilial]);
+
+    // Gerencial Giro Estoque
+    useEffect(() => {
         async function getGiroSubGrupo() {
             setLoadButton(true);
             await api.get('girosubgrupo')
@@ -345,7 +367,7 @@ export const AuthProvider = ({ children }) => {
                             parseInt(gs.CodFilial) === parseInt(searchFilial) &
                             parseInt(gs.GiroFilial) !== 0 &
                             parseInt(gs.GiroRede) !== 0
-                        )).sort((a, b) => parseInt(a.SubGrupo) > parseInt(b.SubGrupo) ? 1 : -1);
+                        ));
                         setGiroSubGrupo(girsub);
                         setLoadButton(false);
 
@@ -356,7 +378,7 @@ export const AuthProvider = ({ children }) => {
                             (parseInt(gs.CodSubGrupo) === parseInt(searchSubGrupo) || (gs.SubGrupo.toUpperCase()).includes(searchSubGrupo.toUpperCase())) &
                             parseInt(gs.GiroFilial) !== 0 &
                             parseInt(gs.GiroRede) !== 0
-                        )).sort((a, b) => parseInt(a.SubGrupo) > parseInt(b.SubGrupo) ? 1 : -1);
+                        ));
                         setGiroSubGrupo(girsub);
                         setLoadButton(false);
 
@@ -366,7 +388,7 @@ export const AuthProvider = ({ children }) => {
                             parseInt(gs.CodFilial) === parseInt(searchFilial) &
                             parseInt(gs.GiroFilial) === 0 &
                             parseInt(gs.GiroRede) === 0
-                        )).sort((a, b) => parseInt(a.SubGrupo) > parseInt(b.SubGrupo) ? 1 : -1);
+                        ));
                         setGiroSubGrupo(girsub);
                         setLoadButton(false);
 
@@ -376,7 +398,7 @@ export const AuthProvider = ({ children }) => {
                             parseInt(gs.CodFilial) === parseInt(numFilial) &
                             parseInt(gs.GiroFilial) !== 0 &
                             parseInt(gs.GiroRede) !== 0
-                        )).sort((a, b) => parseInt(a.CodSubGrupo) > parseInt(b.CodSubGrupo) ? 1 : -1);
+                        ));
                         setGiroSubGrupo(girsub);
                         setLoadButton(false);
                     }
@@ -467,6 +489,7 @@ export const AuthProvider = ({ children }) => {
             filialuser,
             setNumFilial,
             setSearchFilial,
+            searchFilial,
             errorMessage,
             registerUser,
             login,
@@ -487,6 +510,7 @@ export const AuthProvider = ({ children }) => {
             inadimplenciaKpis,
             giroEstoqueKpis,
             giroSubGrupo,
+            giroSubGrupoFilial,
             conversaoKpis,
             analiseVendedoresKpis,
             conversaoVendedoresKpis,

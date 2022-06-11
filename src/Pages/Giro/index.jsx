@@ -14,12 +14,12 @@ import { IconContext } from 'react-icons';
 
 const GiroSubGrupo = () => {
 
-    const { user, logout, analiseFiliaisKpis, giroSubGrupo, giroSearch, loadButton, allFiliais, numFilial } = useContext(AuthContext);
+    const { user, logout, analiseFiliaisKpis, giroSubGrupo, giroSubGrupoFilial, giroSearch, loadButton, allFiliais, numFilial, searchFilial } = useContext(AuthContext);
     const [currentFilial, setCurrentFilial] = useState(numFilial);
 
     useEffect(() => {
         setCurrentFilial(numFilial);
-    },[numFilial]);
+    }, [numFilial]);
 
     const refFilial = useRef();
     const refSub = useRef();
@@ -29,8 +29,11 @@ const GiroSubGrupo = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        giroSearch(refFilial.current.value, refSub.current.value, refGiro.current.checked);
+        giroSearch(refFilial.current.value, refSub.current.value, refGiro.current.checked);//searchFilial
     }
+
+    const filialEstoque = allFiliais.filter((value) => (parseInt(value.CodFilial) === (parseInt(value.CodFilial) === searchFilial ? parseInt(searchFilial) : parseInt(numFilial)) )).map((value) => (value.Filial));
+    const sumValorGiro = giroSubGrupoFilial.reduce(function (result, item) { return result + item.ValorEstoque * 1; }, 0);
 
     return (
         <Fragment>
@@ -57,7 +60,7 @@ const GiroSubGrupo = () => {
                                 </select>
                                 :
                                 <>
-                                <input type="hidden" value={user.Filial} ref={refFilial}/>
+                                    <input type="hidden" value={user.Filial} ref={refFilial} />
                                     <NoSelect>
                                         {analiseFiliaisKpis.map((value) => (value.Filial))}
                                     </NoSelect>
@@ -89,16 +92,26 @@ const GiroSubGrupo = () => {
                 <BoxAnalise>
                     {giroSubGrupo &&
                         <div className="py-2">
-                            <span className="w-1/6 flex items-center justify-center px-8 py-1 rounded text-white text-sm border bg-solar-yellow-300 bg-border-solar-yellow-200">
 
+                            <span className={`w-4/12 flex items-center justify-center py-1 uppercase font-medium rounded text-gray-700 text-sm border bg-solar-yellow-200 bg-border-solar-yellow-200`}>
                                 {loadButton ?
                                     <IconContext.Provider value={{ className: "text-xl text-gray-50 text-center animate-spin" }}>
                                         <CgSpinnerTwo />
                                     </IconContext.Provider>
                                     :
-                                    giroSubGrupo.map((value) => (value.Filial)).filter((value, index, self) => self.indexOf(value) === index)
+                                    <>
+                                        <span className="text-sm">Valor do estoque para </span> <span className="text-gray-200 italic text-md ml-1 underline"> {filialEstoque}</span>:
+                                        <span className="mx-2 font-bold text-gray-900">
+                                            
+                                                {parseFloat(((sumValorGiro) * 1).toString().slice(0, -2) + '.' + ((sumValorGiro) * 1).toString().slice(-2)).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                                                
+
+                                        </span>
+                                    </>
+
                                 }
                             </span>
+
                         </div>
                     }
                     <Pagination data={giroSubGrupo} />

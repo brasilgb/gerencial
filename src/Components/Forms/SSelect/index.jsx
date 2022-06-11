@@ -18,7 +18,7 @@ const SSelect = () => {
             <select
                 name="filiais"
                 id="filiais"
-                defaultValue={currentFilial}
+                value={currentFilial}
                 onChange={changeFilial}
                 className="bg-white border mx-2 px-4 pt-2 py-1 rounded-md text-sm shadow"
             >
