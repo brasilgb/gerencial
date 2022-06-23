@@ -11,6 +11,7 @@ import { InputSearch, InputCheck } from '../../Components/Forms/Input';
 import ButtonSearch from '../../Components/Forms/Buttons';
 import { CgSpinnerTwo } from 'react-icons/cg';
 import { IconContext } from 'react-icons';
+import FormatMoney from '../../Components/FormatMoney';
 
 const GiroSubGrupo = () => {
 
@@ -32,9 +33,9 @@ const GiroSubGrupo = () => {
         giroSearch(refFilial.current.value, refSub.current.value, refGiro.current.checked);//searchFilial
     }
 
-    const filialEstoque = allFiliais.filter((value) => (parseInt(value.CodFilial) === (parseInt(value.CodFilial) === searchFilial ? parseInt(searchFilial) : parseInt(numFilial)) )).map((value) => (value.Filial));
-    const sumValorGiro = giroSubGrupoFilial.reduce(function (result, item) { return result + item.ValorEstoque * 1; }, 0);
-
+    const filialEstoque = allFiliais.filter((value) => (parseInt(value.CodFilial) === (parseInt(value.CodFilial) === searchFilial ? parseInt(searchFilial) : parseInt(numFilial)))).map((value) => (value.Filial));
+    const subGrupoEstoque = giroSubGrupoFilial.filter((fil) => (parseInt(fil.codigoSubgrupo) === 0));
+    //    console.log(subGrupoEstoque.length > 0 ? subGrupoEstoque.map((ve) => (ve.valorEstoque)) : 0 );
     return (
         <Fragment>
             <TopBar user={user} logout={logout} />
@@ -83,7 +84,8 @@ const GiroSubGrupo = () => {
 
                         <div className="w-1/5 text-md text-gray-50 bg-solar-blue-200 px-4 py-1 rounded text-shadow text-md">
                             Atualização de dados:&nbsp;
-                            {giroSubGrupo.map((value) => (value.Atualizacao)).filter((value, index, self) => self.indexOf(value) === index)}
+
+                            {/* {giroSubGrupo.map((value) => (value.Atualizacao)).filter((value, index, self) => self.indexOf(value) === index)} */}
                         </div>
 
                     </div>
@@ -100,11 +102,11 @@ const GiroSubGrupo = () => {
                                     </IconContext.Provider>
                                     :
                                     <>
-                                        <span className="text-sm">Valor do estoque para </span> <span className="text-gray-200 italic text-md ml-1 underline"> {filialEstoque}</span>:
+                                        <span className="text-sm">Valor do estoque para </span> 
+                                        <span className="text-gray-200 text-md ml-1"> {filialEstoque}</span>:
                                         <span className="mx-2 font-bold text-gray-900">
-                                            
-                                                {parseFloat(((sumValorGiro) * 1).toString().slice(0, -2) + '.' + ((sumValorGiro) * 1).toString().slice(-2)).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-                                                
+
+                                            <FormatMoney value={subGrupoEstoque.length > 0 ? subGrupoEstoque.map((ve) => (ve.valorEstoque)) : 0} />
 
                                         </span>
                                     </>
@@ -114,7 +116,8 @@ const GiroSubGrupo = () => {
 
                         </div>
                     }
-                    <Pagination data={giroSubGrupo} />
+                        <Pagination data={giroSubGrupo} />
+
                 </BoxAnalise>
 
             </div>

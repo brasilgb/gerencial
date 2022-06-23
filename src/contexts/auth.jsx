@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from '../services/api';
+import isCobol from "../services/isCobol";
 import moment from "moment";
 // import iscobol from '../services/login';
 // import axios from 'axios';
@@ -339,12 +340,9 @@ export const AuthProvider = ({ children }) => {
     // Gerencial Giro Estoque
     useEffect(() => {
         async function getGiroSubGrupoFilial() {
-            await api.get('girosubgrupo')
+            await isCobol.get(`http://172.16.1.43:9090/servicecomercial/servlet/isCobol(AR_ESTOQUE_IDEAL)?filial=${numFilial}?q=proxy`)
                 .then((giro) => {
-                    
-                        const gir = giro.data.filter((g) => (parseInt(g.CodFilial) === parseInt(numFilial)));
-                        setGiroSubGrupoFilial(gir);
-
+                    setGiroSubGrupoFilial(giro.data.resposta.data.dados);
                 })
                 .catch(err => {
                     console.log(err);
@@ -357,47 +355,43 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         async function getGiroSubGrupo() {
             setLoadButton(true);
-            await api.get('girosubgrupo')
+            await isCobol.get(`http://172.16.1.43:9090/servicecomercial/servlet/isCobol(AR_ESTOQUE_IDEAL)?filial=${numFilial}?q=proxy`)
 
                 .then((girosub) => {
+                    // console.log(girosub.data.resposta.data.dados[0]);
+                    if (searchSubGrupo === '' & !searchGiro) {
 
-                    if (searchFilial !== false & searchSubGrupo === '' & !searchGiro) {
-
-                        const girsub = girosub.data.filter((gs) => (
-                            parseInt(gs.CodFilial) === parseInt(searchFilial) &
-                            parseInt(gs.GiroFilial) !== 0 &
-                            parseInt(gs.GiroRede) !== 0
+                        const girsub = girosub.data.resposta.data.dados.filter((gs) => (
+                            parseInt(gs.giroFilial) !== 0 &
+                            parseInt(gs.giroRede) !== 0
                         ));
                         setGiroSubGrupo(girsub);
                         setLoadButton(false);
 
-                    } else if (searchFilial !== false & searchSubGrupo !== '' & !searchGiro) {
+                    } else if (searchSubGrupo !== '' & !searchGiro) {
 
-                        const girsub = girosub.data.filter((gs) => (
-                            parseInt(gs.CodFilial) === parseInt(searchFilial) &
-                            (parseInt(gs.CodSubGrupo) === parseInt(searchSubGrupo) || (gs.SubGrupo.toUpperCase()).includes(searchSubGrupo.toUpperCase())) &
-                            parseInt(gs.GiroFilial) !== 0 &
-                            parseInt(gs.GiroRede) !== 0
+                        const girsub = girosub.data.resposta.data.dados.filter((gs) => (
+                            (parseInt(gs.codigoSubgrupo) === parseInt(searchSubGrupo) || (gs.descricaoSubgrupo.toUpperCase()).includes(searchSubGrupo.toUpperCase())) &
+                            parseInt(gs.giroFilial) !== 0 &
+                            parseInt(gs.giroRede) !== 0
                         ));
                         setGiroSubGrupo(girsub);
                         setLoadButton(false);
 
-                    } else if (searchFilial !== false & searchGiro === true) {
+                    } else if (searchGiro === true) {
 
-                        const girsub = girosub.data.filter((gs) => (
-                            parseInt(gs.CodFilial) === parseInt(searchFilial) &
-                            parseInt(gs.GiroFilial) === 0 &
-                            parseInt(gs.GiroRede) === 0
+                        const girsub = girosub.data.resposta.data.dados.filter((gs) => (
+                            parseInt(gs.giroFilial) === 0 &
+                            parseInt(gs.giroRede) === 0
                         ));
                         setGiroSubGrupo(girsub);
                         setLoadButton(false);
 
                     } else {
 
-                        const girsub = girosub.data.filter((gs) => (
-                            parseInt(gs.CodFilial) === parseInt(numFilial) &
-                            parseInt(gs.GiroFilial) !== 0 &
-                            parseInt(gs.GiroRede) !== 0
+                        const girsub = girosub.data.resposta.data.dados.filter((gs) => (
+                            parseInt(gs.giroFilial) !== 0 &
+                            parseInt(gs.giroRede) !== 0
                         ));
                         setGiroSubGrupo(girsub);
                         setLoadButton(false);
@@ -410,7 +404,7 @@ export const AuthProvider = ({ children }) => {
         }
         getGiroSubGrupo();
     }, [searchFilial, searchSubGrupo, searchGiro, numFilial]);
-
+    // console.log(giroSubGrupo);
     // Gerencial Melhor Conversão
     useEffect(() => {
         async function getConversao() {

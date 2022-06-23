@@ -5,14 +5,14 @@ let BASE_URL = '';
 let requestCustom;
 let data;
 
-const login = axios.create({
+const isCobol = axios.create({
   withCredentials: true
 });
 
-login.interceptors.request.use(async (request) => {
+isCobol.interceptors.request.use(async (request) => {
 
-  request.baseURL = `http://172.16.1.43:9090/servicemobile/servlet/isCobol`;
-  BASE_URL = `http://172.16.1.43:9090/servicemobile/servlet/isCobol`;
+  request.baseURL = `http://172.16.1.43:9090/servicecomercial/servlet/isCobol`;
+  BASE_URL = `http://172.16.1.43:9090/servicecomercial/servlet/isCobol`;
 
   requestCustom = request;
   data = request.data;
@@ -20,7 +20,7 @@ login.interceptors.request.use(async (request) => {
   return request;
 });
 
-login.interceptors.response.use(
+isCobol.interceptors.response.use(
   response => response,
   async _error => {
     console.log('Abrindo sessão com o servidor novamente');
@@ -31,13 +31,14 @@ login.interceptors.response.use(
     });
 
     let session = await axiosNew
-      .get('(servicemobile)')
+      .get('(serviceci)')
       .then(resp => resp)
       .catch(_err => {
         return {
           status: 404,
           success: false,
           message: 'Não foi possível conectar ao servidor',
+          withCredentials: true
         };
       });
 
@@ -46,6 +47,7 @@ login.interceptors.response.use(
         status: 404,
         success: false,
         message: 'Não foi possível conectar ao servidor',
+        withCredentials: true
       };
 
       return session;
@@ -54,13 +56,21 @@ login.interceptors.response.use(
     console.log('Refazendo a chamada original...');
     let originalResponse;
     if (requestCustom.method === 'POST' || requestCustom.method === 'post') {
-      originalResponse = await login.post(`${requestCustom.url}`, data);
+      originalResponse = await isCobol.post(`${requestCustom.url}`, data);
     } else {
-      originalResponse = await login.get(`${requestCustom.url}`);
+      originalResponse = await isCobol.get(`${requestCustom.url}`);
     }
-
+    if (originalResponse.status !== 200) {
+      session = {
+        status: 404,
+        success: false,
+        message: 'Não foi possível conectar ao servidor',
+        withCredentials: true
+      };
+      return session;
+    }
     return originalResponse;
   },
 );
 
-export default login;
+export default isCobol;

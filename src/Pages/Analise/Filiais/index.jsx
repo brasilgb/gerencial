@@ -248,23 +248,6 @@ const AnaliseFiliais = () => {
                     </div>
                 </div>
 
-                {/* <BoxAnalise title="Operações GE - Garantia Estendida" textColor="text-gray-500" borderColor="border-gray-200">
-                    <div className="grid gap-2 grid-cols-6 mb-3">
-                        {
-                            analiseFiliaisKpis.map((value, key) => (
-                                <Fragment key={key}>
-                                    <Kpi title="Valor GE" value={<FormatMoney value={value.ValorGE !== '-' ? value.ValorGE : 0} />} titleColor="text-gray-500" valColor="text-blue-600" />
-                                    <Kpi title="Meta GE" value={<FormatMoney value={value.MetaGE} />} titleColor="text-gray-500" valColor="text-green-600" />
-                                    <Kpi title="Elegiveis GE" value={`${value.ElegiveisGE}`} titleColor="text-gray-500" valColor="text-blue-600" />
-                                    <Kpi title="Vendas GE" value={`${value.VendasGE}`} titleColor="text-gray-500" valColor="text-green-600" />
-                                    <ProgressBar value={((value.Meta_GE_Atingida) * 100).toFixed(2)} title="% GE Atingida" colorBar="#aa52f1" colorText="#241d09" />
-                                    <ProgressBar value={((value.GE_Convertida) * 100).toFixed(2)} title="% GE Convertida" colorBar="#5547cc" colorText="#241d09" />
-                                </Fragment>
-                            ))
-                        }
-                    </div>
-                </BoxAnalise> */}
-
                 <BoxAnalise title="Operações AP - Acidentes Pessoais" textColor="text-gray-500" borderColor="border-gray-200">
                     <div className="grid gap-2 grid-cols-4 mb-3">
                         {
