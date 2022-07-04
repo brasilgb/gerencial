@@ -60,8 +60,10 @@ export const Pagination = ({ data }) => {
                 <STr key={index} colorRow={(index % 2)}>
                     <STd>{gir.codigoSubgrupo}</STd>
                     <STd>{gir.descricaoSubgrupo}</STd>
-                    <STd>{parseFloat(((gir.valorEstoque) * 1).toString().slice(0, -2) + '.' + ((gir.valorEstoque) * 1).toString().slice(-2)).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</STd>
-                    <STd>{parseFloat(((gir.valorAtual) * 1).toString().slice(0, -2) + '.' + ((gir.valorAtual) * 1).toString().slice(-2)).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</STd>
+                    {/* <STd>{ gir.valorEstoque }</STd>
+                    <STd>{ gir.valorAtual }</STd> */}
+                    <STd>{((gir.valorEstoque) * 1).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</STd>
+                    <STd>{ ((gir.valorAtual)*1).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</STd>
                     <STd>{gir.giroFilial}</STd>
                     <STd>{gir.giroRede}</STd>
                 </STr>
@@ -75,6 +77,7 @@ export const Pagination = ({ data }) => {
 
     return (
         <Fragment>
+            
             <STable>
                 <STr thead={true}>
                     <STh largura="w-44">

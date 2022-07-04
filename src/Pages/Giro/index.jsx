@@ -15,7 +15,7 @@ import FormatMoney from '../../Components/FormatMoney';
 
 const GiroSubGrupo = () => {
 
-    const { user, logout, analiseFiliaisKpis, giroSubGrupo, giroSubGrupoFilial, giroSearch, loadButton, allFiliais, numFilial, searchFilial } = useContext(AuthContext);
+    const { user, logout, analiseFiliaisKpis, giroSubGrupo, giroSubGrupoFilial, dataDoGiro, giroSearch, loadButton, allFiliais, numFilial, searchFilial } = useContext(AuthContext);
     const [currentFilial, setCurrentFilial] = useState(numFilial);
 
     useEffect(() => {
@@ -83,7 +83,7 @@ const GiroSubGrupo = () => {
                         </div>
 
                         <div className="w-1/5 text-md text-gray-50 bg-solar-blue-200 px-4 py-1 rounded text-shadow text-md">
-                            Atualização de dados:&nbsp;
+                            Atualização de dados:&nbsp; {dataDoGiro}
 
                             {/* {giroSubGrupo.map((value) => (value.Atualizacao)).filter((value, index, self) => self.indexOf(value) === index)} */}
                         </div>

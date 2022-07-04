@@ -18,12 +18,13 @@ import AnaliseFiliais from './Pages/Analise/Filiais';
 import AnaliseVendedores from './Pages/Analise/Vendedores';
 import UserAccess from './Pages/UserAccess';
 import GiroSubGrupo from './Pages/Giro';
+import NoFirefox from './Pages/NoFirefox';
 
 const AppRoutes = () => {
-  
+
     const Private = ({ children }) => {
         const { authenticated, loading } = useContext(AuthContext);
-        
+
         if (loading) {
 
             return <div className="max-h-screen flex-grow flex items-center justify-center">
@@ -53,17 +54,18 @@ const AppRoutes = () => {
     return (
         <Router>
             <AuthProvider>
-                        <Routes>
-                            <Route  path="/register" element={<LoggedIn><Register /></LoggedIn>} />
-                            <Route  path="/login" element={<LoggedIn><Login /></LoggedIn>} />
-                            <Route  path="/" element={<Private><Home /></Private>} />
-                            <Route  path="/analisefiliais" element={<Private><AnaliseFiliais /></Private>} />
-                            <Route  path="/desempenhofiliais" element={<Private><DesempenhoFiliais /></Private>} />
-                            <Route  path="/analisevendedores" element={<Private><AnaliseVendedores /></Private>} />
-                            <Route  path="/desempenhovendedores" element={<Private><DesempenhoVendedores /></Private>} />
-                            <Route  path="/giroestoque" element={<Private><GiroSubGrupo /></Private>} />
-                            <Route  path="/logacesso" element={<Private><UserAccess /></Private>} />
-                        </Routes>
+                <Routes>
+                    <Route path="/register" element={<LoggedIn><Register /></LoggedIn>} />
+                    <Route path="/login" element={<LoggedIn><Login /></LoggedIn>} />
+                    <Route path="/" element={<Private><Home /></Private>} />
+                    <Route path="/analisefiliais" element={<Private><AnaliseFiliais /></Private>} />
+                    <Route path="/desempenhofiliais" element={<Private><DesempenhoFiliais /></Private>} />
+                    <Route path="/analisevendedores" element={<Private><AnaliseVendedores /></Private>} />
+                    <Route path="/desempenhovendedores" element={<Private><DesempenhoVendedores /></Private>} />
+                    <Route path="/giroestoque" element={<Private><GiroSubGrupo /></Private>} />
+                    <Route path="/logacesso" element={<Private><UserAccess /></Private>} />
+                    <Route path="/nofirefox" element={<LoggedIn><NoFirefox /></LoggedIn>} />
+                </Routes>
             </AuthProvider>
         </Router>
     )

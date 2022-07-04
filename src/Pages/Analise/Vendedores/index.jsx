@@ -19,6 +19,8 @@ const AnaliseVendedores = () => {
         if (value > 90) return "bg-emerald-500";
     });
 
+ 
+
     // const filterVendedor = (idvendedor) => {
     //     return margemVendedor.filter((m) => (parseInt(m.vendedor) === parseInt(idvendedor))).map((i) => (i.margem));
     // } 

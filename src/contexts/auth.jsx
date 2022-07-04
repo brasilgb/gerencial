@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import api from '../services/api';
 import isCobol from "../services/isCobol";
 import moment from "moment";
+import { isFirefox } from 'react-device-detect';
 // import iscobol from '../services/login';
 // import axios from 'axios';
 
@@ -11,6 +12,13 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!isFirefox) {
+            navigate('/nofirefox');
+        }
+    })
+
     const [user, setUser] = useState(null);
     const [userAccess, setUserAccess] = useState([]);
     const [valuesKpis, setValuesKpis] = useState([]);
@@ -43,6 +51,7 @@ export const AuthProvider = ({ children }) => {
     const [searchFilial, setSearchFilial] = useState("false");
     const [searchSubGrupo, setSearchSubGrupo] = useState("false");
     const [searchGiro, setSearchGiro] = useState("false");
+    const [dataDoGiro, setDataDoGiro] = useState(moment(new Date()).format('DD/MM/YYYY HH:mm:ss'));
 
     function dataSearch(inicial, final, filial) {
         setDataFiltroIni(inicial);
@@ -195,6 +204,7 @@ export const AuthProvider = ({ children }) => {
                 })
         }
         getUserAccess();
+
     }, [dataFiltroIni, dataFiltroFin, searchFilial]);
 
     useEffect(() => {
@@ -210,6 +220,7 @@ export const AuthProvider = ({ children }) => {
                 })
         }
         getKpis();
+
     }, [numFilial]);
 
     // Kpis total
@@ -225,6 +236,7 @@ export const AuthProvider = ({ children }) => {
                 })
         }
         getKpisTotal();
+
     }, []);
 
     // Analise Vencidos Fiiais
@@ -241,6 +253,7 @@ export const AuthProvider = ({ children }) => {
                 })
         }
         getVencidos();
+
     }, [numFilial]);
 
     // Analise Vencidos total
@@ -256,6 +269,7 @@ export const AuthProvider = ({ children }) => {
                 })
         }
         getVencidosTotal();
+
     }, [numFilial]);
 
     // Analise projeções Filial
@@ -272,6 +286,7 @@ export const AuthProvider = ({ children }) => {
                 })
         }
         getProjecoes();
+
     }, [numFilial]);
 
     // Analise projeções Totais
@@ -287,6 +302,7 @@ export const AuthProvider = ({ children }) => {
                 })
         }
         getProjecoesTotal();
+
     }, [numFilial]);
 
     // Gerencial analise de filiais
@@ -303,6 +319,7 @@ export const AuthProvider = ({ children }) => {
                 })
         }
         getAnaliseFiliais();
+
     }, [numFilial]);
 
     // Gerencial Inadimplencia
@@ -319,6 +336,7 @@ export const AuthProvider = ({ children }) => {
                 })
         }
         getInadimplencia();
+
     }, [numFilial]);
 
     // Gerencial Giro Estoque
@@ -335,30 +353,24 @@ export const AuthProvider = ({ children }) => {
                 })
         }
         getGiroEstoque();
+        const interval = setInterval(() => {
+            getGiroEstoque();
+        }, 10000)
+
+        return () => clearInterval(interval)
     }, [numFilial]);
 
-    // Gerencial Giro Estoque
-    useEffect(() => {
-        async function getGiroSubGrupoFilial() {
-            await isCobol.get(`http://172.16.1.43:9090/servicecomercial/servlet/isCobol(AR_ESTOQUE_IDEAL)?filial=${numFilial}?q=proxy`)
-                .then((giro) => {
-                    setGiroSubGrupoFilial(giro.data.resposta.data.dados);
-                })
-                .catch(err => {
-                    console.log(err);
-                })
-        }
-        getGiroSubGrupoFilial();
-    }, [numFilial]);
 
     // Gerencial Giro Estoque
     useEffect(() => {
         async function getGiroSubGrupo() {
-            setLoadButton(true);
-            await isCobol.get(`http://172.16.1.43:9090/servicecomercial/servlet/isCobol(AR_ESTOQUE_IDEAL)?filial=${numFilial}?q=proxy`)
-
+            if (!isFirefox)
+                setLoadButton(true);
+            await isCobol.get(`http://172.16.1.43:9090/servicecomercial/servlet/isCobol(AR_ESTOQUE_IDEAL)?filial=${numFilial}`)
+                // await isCobol.get(`http://172.16.1.34:8081/servicecomercial/servlet/isCobol(AR_ESTOQUE_IDEAL)?filial=${numFilial}`)
                 .then((girosub) => {
                     // console.log(girosub.data.resposta.data.dados[0]);
+                    setGiroSubGrupoFilial(girosub.data.resposta.data.dados);
                     if (searchSubGrupo === '' & !searchGiro) {
 
                         const girsub = girosub.data.resposta.data.dados.filter((gs) => (
@@ -403,9 +415,15 @@ export const AuthProvider = ({ children }) => {
                 })
         }
         getGiroSubGrupo();
+        const interval = setInterval(() => {
+            setDataDoGiro(moment(new Date()).format('DD/MM/YYYY HH:mm:ss'));
+            getGiroSubGrupo();
+        }, 10000)
+
+        return () => clearInterval(interval)
+
     }, [searchFilial, searchSubGrupo, searchGiro, numFilial]);
-    // console.log(giroSubGrupo);
-    // Gerencial Melhor Conversão
+
     useEffect(() => {
         async function getConversao() {
             await api.get('conversaofiliais')
@@ -417,6 +435,7 @@ export const AuthProvider = ({ children }) => {
                 })
         }
         getConversao();
+
     }, []);
 
     // Gerencial analise de vendedores
@@ -425,7 +444,7 @@ export const AuthProvider = ({ children }) => {
             setLoadList(true);
             await api.get('analisevendedores')
                 .then((analisevendedores) => {
-                    const vend = analisevendedores.data.filter((aven) => (parseInt(aven.Filial) === parseInt(numFilial)));
+                    const vend = analisevendedores.data.filter((aven) => (parseInt(aven.CodFilial) === parseInt(numFilial) & aven.ValorVenda > 0));
                     vend.sort((a, b) => parseInt(a.ValorVenda) < parseInt(b.ValorVenda) ? 1 : -1);
                     setAnaliseVendedoresKpis(vend);
                     setLoadList(false);
@@ -435,6 +454,11 @@ export const AuthProvider = ({ children }) => {
                 })
         }
         getAnaliseVendedores();
+        const interval = setInterval(() => {
+            getAnaliseVendedores();
+        }, 20000)
+
+        return () => clearInterval(interval)
     }, [numFilial]);
 
     // Gerencial Melhor Conversão de vendedores
@@ -443,7 +467,7 @@ export const AuthProvider = ({ children }) => {
             setLoadList(true);
             await api.get('conversaovendedores')
                 .then((cvendedores) => {
-                    const vend = cvendedores.data.filter((cven) => (parseInt(cven.CodigoFilial) === parseInt(numFilial)));
+                    const vend = cvendedores.data.filter((cven) => (parseInt(cven.CodFilial) === parseInt(numFilial)));
                     vend.sort((a, b) => parseInt(a.ValorVenda) < parseInt(b.ValorVenda) ? 1 : -1);
                     setConversaoVendedoresKpis(vend);
                     setLoadList(false);
@@ -453,6 +477,11 @@ export const AuthProvider = ({ children }) => {
                 })
         }
         getConversaoVendedores();
+        const interval = setInterval(() => {
+            getConversaoVendedores();
+        }, 20000)
+
+        return () => clearInterval(interval)
     }, [numFilial]);
 
     // Gerencial analise de vendedores
@@ -461,7 +490,7 @@ export const AuthProvider = ({ children }) => {
             setLoadList(true);
             await api.get('margemvendedor')
                 .then((margemvendedor) => {
-                    const vend = margemvendedor.data.filter((aven) => (parseInt(aven.filial) === parseInt(numFilial)));
+                    const vend = margemvendedor.data.filter((aven) => (parseInt(aven.CodFilial) === parseInt(numFilial)));
                     setMargemVendedor(vend);
                     setLoadList(false);
                 })
@@ -470,6 +499,11 @@ export const AuthProvider = ({ children }) => {
                 })
         }
         getMargemVendedor();
+        const interval = setInterval(() => {
+            getMargemVendedor();
+        }, 20000)
+
+        return () => clearInterval(interval)
     }, [numFilial]);
 
     return (
@@ -505,6 +539,7 @@ export const AuthProvider = ({ children }) => {
             giroEstoqueKpis,
             giroSubGrupo,
             giroSubGrupoFilial,
+            dataDoGiro,
             conversaoKpis,
             analiseVendedoresKpis,
             conversaoVendedoresKpis,

@@ -11,6 +11,8 @@ const isCobol = axios.create({
 
 isCobol.interceptors.request.use(async (request) => {
 
+  // request.baseURL = `http://172.16.1.34:8081/servicecomercial/servlet/isCobol`;
+  // BASE_URL = `http://172.16.1.34:8081/servicecomercial/servlet/isCobol`;
   request.baseURL = `http://172.16.1.43:9090/servicecomercial/servlet/isCobol`;
   BASE_URL = `http://172.16.1.43:9090/servicecomercial/servlet/isCobol`;
 
