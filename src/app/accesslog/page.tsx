@@ -20,6 +20,7 @@ const Dre = (props: Props) => {
   const { user, filialAtiva, setFilialAtiva } = useContext(AuthContext);
   const [allFiliais, setAllFiliais] = useState([]);
   const [loadingPage, setLoadingPage] = useState(false);
+  const [loadingFilial, setLoadingFilial] = useState(false);
   const [userAccess, setUserAccess] = useState([]);
   const [allUserAccess, setAllUserAccess] = useState([]);
   const userAuthenticated = listUserAuthenticated();
@@ -27,9 +28,13 @@ const Dre = (props: Props) => {
 
   useEffect(() => {
     async function getAllFiliais() {
-      await apiphpmysql.get(`analisekpis/${0}`)
+      setLoadingFilial(true);
+      await apiphpmysql.get(`filiaisativas`)
         .then((filiais) => {
           const fsort = filiais.data.sort((a: any, b: any) => a.CodFilial > b.CodFilial ? 1 : -1);
+          setTimeout(() => {
+            setLoadingFilial(false);
+          }, 500);
           setAllFiliais(fsort);
         })
         .catch(err => {
@@ -203,21 +208,21 @@ const Dre = (props: Props) => {
 
         <div className="flex-1">
           <div className="flex items-center justify-center">
-            {user?.type === "S" ?
+          {user?.type === "S" ?
               <select
-                className="w-full bg-solar-gray-dark shadow border border-white h-9 mx-2 uppercase text-sm font-semibold text-solar-blue-dark focus:ring-0 focus:border-solar-gray-light"
-                id="filial"
-                name="filial"
-                onChange={(e) => handleLoadFilial(e.target.value)}
+                className={`w-full duration-300 bg-solar-gray-dark shadow border border-white h-9 ml-2 text-sm font-semibold ${loadingFilial ? 'text-gray-500' : 'text-solar-blue-dark'} focus:ring-0 focus:border-solar-gray-light`}
+                name="cities"
                 value={filialAtiva}
+                onChange={(e: any) => handleLoadFilial(e.target.value)}
               >
-                <option value="" className="text-sm font-semibold">Selecione a filial</option>
+                {loadingFilial && <option className="text-sm font-semibold">Carregando filiais ...</option>}
+
                 {allFiliais.map((filial: any, idxFil: any) => (
-                  <option key={idxFil} value={filial.CodFilial} className="text-sm font-medium">{("00" + filial.CodFilial).slice(-2)} - {filial.Filial}</option>
+                  <option key={idxFil} value={filial.CodFilial} className="text-sm font-medium">{("00" + filial.CodFilial).slice(-2)} - {filial.NomeFilial}</option>
                 ))}
               </select>
-              : <div className="w-full flex items-center justify-center bg-solar-gray-dark shadow border border-white h-9 mx-2 uppercase text-sm font-semibold text-solar-blue-dark focus:ring-0 focus:border-solar-gray-light">
-                {allFiliais.filter((sf: any) => (sf.CodFilial == atuFiliais)).map((lf: any) => (lf.CodFilial + ' - ' + lf.Filial))}
+              : <div className="w-full flex items-center justify-center bg-solar-gray-dark shadow border border-white h-9 ml-2 text-sm font-semibold text-solar-blue-dark focus:ring-0 focus:border-solar-gray-light">
+                {allFiliais.filter((sf: any) => (sf.CodFilial == atuFiliais)).map((lf: any) => (lf.CodFilial + ' - ' + lf.NomeFilial))}
               </div>
             }
           </div>
@@ -245,7 +250,7 @@ const Dre = (props: Props) => {
           </div>
         </form>
         <div className="bg-solar-blue-light border border-solar-blue-light flex flex-1 items-center justify-center h-9">
-          <h1 className="text-center text-base font-medium drop-shadow-md text-solar-gray-light">Acessos para a filial de {allFiliais.filter((ffil: any) => (ffil.CodFilial == filialAtiva)).map((fil: any) => (fil.Filial))}
+          <h1 className="text-center text-base font-medium drop-shadow-md text-solar-gray-light">Acessos para a filial de {allFiliais.filter((ffil: any) => (ffil.CodFilial == filialAtiva)).map((fil: any) => (fil.NomeFilial))}
           </h1>
         </div>
       </div>

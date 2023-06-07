@@ -1,3 +1,5 @@
+"use client"
+
 import React, { ReactNode, useEffect } from "react";
 import { APP_ROUTES } from "@/constants";
 import { useRouter } from "next/navigation";

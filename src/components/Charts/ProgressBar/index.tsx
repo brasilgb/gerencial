@@ -1,3 +1,5 @@
+"use client"
+
 import React, { Fragment } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
@@ -7,16 +9,17 @@ interface ProgressProps {
     value?: any;
     colorBar?: any;
     colorText?: any;
+    width?: any;
 }
 
-const ProgressBar = ({ title, value, colorBar, colorText }: ProgressProps) => {
+const ProgressBar = ({ title, value, colorBar, colorText, width }: ProgressProps) => {
 
     const options = {
         chart: {
             type: 'bar',
             height: 130,
             padding: 0,
-
+            width: width
         },
         title: {
             text: "",
@@ -80,7 +83,7 @@ const ProgressBar = ({ title, value, colorBar, colorText }: ProgressProps) => {
     }
 
     return (
-        <div className="w-full bg-white border border-gray-200 p-3 relative flex items-start justify-center">
+        <div className="bg-white border border-gray-200 pr-3 py-3  flex items-start justify-center">
             <div className="text-lg text-gray-600 font-medium drop-shadow-md -mb-4 absolute z-10">{title}</div>
             <HighchartsReact
                 highcharts={Highcharts}

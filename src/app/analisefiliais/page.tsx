@@ -1,4 +1,5 @@
 "use client"
+
 import React, { Fragment, useContext, useEffect, useState } from "react";
 import AppLoading from "@/components/AppLoading";
 import apiphpmysql from "../api/apiphpmysql";
@@ -10,6 +11,7 @@ import ProgressBar from "@/components/Charts/ProgressBar";
 import 'animate.css';
 import { AuthContext } from "@/contexts/auth";
 import { listUserAuthenticated } from "@/function/list-user-autenticated";
+import { CgSpinnerTwo } from "react-icons/cg";
 
 type Props = {
 
@@ -18,6 +20,7 @@ type Props = {
 const AnaliseFiliais = (props: Props) => {
   const { user, filialAtiva, setFilialAtiva } = useContext(AuthContext);
   const [loadingPage, setLoadingPage] = useState(false);
+  const [loadingFilial, setLoadingFilial] = useState(false);
   const [allFiliais, setAllFiliais] = useState([]);
   const [analiseFiliaisKpis, setAnaliseFiliaisKpis] = useState([]);
   const [inadimplenciaKpis, setInadimplenciaKpis] = useState([]);
@@ -26,9 +29,13 @@ const AnaliseFiliais = (props: Props) => {
   const atuFiliais = user?.type === "S" ? filialAtiva : userAuthenticated?.filial;
   useEffect(() => {
     async function getAllFiliais() {
-      await apiphpmysql.get(`analisekpis/${0}`)
+      setLoadingFilial(true)
+      await apiphpmysql.get(`filiaisativas`)
         .then((filiais) => {
           const fsort = filiais.data.sort((a: any, b: any) => a.CodFilial > b.CodFilial ? 1 : -1);
+          setTimeout(() => {
+            setLoadingFilial(false);
+          }, 500);
           setAllFiliais(fsort);
         })
         .catch(err => {
@@ -86,7 +93,7 @@ const AnaliseFiliais = (props: Props) => {
           setGiroEstoqueKpis(gir);
           setTimeout(() => {
             setLoadingPage(false);
-          }, 500);
+          }, 200);
         })
         .catch(err => {
           console.log(err);
@@ -121,18 +128,19 @@ const AnaliseFiliais = (props: Props) => {
           <div className="flex items-center justify-end">
             {user?.type === "S" ?
               <select
-                className="w-full bg-solar-gray-dark shadow border border-white h-9 ml-2 uppercase text-sm font-semibold text-solar-blue-dark focus:ring-0 focus:border-solar-gray-light"
+                className={`w-full duration-300 bg-solar-gray-dark shadow border border-white h-9 ml-2 text-sm font-semibold ${loadingFilial ? 'text-gray-500' : 'text-solar-blue-dark'} focus:ring-0 focus:border-solar-gray-light`}
                 name="cities"
                 value={filialAtiva}
                 onChange={(e: any) => handleLoadFilial(e.target.value)}
               >
-                <option value="" className="text-sm font-semibold">Selecione a filial</option>
+                {loadingFilial && <option className="text-sm font-semibold">Carregando filiais ...</option>}
+
                 {allFiliais.map((filial: any, idxFil: any) => (
-                  <option key={idxFil} value={filial.CodFilial} className="text-sm font-medium">{("00" + filial.CodFilial).slice(-2)} - {filial.Filial}</option>
+                  <option key={idxFil} value={filial.CodFilial} className="text-sm font-medium">{("00" + filial.CodFilial).slice(-2)} - {filial.NomeFilial}</option>
                 ))}
               </select>
-              : <div className="w-full flex items-center justify-center bg-solar-gray-dark shadow border border-white h-9 ml-2 uppercase text-sm font-semibold text-solar-blue-dark focus:ring-0 focus:border-solar-gray-light">
-                {allFiliais.filter((sf: any) => (sf.CodFilial == atuFiliais)).map((lf: any) => (lf.CodFilial + ' - ' + lf.Filial))}
+              : <div className="w-full flex items-center justify-center bg-solar-gray-dark shadow border border-white h-9 ml-2 text-sm font-semibold text-solar-blue-dark focus:ring-0 focus:border-solar-gray-light">
+                {allFiliais.filter((sf: any) => (sf.CodFilial == atuFiliais)).map((lf: any) => (lf.CodFilial + ' - ' + lf.NomeFilial))}
               </div>
             }
           </div>
@@ -148,8 +156,8 @@ const AnaliseFiliais = (props: Props) => {
         ? <AppLoading />
         :
         <div className="animate__animated animate__fadeIn">
-          <div className="grid gap-2 grid-cols-3">
-            <div className="col-span-2 ml-4 ">
+          <div className="grid gap-2 grid-cols-3 px-4">
+            <div className="col-span-2">
               <BoxAnalise title="Faturamento" textColor="!font-semibold text-solar-blue-dark" borderColor="border-gray-200">
                 <div className="grid gap-2 grid-cols-4">
                   {
@@ -184,7 +192,7 @@ const AnaliseFiliais = (props: Props) => {
               </BoxAnalise>
             </div>
 
-            <div className="mr-4">
+            <div>
               <BoxAnalise title="Projeção" textColor="!font-semibold text-solar-blue-dark" borderColor="border-gray-200">
                 <div className="grid gap-2 grid-cols-2">
                   {
@@ -211,8 +219,8 @@ const AnaliseFiliais = (props: Props) => {
             </div>
           </div>
 
-          <div className="grid gap-2 grid-cols-3">
-            <div className="col-span-2 ml-4 ">
+          <div className="grid gap-2 grid-cols-3 px-4">
+            <div className="col-span-2">
               <BoxAnalise title="Faturamento diário" textColor="!font-semibold text-solar-blue-dark" borderColor="border-gray-200">
                 <div className="grid gap-2 grid-cols-3">
                   {
@@ -238,6 +246,7 @@ const AnaliseFiliais = (props: Props) => {
                           title="Alcançada"
                           colorBar={colorBar(((value.ValorAlcancadoDia) * 100).toFixed())}
                           colorText={''}
+                        // width={410}
                         />
                       </Fragment>
                     ))
@@ -246,211 +255,75 @@ const AnaliseFiliais = (props: Props) => {
               </BoxAnalise>
             </div>
 
-            <div className="mr-4">
-              <BoxAnalise title="Taxa de juros" textColor="!font-semibold text-solar-blue-dark" borderColor="border-gray-200">
-                <div className="grid gap-2 grid-cols-2">
-                  {
-                    analiseFiliaisKpis.map((value: any, idxFour: any) => (
-                      <Fragment key={idxFour}>
-                        <Kpis
-                          title="Taxa de juros"
-                          value={<FormatMoney value={value.ValorTaxaJuros} />}
-                          titleColor="text-gray-500"
-                          valueColor={colorKpi(((value.TaxaJurosFilial) * 100).toFixed())}
-                          classname="!bg-white !shadow-none !border-gray-200"
-                        />
-                        <ProgressBar
-                          value={((value.TaxaJurosFilial) * 100).toFixed(2)}
-                          title="Juros"
-                          colorBar={colorBar(((value.TaxaJurosFilial) * 100).toFixed())}
-                          colorText={"#000"}
-                        />
-                      </Fragment>
-                    ))
-                  }
-                </div>
-              </BoxAnalise>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-6 gap-2">
             <div>
-              <div className="ml-4">
-                <BoxAnalise title="Inadimplência" textColor="!font-semibold text-solar-blue-dark" borderColor="border-gray-200">
-                  {
-                    inadimplenciaKpis.map((value: any, idxFive: any) => (
-                      <Fragment key={idxFive}>
-                        <ProgressBar
-                          value={((value.PercentInadimplencia) * 100).toFixed(2)}
-                          title="Inadimplência"
-                          colorBar={((value.PercentInadimplencia) * 100).toFixed() < '2' ? "#10B981" : "#DC2626"}
-                          colorText="#241d09"
-                        />
-                      </Fragment>
-                    ))
-                  }
-                </BoxAnalise>
-              </div>
+              <BoxAnalise title="Inadimplência" textColor="!font-semibold text-solar-blue-dark" borderColor="border-gray-200">
+                {
+                  inadimplenciaKpis.map((value: any, idxFive: any) => (
+                    <Fragment key={idxFive}>
+                      <ProgressBar
+                        value={((value.PercentInadimplencia) * 100).toFixed(2)}
+                        title="Inadimplência"
+                        colorBar={((value.PercentInadimplencia) * 100).toFixed() < '2' ? "#10B981" : "#DC2626"}
+                        colorText="#241d09"
+                      // width={590}
+                      />
+                    </Fragment>
+                  ))
+                }
+              </BoxAnalise>
             </div>
 
-            <div className="col-span-2">
-              <div>
-                <BoxAnalise title="Giro Estoque" textColor="!font-semibold text-solar-blue-dark" borderColor="border-gray-200">
-                  <div className="grid gap-2 grid-cols-2">
-                    {
-                      giroEstoqueKpis.map((value: any, idxSix: any) => (
-                        <Fragment key={idxSix}>
-                          <Kpis
-                            title="Giro estoque Loja"
-                            value={`${value.GiroEstoqueLoja}`}
-                            titleColor="text-gray-500"
-                            valueColor="text-blue-600"
-                            classname="!bg-white !shadow-none !border-gray-200 !py-[43.4px]"
-                          />
-                          <Kpis
-                            title="Giro estoque Rede"
-                            value={`${(value.GiroEstoqueRede * 1).toFixed()}`}
-                            titleColor="text-gray-500"
-                            valueColor="text-green-600"
-                            classname="!bg-white !shadow-none !border-gray-200 !py-[43.4px]"
-                          />
-                        </Fragment>
-                      ))
-                    }
-                  </div>
-                </BoxAnalise>
-              </div>
-            </div>
-
-            <div className="col-span-3">
-              <div className="mr-4">
-                <BoxAnalise title="Operações EP - Empréstimo Pessoal" textColor="!font-semibold text-solar-blue-dark" borderColor="border-gray-200">
-                  <div className="grid gap-2 grid-cols-3">
-                    {
-                      analiseFiliaisKpis.map((value: any, idxSeven: any) => (
-                        <Fragment key={idxSeven}>
-                          <Kpis
-                            title="Valor EP"
-                            value={<FormatMoney value={value.ValorEP} />}
-                            titleColor="text-gray-500"
-                            valueColor={colorKpi(((value.Meta_EP_Atingida) * 100).toFixed())}
-                            classname="!bg-white !shadow-none !border-gray-200 !py-[43.4px]"
-                          />
-                          <Kpis
-                            title="Meta EP"
-                            value={<FormatMoney value={value.MetaEP} />}
-                            titleColor="text-gray-500"
-                            valueColor="text-blue-500"
-                            classname="!bg-white !shadow-none !border-gray-200 !py-[43.4px]"
-                          />
-                          <ProgressBar
-                            value={((value.Meta_EP_Atingida) * 100).toFixed(2)}
-                            title="% EP Atingida"
-                            colorBar={colorBar(((value.Meta_EP_Atingida) * 100).toFixed())}
-                            colorText="#241d09"
-                          />
-                        </Fragment>
-                      ))
-                    }
-                  </div>
-                </BoxAnalise>
-              </div>
-            </div>
           </div>
 
-          <div className="mb-2">
-            <div className="mx-4">
-              <BoxAnalise title="Operações AP - Acidentes Pessoais" textColor="!font-semibold text-solar-blue-dark" borderColor="border-gray-200">
-                <div className="grid gap-2 grid-cols-4">
-                  {
-                    analiseFiliaisKpis.map((value: any, idxEight: any) => (
-                      <Fragment key={idxEight}>
-                        <Kpis
-                          title="Valor AP"
-                          value={<FormatMoney value={value.ValorAP} />}
-                          titleColor="text-gray-500"
-                          valueColor={colorKpi(((value.Meta_AP_Atingida) * 100).toFixed())}
-                          classname="!bg-white !shadow-none !border-gray-200 !py-[43.4px]"
-                        />
-                        <Kpis
-                          title="Meta AP"
-                          value={<FormatMoney value={value.MetaAP} />}
-                          titleColor="text-gray-500"
-                          valueColor="text-blue-500"
-                          classname="!bg-white !shadow-none !border-gray-200 !py-[43.4px]"
-                        />
-                        <Kpis
-                          title="Vendas AP"
-                          value={`${value.VendasAP}`}
-                          titleColor="text-gray-500"
-                          valueColor={colorKpi(((value.Meta_AP_Atingida) * 100).toFixed())}
-                          classname="!bg-white !shadow-none !border-gray-200 !py-[43.4px]"
-                        />
-                        <ProgressBar
-                          value={((value.Meta_AP_Atingida) * 100).toFixed(2)}
-                          title="% AP Atingida"
-                          colorBar={colorBar(((value.Meta_AP_Atingida) * 100).toFixed())}
-                          colorText="#241d09"
-                        />
-                      </Fragment>
-                    ))
-                  }
-                </div>
-              </BoxAnalise>
-            </div>
+          <div className="grid grid-cols-2 gap-2 px-4">
+            <BoxAnalise title="Taxa de juros" textColor="!font-semibold text-solar-blue-dark" borderColor="border-gray-200">
+              <div className="grid gap-2 grid-cols-2">
+                {
+                  analiseFiliaisKpis.map((value: any, idxFour: any) => (
+                    <Fragment key={idxFour}>
+                      <Kpis
+                        title="Taxa de juros"
+                        value={<FormatMoney value={value.ValorTaxaJuros} />}
+                        titleColor="text-gray-500"
+                        valueColor={colorKpi(((value.TaxaJurosFilial) * 100).toFixed())}
+                        classname="!bg-white !shadow-none !border-gray-200"
+                      />
+                      <ProgressBar
+                        value={((value.TaxaJurosFilial) * 100).toFixed(2)}
+                        title="Juros"
+                        colorBar={colorBar(((value.TaxaJurosFilial) * 100).toFixed())}
+                        colorText={"#000"}
+                      />
+                    </Fragment>
+                  ))
+                }
+              </div>
+            </BoxAnalise>
 
-            <div className="mx-4">
-              <BoxAnalise title="Operações PP - Prestação Protegida" textColor="!font-semibold text-solar-blue-dark" borderColor="border-gray-200">
-                <div className="grid gap-2 grid-cols-6">
-                  {
-                    analiseFiliaisKpis.map((value: any, idxNine: any) => (
-                      <Fragment key={idxNine}>
-                        <Kpis
-                          title="Valor PP"
-                          value={<FormatMoney value={value.ValorPP} />}
-                          titleColor="text-gray-500"
-                          valueColor={colorKpi(((value.Meta_PP_Atingida) * 100).toFixed())}
-                          classname="!bg-white !shadow-none !border-gray-200"
-                        />
-                        <Kpis
-                          title="Meta PP"
-                          value={<FormatMoney value={value.MetaPP} />}
-                          titleColor="text-gray-500"
-                          valueColor="text-blue-500"
-                          classname="!bg-white !shadow-none !border-gray-200"
-                        />
-                        <Kpis
-                          title="Elegiveis PP"
-                          value={`${value.ElegiveisPP}`}
-                          titleColor="text-gray-500"
-                          valueColor="text-blue-500"
-                          classname="!bg-white !shadow-none !border-gray-200"
-                        />
-                        <Kpis
-                          title="Vendas PP"
-                          value={`${value.VendasPP}`}
-                          titleColor="text-gray-500"
-                          valueColor={colorKpi(((value.Meta_PP_Atingida) * 100).toFixed())}
-                          classname="!bg-white !shadow-none !border-gray-200"
-                        />
-                        <ProgressBar
-                          value={((value.Meta_PP_Atingida) * 100).toFixed(2)}
-                          title="% PP Atingida"
-                          colorBar={colorBar(((value.Meta_PP_Atingida) * 100).toFixed())}
-                          colorText="#241d09"
-                        />
-                        <ProgressBar
-                          value={((value.PP_Convertida) * 100).toFixed(2)}
-                          title="% PP Convertida"
-                          colorBar={colorBar(((value.PP_Convertida) * 100).toFixed())}
-                          colorText="#241d09"
-                        />
-                      </Fragment>
-                    ))
-                  }
-                </div>
-              </BoxAnalise>
-            </div>
+            <BoxAnalise title="Giro Estoque" textColor="!font-semibold text-solar-blue-dark" borderColor="border-gray-200">
+              <div className="grid gap-2 grid-cols-2">
+                {
+                  giroEstoqueKpis.map((value: any, idxSix: any) => (
+                    <Fragment key={idxSix}>
+                      <Kpis
+                        title="Giro estoque Loja"
+                        value={`${value.GiroEstoqueLoja}`}
+                        titleColor="text-gray-500"
+                        valueColor="text-blue-600"
+                        classname="!bg-white !shadow-none !border-gray-200 !py-[43.4px]"
+                      />
+                      <Kpis
+                        title="Giro estoque Rede"
+                        value={`${(value.GiroEstoqueRede * 1).toFixed()}`}
+                        titleColor="text-gray-500"
+                        valueColor="text-green-600"
+                        classname="!bg-white !shadow-none !border-gray-200 !py-[43.4px]"
+                      />
+                    </Fragment>
+                  ))
+                }
+              </div>
+            </BoxAnalise>
           </div>
         </div>
       }

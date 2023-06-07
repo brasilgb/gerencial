@@ -1,3 +1,5 @@
+"use client"
+
 import React from "react";
 
 interface TableProps {
@@ -39,12 +41,12 @@ export const STh = ({ children, colspan, rowspan, classname }: TableProps) => {
     );
 };
 
-export const STd = ({ children, classname, colspan, rowspan }: TableProps) => {
+export const STd = ({ children, classname, colspan, rowspan, total }: TableProps) => {
     return (
         <td
             colSpan={colspan}
             rowSpan={rowspan}
-            className={`${classname} p-2 border-b border-gray-200 text-gray-600 text-shadow-md`}
+            className={`p-2 border-b border-gray-200 text-gray-600 text-shadow-md ${classname}`}
         >
             {children}
         </td>

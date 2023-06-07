@@ -1,3 +1,5 @@
+"use client"
+
 import React, { Fragment } from 'react'
 import { CgSearch } from 'react-icons/cg';
 import { IconContext } from 'react-icons';

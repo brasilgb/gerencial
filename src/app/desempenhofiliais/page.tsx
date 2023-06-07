@@ -1,4 +1,5 @@
 "use client"
+
 import React, { Fragment, useEffect, useState } from "react";
 import apiphpmysql from "../api/apiphpmysql";
 import AppLoading from "@/components/AppLoading";
@@ -98,21 +99,21 @@ const DesempenhoFiliais = (props: Props) => {
               </BoxAnalise>
             </div>
             <div>
-              <BoxAnalise title="Operações PP - Prestação Protegida" textColor="!font-semibold text-solar-blue-dark" borderColor="border-gray-200">
+              <BoxAnalise title="Projeção" textColor="!font-semibold text-solar-blue-dark" borderColor="border-gray-200">
                 <div className="grid gap-2 grid-cols-2">
                   {
                     conversaoKpis.map((value: any, key: any) => (
                       <Fragment key={key}>
                         <Kpis
-                          title="Melhor PP"
-                          rotulo={value.RotuloMelhorPP}
-                          value={`${((value.ValorMelhorPP > 0 ? value.ValorMelhorPP : 0) * 100).toFixed(2).replace('.', ',')}%`}
+                          title="Melhor Projeção"
+                          rotulo={value.RotuloProjecao}
+                          value={`${((value.ValorProjecao > 0 ? value.ValorProjecao : 0) * 100).toFixed(2).replace('.', ',')}%`}
                           titleColor="text-gray-500"
-                          valueColor={colorKpi(((value.ValorMelhorPP > 0 ? value.ValorMelhorPP : 0) * 100).toFixed(2))}
+                          valueColor={colorKpi(((value.ValorProjecao > 0 ? value.ValorProjecao : 0) * 100).toFixed())}
                           classname="!bg-white !shadow-none !border-gray-200"
                         />
                         <Progress
-                          value={((value.MediaMelhorPP > 0 ? value.MediaMelhorPP : 0) * 100).toFixed(2)}
+                          value={((value.MediaProjecao > 0 ? value.MediaProjecao : 0) * 100).toFixed(2)}
                           title="Média"
                           colorBar="#e4a548"
                           colorText="#f0c129"
@@ -123,21 +124,7 @@ const DesempenhoFiliais = (props: Props) => {
                 </div>
               </BoxAnalise>
             </div>
-            {/* <div>
-                <BoxAnalise title="Operações GE - Garantia Estendida" textColor="text-gray-500" borderColor="border-gray-200">
-                    <div className="grid gap-2 grid-cols-2">
-                        {
-                            conversaoKpis.map((value, key) => (
-                                <Fragment key={key}>
 
-                                    <Kpis title="Melhor GE" rotulo={value.RotuloMelhorGE} value={`${((value.ValorMelhorGE) * 100).toFixed(2).replace('.', ',')}%`} titleColor="text-gray-500" valColor="text-green-600" />
-                                    <Progress value={((value.MediaMelhorGE) * 100).toFixed(2)} title="Média" colorBar="#248f20" colorText="#5ab44e" />
-                                </Fragment>
-                            ))
-                        }
-                    </div>
-                </BoxAnalise>
-            </div> */}
           </div>
 
           <div className="grid gap-2 grid-cols-3">
@@ -168,88 +155,6 @@ const DesempenhoFiliais = (props: Props) => {
               </BoxAnalise>
             </div>
             <div>
-              <BoxAnalise title="Operações AP - Acidentes Pessoais" textColor="!font-semibold text-solar-blue-dark" borderColor="border-gray-200">
-                <div className="grid gap-2 grid-cols-2">
-                  {
-                    conversaoKpis.map((value: any, key: any) => (
-                      <Fragment key={key}>
-                        <Kpis
-                          title="Melhor AP"
-                          rotulo={value.RotuloMelhorAP}
-                          value={`${((value.ValorMelhorAP > 0 ? value.ValorMelhorAP : 0) * 100).toFixed(2).replace('.', ',')}%`}
-                          titleColor="text-gray-500"
-                          valueColor={colorKpi(((value.ValorMelhorAP > 0 ? value.ValorMelhorAP : 0) * 100).toFixed())}
-                          classname="!bg-white !shadow-none !border-gray-200"
-                        />
-                        <Progress
-                          value={((value.MediaMelhorAP > 0 ? value.MediaMelhorAP : 0) * 100).toFixed(2)}
-                          title="Média"
-                          colorBar="#e4a548"
-                          colorText="#f0c129"
-                        />
-                      </Fragment>
-                    ))
-                  }
-                </div>
-              </BoxAnalise>
-            </div>
-
-            <div>
-              <BoxAnalise title="Operações EP - Empréstimo Pessoal" textColor="!font-semibold text-solar-blue-dark" borderColor="border-gray-200">
-                <div className="grid gap-2 grid-cols-2">
-                  {
-                    conversaoKpis.map((value: any, key: any) => (
-                      <Fragment key={key}>
-                        <Kpis
-                          title="Melhor EP"
-                          rotulo={value.RotuloMelhorEP}
-                          value={`${((value.ValorMelhorEP > 0 ? value.ValorMelhorEP : 0) * 100).toFixed(2).replace('.', ',')}%`}
-                          titleColor="text-gray-500"
-                          valueColor={colorKpi(((value.ValorMelhorEP > 0 ? value.ValorMelhorEP : 0) * 100).toFixed())}
-                          classname="!bg-white !shadow-none !border-gray-200"
-                        />
-                        <Progress
-                          value={((value.MediaMelhorEP > 0 ? value.MediaMelhorEP : 0) * 100).toFixed(2)}
-                          title="Média"
-                          colorBar="#e4a548"
-                          colorText="#f0c129"
-                        />
-                      </Fragment>
-                    ))
-                  }
-                </div>
-              </BoxAnalise>
-            </div>
-          </div>
-
-          <div className="grid gap-2 grid-cols-5 mb-2">
-            <div className="col-span-2">
-              <BoxAnalise title="Projeção" textColor="!font-semibold text-solar-blue-dark" borderColor="border-gray-200">
-                <div className="grid gap-2 grid-cols-2">
-                  {
-                    conversaoKpis.map((value: any, key: any) => (
-                      <Fragment key={key}>
-                        <Kpis
-                          title="Melhor Projeção"
-                          rotulo={value.RotuloProjecao}
-                          value={`${((value.ValorProjecao > 0 ? value.ValorProjecao : 0) * 100).toFixed(2).replace('.', ',')}%`}
-                          titleColor="text-gray-500"
-                          valueColor={colorKpi(((value.ValorProjecao > 0 ? value.ValorProjecao : 0) * 100).toFixed())}
-                          classname="!bg-white !shadow-none !border-gray-200"
-                        />
-                        <Progress
-                          value={((value.MediaProjecao > 0 ? value.MediaProjecao : 0) * 100).toFixed(2)}
-                          title="Média"
-                          colorBar="#e4a548"
-                          colorText="#f0c129"
-                        />
-                      </Fragment>
-                    ))
-                  }
-                </div>
-              </BoxAnalise>
-            </div>
-            <div className="col-span-2">
               <BoxAnalise title="Taxa de Juros" textColor="!font-semibold text-solar-blue-dark" borderColor="border-gray-200">
                 <div className="grid gap-2 grid-cols-2">
                   {
@@ -275,26 +180,24 @@ const DesempenhoFiliais = (props: Props) => {
                 </div>
               </BoxAnalise>
             </div>
-            <div>
-              <BoxAnalise title="Meta Diária" textColor="!font-semibold text-solar-blue-dark" borderColor="border-gray-200">
-                <div>
-                  {
-                    conversaoKpis.map((value: any, key: any) => (
-                      <Fragment key={key}>
-                        <Kpis
-                          title="Meta Dia"
-                          rotulo={value.RotuloMetaDia}
-                          value={`${((value.MetaAlcancadaDia > 0 ? value.MetaAlcancadaDia : 0) * 100).toFixed(2).replace('.', ',')}%`}
-                          titleColor="text-gray-500"
-                          valueColor={colorKpi(((value.MetaAlcancadaDia > 0 ? value.MetaAlcancadaDia : 0) * 100).toFixed())}
-                          classname="!bg-white !shadow-none !border-gray-200 !py-[50px]"
-                        />
-                      </Fragment>
-                    ))
-                  }
-                </div>
-              </BoxAnalise>
-            </div>
+            <BoxAnalise title="Meta Diária" textColor="!font-semibold text-solar-blue-dark" borderColor="border-gray-200">
+              <div>
+                {
+                  conversaoKpis.map((value: any, key: any) => (
+                    <Fragment key={key}>
+                      <Kpis
+                        title="Meta Dia"
+                        rotulo={value.RotuloMetaDia}
+                        value={`${((value.MetaAlcancadaDia > 0 ? value.MetaAlcancadaDia : 0) * 100).toFixed(2).replace('.', ',')}%`}
+                        titleColor="text-gray-500"
+                        valueColor={colorKpi(((value.MetaAlcancadaDia > 0 ? value.MetaAlcancadaDia : 0) * 100).toFixed())}
+                        classname="!bg-white !shadow-none !border-gray-200 !py-[50px]"
+                      />
+                    </Fragment>
+                  ))
+                }
+              </div>
+            </BoxAnalise>
           </div>
         </div>
       }

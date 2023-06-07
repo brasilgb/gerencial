@@ -16,16 +16,22 @@ const Dre = (props: Props) => {
   const { user, filialAtiva, setFilialAtiva } = useContext(AuthContext);
   const [allFiliais, setAllFiliais] = useState([]);
   const [loadingPage, setLoadingPage] = useState(false);
+  const [loadingFilial, setLoadingFilial] = useState(false);
   const [dreEstrutura, setDreEstrutura] = useState([]);
   const [dreData, setDreData] = useState([]);
+  const [dreDataTotal, setDreDataTotal] = useState([]);
   const userAuthenticated = listUserAuthenticated();
   const atuFiliais = user?.type === "S" ? filialAtiva : userAuthenticated?.filial;
 
   useEffect(() => {
     async function getAllFiliais() {
-      await apiphpmysql.get(`analisekpis/${0}`)
+      setLoadingFilial(true);
+      await apiphpmysql.get(`filiaisativas`)
         .then((filiais) => {
           const fsort = filiais.data.sort((a: any, b: any) => a.CodFilial > b.CodFilial ? 1 : -1);
+          setTimeout(() => {
+            setLoadingFilial(false);
+          }, 500);
           setAllFiliais(fsort);
         })
         .catch(err => {
@@ -37,9 +43,13 @@ const Dre = (props: Props) => {
 
   useEffect(() => {
     const getDreEstrutura = (async () => {
+      setLoadingPage(true);
       await apiiscobol.get(`(DRE_ESTRU)`)
         .then((response) => {
           setDreEstrutura(response.data.bi058.bidata);
+          setTimeout(() => {
+            setLoadingPage(false);
+          }, 200);
         }).catch((error) => {
           console.log(error);
         })
@@ -68,7 +78,26 @@ const Dre = (props: Props) => {
     getDreData();
   }, [atuFiliais]);
 
-  // console.log(dreData);
+  useEffect(() => {
+    const getDreDataTotal = (async () => {
+      setLoadingPage(true);
+      await apiiscobol.post(`(DRE_REL)`,
+        {
+          "dreidenti": 6,
+          "dredepto": 1,
+          "drefilial": atuFiliais
+        })
+        .then((response) => {
+          setDreDataTotal(response.data.bi057.bidata);
+          setTimeout(() => {
+            setLoadingPage(false);
+          }, 200);
+        }).catch((error) => {
+          console.log(error);
+        })
+    });
+    getDreDataTotal();
+  }, [atuFiliais]);
 
   const handleChangeFilial = (filial: any) => {
     setFilialAtiva(filial);
@@ -77,7 +106,9 @@ const Dre = (props: Props) => {
   const headerClass = {
     default: "text-center border-r border-t text-xs font-semibold bg-solar-blue-light text-white",
     conta: "w-44 text-left border-r text-xs",
-    line: "text-right border-r text-xs"
+    line: "text-right border-r text-xs",
+    total: "text-center border-r border-t text-sm font-semibold bg-orange-200 text-solar-orange-dark",
+    lineTotal: "text-right border-r text-xs bg-orange-200",
   }
 
   const lineTotal = ((EstruturaId: any) => {
@@ -113,18 +144,19 @@ const Dre = (props: Props) => {
           <div className="flex items-center justify-end">
             {user?.type === "S" ?
               <select
-                className=" w-full bg-solar-gray-dark shadow border border-white h-9 ml-2 uppercase text-sm font-semibold text-solar-blue-dark focus:ring-0 focus:border-solar-gray-light"
+                className={`w-full duration-300 bg-solar-gray-dark shadow border border-white h-9 ml-2 text-sm font-semibold ${loadingFilial ? 'text-gray-500' : 'text-solar-blue-dark'} focus:ring-0 focus:border-solar-gray-light`}
                 name="cities"
                 value={filialAtiva}
                 onChange={(e: any) => handleChangeFilial(e.target.value)}
               >
-                <option value="" className="text-sm font-semibold">Selecione a filial</option>
+                {loadingFilial && <option className="text-sm font-semibold">Carregando filiais ...</option>}
+
                 {allFiliais.map((filial: any, idxFil: any) => (
-                  <option key={idxFil} value={filial.CodFilial} className="text-sm font-medium">{("00" + filial.CodFilial).slice(-2)} - {filial.Filial}</option>
+                  <option key={idxFil} value={filial.CodFilial} className="text-sm font-medium">{("00" + filial.CodFilial).slice(-2)} - {filial.NomeFilial}</option>
                 ))}
               </select>
-              : <div className="w-full flex items-center justify-center bg-solar-gray-dark shadow border border-white h-9 ml-2 uppercase text-sm font-semibold text-solar-blue-dark focus:ring-0 focus:border-solar-gray-light">
-                {allFiliais.filter((sf: any) => (sf.CodFilial == atuFiliais)).map((lf: any) => (lf.CodFilial + ' - ' + lf.Filial))}
+              : <div className="w-full flex items-center justify-center bg-solar-gray-dark shadow border border-white h-9 ml-2 text-sm font-semibold text-solar-blue-dark focus:ring-0 focus:border-solar-gray-light">
+                {allFiliais.filter((sf: any) => (sf.CodFilial == atuFiliais)).map((lf: any) => (lf.CodFilial + ' - ' + lf.NomeFilial))}
               </div>
             }
           </div>
@@ -146,6 +178,7 @@ const Dre = (props: Props) => {
               <tbody>
                 <STr>
                   <STd rowspan={2} classname="align-middle text-sm text-center border font-semibold bg-solar-blue-light text-white uppercase">Conta</STd>
+                  <STd colspan={2} classname={headerClass.total}>Total</STd>
                   <STd colspan={2} classname={headerClass.default}>Janeiro</STd>
                   <STd colspan={2} classname={headerClass.default}>Fevereiro</STd>
                   <STd colspan={2} classname={headerClass.default}>Março</STd>
@@ -160,6 +193,8 @@ const Dre = (props: Props) => {
                   <STd colspan={2} classname={headerClass.default}>Dezembro</STd>
                 </STr>
                 <STr>
+                  <STd classname={headerClass.total}>Valor</STd>
+                  <STd classname={headerClass.total}>%</STd>
                   <STd classname={headerClass.default}>Valor</STd>
                   <STd classname={headerClass.default}>%</STd>
                   <STd classname={headerClass.default}>Valor</STd>
@@ -188,6 +223,8 @@ const Dre = (props: Props) => {
                 {dreEstrutura.sort((a: any, b: any) => (a.Ordem > b.Ordem ? 1 : -1)).map((est: any, idxEst: any) => (
                   <STr key={idxEst} colorRow={idxEst % 2} total={lineTotal(est.EstruturaId)}>
                     <STd classname={`${headerClass.conta}`}>{est.Estrutura}</STd>
+                    <STd classname={headerClass.lineTotal}>{dreListDataValue({ data: dreDataTotal, estrutura: est.EstruturaId, mes: 0, valor: 1 })}</STd>
+                    <STd classname={headerClass.lineTotal}>{dreListDataValue({ data: dreDataTotal, estrutura: est.EstruturaId, mes: 0, valor: 0 })}</STd>
                     <STd classname={headerClass.line}>{dreListDataValue({ data: dreData, estrutura: est.EstruturaId, mes: 1, valor: 1 })}</STd>
                     <STd classname={headerClass.line}>{dreListDataValue({ data: dreData, estrutura: est.EstruturaId, mes: 1, valor: 0 })}</STd>
                     <STd classname={headerClass.line}>{dreListDataValue({ data: dreData, estrutura: est.EstruturaId, mes: 2, valor: 1 })}</STd>

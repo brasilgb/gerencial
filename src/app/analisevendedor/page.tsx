@@ -1,4 +1,5 @@
 "use client"
+
 import React, { Fragment, useContext, useEffect, useState } from 'react'
 import apiphpmysql from "../api/apiphpmysql";
 import AppLoading from "@/components/AppLoading";
@@ -17,14 +18,19 @@ const AnaliseVendedor = (props: Props) => {
   const [conversaoVendedoresKpis, setConversaoVendedoresKpis] = useState([]);
   const [allFiliais, setAllFiliais] = useState([]);
   const [loadingPage, setLoadingPage] = useState(false);
+  const [loadingFilial, setLoadingFilial] = useState(false);
   const userAuthenticated = listUserAuthenticated();
   const atuFiliais = user?.type === "S" ? filialAtiva : userAuthenticated?.filial;
 
   useEffect(() => {
     async function getAllFiliais() {
-      await apiphpmysql.get(`analisekpis/${0}`)
+      setLoadingFilial(true);
+      await apiphpmysql.get(`filiaisativas`)
         .then((filiais) => {
           const fsort = filiais.data.sort((a: any, b: any) => a.CodFilial > b.CodFilial ? 1 : -1);
+          setTimeout(() => {
+            setLoadingFilial(false);
+          }, 500);
           setAllFiliais(fsort);
         })
         .catch(err => {
@@ -90,20 +96,21 @@ const AnaliseVendedor = (props: Props) => {
         </div>
         <div className="flex-1">
           <div className="flex items-center justify-end">
-            {user?.type === "S" ?
+          {user?.type === "S" ?
               <select
-                className="w-full bg-solar-gray-dark shadow border border-white h-9 ml-2 uppercase text-sm font-semibold text-solar-blue-dark focus:ring-0 focus:border-solar-gray-light"
+                className={`w-full duration-300 bg-solar-gray-dark shadow border border-white h-9 ml-2 text-sm font-semibold ${loadingFilial ? 'text-gray-500' : 'text-solar-blue-dark'} focus:ring-0 focus:border-solar-gray-light`}
                 name="cities"
                 value={filialAtiva}
-                onChange={(e) => handleLoadFilial(e.target.value)}
+                onChange={(e: any) => handleLoadFilial(e.target.value)}
               >
-                <option value="" className="text-sm font-semibold">Selecione a filial</option>
+                {loadingFilial && <option className="text-sm font-semibold">Carregando filiais ...</option>}
+
                 {allFiliais.map((filial: any, idxFil: any) => (
-                  <option key={idxFil} value={filial.CodFilial} className="text-sm font-medium">{("00" + filial.CodFilial).slice(-2)} - {filial.Filial}</option>
+                  <option key={idxFil} value={filial.CodFilial} className="text-sm font-medium">{("00" + filial.CodFilial).slice(-2)} - {filial.NomeFilial}</option>
                 ))}
               </select>
-              : <div className="w-full flex items-center justify-center bg-solar-gray-dark shadow border border-white h-9 ml-2 uppercase text-sm font-semibold text-solar-blue-dark focus:ring-0 focus:border-solar-gray-light">
-                {allFiliais.filter((sf: any) => (sf.CodFilial == atuFiliais)).map((lf: any) => (lf.CodFilial + ' - ' + lf.Filial))}
+              : <div className="w-full flex items-center justify-center bg-solar-gray-dark shadow border border-white h-9 ml-2 text-sm font-semibold text-solar-blue-dark focus:ring-0 focus:border-solar-gray-light">
+                {allFiliais.filter((sf: any) => (sf.CodFilial == atuFiliais)).map((lf: any) => (lf.CodFilial + ' - ' + lf.NomeFilial))}
               </div>
             }
           </div>
@@ -120,7 +127,7 @@ const AnaliseVendedor = (props: Props) => {
         ? <AppLoading />
         : <div className="animate__animated animate__fadeIn mx-4 mb-2">
           <BoxAnalise title="Desempenho" textColor="!font-semibold text-solar-blue-dark" borderColor="border-gray-200">
-            <div className="grid gap-2 grid-cols-3">
+            <div className="grid gap-2 grid-cols-2">
               {
                 conversaoVendedoresKpis.map((value: any, key: any) => (
                   <Fragment key={key}>
@@ -139,14 +146,6 @@ const AnaliseVendedor = (props: Props) => {
                       valueColor="text-green-500"
                       classname="!bg-white !shadow-none !border-gray-200"
                     />
-                    <Kpis
-                      title="Melhor PP"
-                      rotulo={value.ValorMelhorPP > 0 ? value.RotuloMelhorPP : '****'}
-                      value={`${((value.ValorMelhorPP > 0 ? value.ValorMelhorPP : 0) * 100).toFixed(2)}%`}
-                      titleColor="text-gray-500"
-                      valueColor="text-green-500"
-                      classname="!bg-white !shadow-none !border-gray-200"
-                    />
                   </Fragment>
                 ))
               }
@@ -155,11 +154,11 @@ const AnaliseVendedor = (props: Props) => {
 
           {
             analiseVendedoresKpis
-              .filter((val: any) => (val.ValorVenda > 0))
+              .filter((val: any) => (val.MetaVenda > 0))
               .map((value: any, key: any) => (
                 <Fragment key={key}>
                   <BoxAnalise title={value.CodigoVendedor + ' - ' + value.NomeVendedor} textColor="!font-semibold text-solar-blue-dark" borderColor="border-gray-200">
-                    <div className="grid gap-2 grid-cols-9">
+                    <div className="grid gap-2 grid-cols-6">
                       <KpiList
                         title="Valor Faturado"
                         value={<FormatMoney value={value.ValorVenda} />}
@@ -184,26 +183,6 @@ const AnaliseVendedor = (props: Props) => {
                         titleColor="text-gray-500"
                         valColor={colorKpi(((value.Margem) * 100).toFixed())}
                       />
-
-                      <KpiList
-                        title="Valor PP"
-                        value={value.ValorPP}
-                        titleColor="text-gray-500"
-                        valColor={colorKpi(((value.PercentualPP) * 100).toFixed())}
-                      />
-                      <KpiList
-                        title="Meta PP"
-                        value={value.MetaPP}
-                        titleColor="text-gray-500"
-                        valColor="text-blue-500"
-                      />
-                      <KpiList
-                        title="Rep. PP"
-                        value={`${((value.PercentualPP) * 100).toFixed(2)}%`}
-                        titleColor="text-gray-500"
-                        valColor={colorKpi(((value.PercentualPP) * 100).toFixed())}
-                      />
-
                       <KpiList
                         title="Juros Vendidos"
                         value={<FormatMoney value={value.ValorJurosVendidos} />}

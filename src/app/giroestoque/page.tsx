@@ -1,4 +1,5 @@
-'use client'
+"use client"
+
 import React, { Fragment, useContext, useEffect, useRef, useState } from 'react';
 import apiphpmysql from "../api/apiphpmysql";
 import moment from "moment";
@@ -23,6 +24,7 @@ const GiroEstoque = (props: Props) => {
   const { user, filialAtiva, setFilialAtiva } = useContext(AuthContext);
   const [allFiliais, setAllFiliais] = useState([]);
   const [loadingPage, setLoadingPage] = useState(false);
+  const [loadingFilial, setLoadingFilial] = useState(false);
   const [searchSubGrupo, setSearchSubGrupo] = useState('');
   const [searchGiro, setSearchGiro] = useState(false);
   const [atualizaDados, setAtualizaDados] = useState(false);
@@ -33,17 +35,19 @@ const GiroEstoque = (props: Props) => {
   const [message, setMessage] = useState<any>(false);
   const userAuthenticated = listUserAuthenticated();
   const atuFiliais = user?.type === "S" ? filialAtiva : userAuthenticated?.filial;
+
   // console.log(giroSubGrupo);
   useEffect(() => {
     async function getAllFiliais() {
+      setLoadingFilial(true);
       setLoadingPage(true);
-      await apiphpmysql.get(`analisekpis/${0}`)
+      await apiphpmysql.get(`filiaisativas`)
         .then((filiais) => {
           const fsort = filiais.data.sort((a: any, b: any) => a.CodFilial > b.CodFilial ? 1 : -1);
-          setAllFiliais(fsort);
           setTimeout(() => {
-            setLoadingPage(false);
-          }, 200);
+            setLoadingFilial(false);
+          }, 500);
+          setAllFiliais(fsort);
         })
         .catch(err => {
           console.log(err);
@@ -62,7 +66,7 @@ const GiroEstoque = (props: Props) => {
 
   const [defaultCheck, setDefaultCheck] = useState(false);
 
-  const filialEstoque = allFiliais.filter((value: any) => (value.CodFilial == (value.CodFilial == searchFilial ? searchFilial : atuFiliais))).map((value: any) => (value.Filial));
+  const filialEstoque = allFiliais.filter((value: any) => (value.CodFilial == (value.CodFilial == searchFilial ? searchFilial : atuFiliais))).map((value: any) => (value.NomeFilial));
   const subGrupoEstoque = giroSubGrupoFilial.filter((fil: any) => (parseInt(fil.codigoSubgrupo) === 0));
 
 
@@ -80,17 +84,20 @@ const GiroEstoque = (props: Props) => {
       }
       )
         .then((response) => {
-
           setMessage(response.data.bi059);
           setGiroSubGrupoFilial(response.data.bi059.bidata.dados);
-          setLoadingPage(false);
+          setTimeout(() => {
+            setLoadingPage(false);
+          }, 200);
           if (searchSubGrupo == '' && !searchGiro) {
             const girsub = response.data.bi059.bidata.dados.filter((gs: any) => (
               gs.giroFilial != 0 &&
               gs.giroRede != 0
             ));
             setGiroSubGrupo(girsub);
-            setLoadingPage(false);
+            setTimeout(() => {
+              setLoadingPage(false);
+            }, 200);
           }
           if (searchSubGrupo != '' && !searchGiro) {
             const girsub = response.data.bi059.bidata.dados.filter((gs: any) => (
@@ -99,7 +106,9 @@ const GiroEstoque = (props: Props) => {
               gs.giroRede != 0
             ));
             setGiroSubGrupo(girsub);
-            setLoadingPage(false);
+            setTimeout(() => {
+              setLoadingPage(false);
+            }, 200);
           }
           if (searchGiro) {
             const girsub = response.data.bi059.bidata.dados.filter((gs: any) => (
@@ -107,7 +116,9 @@ const GiroEstoque = (props: Props) => {
               gs.giroRede == 0
             ));
             setGiroSubGrupo(girsub);
-            setLoadingPage(false);
+            setTimeout(() => {
+              setLoadingPage(false);
+            }, 200);
           }
 
         })
@@ -137,19 +148,19 @@ const GiroEstoque = (props: Props) => {
             <div className="flex items-center justify-center px-2">
               {user?.type === "S" ?
                 <select
-                  className="bg-solar-gray-dark shadow border border-white h-9 pl-4 uppercase text-sm font-semibold text-solar-blue-dark focus:ring-0 focus:border-solar-gray-light"
+                  className={`w-full duration-300 bg-solar-gray-dark shadow border border-white h-9 ml-2 text-sm font-semibold ${loadingFilial ? 'text-gray-500' : 'text-solar-blue-dark'} focus:ring-0 focus:border-solar-gray-light`}
                   id="filial"
                   name="filial"
                   onChange={(e) => changeFilial(e.target.value)}
                   value={filialAtiva}
                 >
-                  <option value="" className="text-sm font-semibold">Selecione a filial</option>
+                  {loadingFilial && <option className="text-sm font-semibold">Carregando filiais ...</option>}
                   {allFiliais.map((filial: any, idxFil: any) => (
-                    <option key={idxFil} value={filial.CodFilial} className="text-sm font-medium">{("00" + filial.CodFilial).slice(-2)} - {filial.Filial}</option>
+                    <option key={idxFil} value={filial.CodFilial} className="text-sm font-medium">{("00" + filial.CodFilial).slice(-2)} - {filial.NomeFilial}</option>
                   ))}
                 </select>
                 : <div className="w-80 flex items-center justify-center bg-solar-gray-dark shadow border border-white h-9 uppercase text-sm font-semibold text-solar-blue-dark focus:ring-0 focus:border-solar-gray-light">
-                  {allFiliais.filter((sf: any) => (sf.CodFilial == atuFiliais)).map((lf: any) => (lf.CodFilial + ' - ' + lf.Filial))}
+                  {allFiliais.filter((sf: any) => (sf.CodFilial == atuFiliais)).map((lf: any) => (lf.CodFilial + ' - ' + lf.NomeFilial))}
                 </div>
               }
             </div>
@@ -170,9 +181,9 @@ const GiroEstoque = (props: Props) => {
               <ButtonSearch />
 
               <button onClick={() => { setAtualizaDados(true) }}>
-                  <IconContext.Provider value={{ className: "text-3xl text-gray-500 text-center" }}>
-                    <BiRefresh />
-                  </IconContext.Provider>
+                <IconContext.Provider value={{ className: "text-3xl text-gray-500 text-center" }}>
+                  {loadingPage ? <BiRefresh className="animate-spin" /> : <BiRefresh />}
+                </IconContext.Provider>
               </button>
             </div>
           </div>
@@ -189,14 +200,12 @@ const GiroEstoque = (props: Props) => {
 
             <div className="py-1 flex items-center justify-start">
 
-              {message.success && giroSubGrupo.length === 0 ?
+              {message.success && giroSubGrupo.length === 0 &&
                 <div className={`w-4/12 flex items-center justify-center py-1 bg-red-500`}>
                   <h1 className="text-sm uppercase text-white font-medium">Não há giro de estoque para a filial de {filialEstoque}!</h1>
                 </div>
-                :
-                ''
               }
-              {message.success && giroSubGrupo.length > 0 ?
+              {message.success && giroSubGrupo.length > 0 &&
                 <div className={`flex items-center justify-start py-1 uppercase font-semibold text-solar-blue-dark text-sm`}>
                   <span className="text-sm">Valor do estoque para </span>
                   <span className="text-red-400 text-md ml-1"> {filialEstoque}</span>:
@@ -204,17 +213,12 @@ const GiroEstoque = (props: Props) => {
                     <FormatMoney value={subGrupoEstoque.length > 0 ? subGrupoEstoque.map((ve: any) => (ve.valorAtual)) : 0} />
                   </span>
                 </div>
-                :
-                ''
               }
-              {message.success ?
+              {!message.success &&
                 <div className={`flex items-center justify-center py-1`}>
                   <h1 className="text-sm uppercase text-red-500 font-semibold">{message.message}</h1>
                 </div>
-                :
-                ''
               }
-
             </div>
 
             <Pagination data={giroSubGrupo} />

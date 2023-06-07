@@ -1,7 +1,11 @@
+"use client"
+
 import React, { Fragment, useMemo, useState } from "react";
 import ReactPaginate from "react-paginate";
 import { STable, STd, STh, STr } from "../../Tables";
 import { IoArrowBack, IoArrowForward } from "react-icons/io5";
+import { TiArrowUnsorted } from "react-icons/ti";
+import { IconContext } from "react-icons";
 
 const useSortableData = (items: any, config: any = null) => {
 
@@ -75,7 +79,7 @@ export const Pagination = ({ data }: any) => {
     };
 
     const headerClass = {
-        default: "text-center border-r border-t text-xs font-semibold bg-solar-blue-light !text-white",
+        default: "border-r border-t text-xs font-semibold bg-solar-blue-light !text-white",
     }
 
     return (
@@ -88,9 +92,14 @@ export const Pagination = ({ data }: any) => {
                             <button
                                 type="button"
                                 onClick={() => requestSort('codigoSubgrupo')}
-                                className={`${getClassNamesFor('codigoSubgrupo')}`}
+                                className={`${getClassNamesFor('codigoSubgrupo')} flex items-center justify-start`}
                             >
-                                <span className="text-white text-shadow-md py-2 text-sm font-bold">
+                                <IconContext.Provider value={{ className: "" }}>
+                                    <div>
+                                        <TiArrowUnsorted size={14} />
+                                    </div>
+                                </IconContext.Provider>
+                                <span className="text-white text-shadow-md py-2 text-sm font-bold mr-2">
                                     Cód. Subgrupo
                                 </span>
                             </button>
@@ -99,9 +108,14 @@ export const Pagination = ({ data }: any) => {
                             <button
                                 type="button"
                                 onClick={() => requestSort('descricaoSubgrupo')}
-                                className={getClassNamesFor('descricaoSubgrupo')}
+                                className={`${getClassNamesFor('descricaoSubgrupo')} flex items-center justify-start`}
                             >
-                                <span className="text-white text-shadow-md py-2 text-sm font-bold w-">
+                                <IconContext.Provider value={{ className: "" }}>
+                                    <div>
+                                        <TiArrowUnsorted size={14} />
+                                    </div>
+                                </IconContext.Provider>
+                                <span className="text-white text-shadow-md py-2 text-sm font-bold mr-2">
                                     Subgrupo
                                 </span>
                             </button>
@@ -110,9 +124,14 @@ export const Pagination = ({ data }: any) => {
                             <button
                                 type="button"
                                 onClick={() => requestSort('valorEstoque')}
-                                className={getClassNamesFor('valorEstoque')}
+                                className={`${getClassNamesFor('valorEstoque')} flex items-center justify-start`}
                             >
-                                <span className="text-white text-shadow-md py-2 text-sm font-bold">
+                                <IconContext.Provider value={{ className: "" }}>
+                                    <div>
+                                        <TiArrowUnsorted size={14} />
+                                    </div>
+                                </IconContext.Provider>
+                                <span className="text-white text-shadow-md py-2 text-sm font-bold mr-2">
                                     Valor estoque
                                 </span>
                             </button>
@@ -121,9 +140,14 @@ export const Pagination = ({ data }: any) => {
                             <button
                                 type="button"
                                 onClick={() => requestSort('valorAtual')}
-                                className={getClassNamesFor('valorAtual')}
+                                className={`${getClassNamesFor('valorAtual')} flex items-center justify-start`}
                             >
-                                <span className="text-white text-shadow-md py-2 text-sm font-bold">
+                                <IconContext.Provider value={{ className: "" }}>
+                                    <div>
+                                        <TiArrowUnsorted size={14} />
+                                    </div>
+                                </IconContext.Provider>
+                                <span className="text-white text-shadow-md py-2 text-sm font-bold mr-2">
                                     Valor atual
                                 </span>
                             </button>
@@ -132,14 +156,19 @@ export const Pagination = ({ data }: any) => {
                             <button
                                 type="button"
                                 onClick={() => requestSort('giroFilial')}
-                                className={getClassNamesFor('giroFilial')}
+                                className={`${getClassNamesFor('giroFilial')} flex items-center justify-start`}
                             >
-                                <span className="white text-shadow-md px-2 py-2 text-sm font-bold">
+                                <IconContext.Provider value={{ className: "" }}>
+                                    <div>
+                                        <TiArrowUnsorted size={14} />
+                                    </div>
+                                </IconContext.Provider>
+                                <span className="white text-shadow-md py-2 text-sm font-bold mr-2">
                                     Giro filial
                                 </span>
                             </button>
                         </STh>
-                        <STh classname={`w-56 ${headerClass.default}`}>
+                        <STh classname={`w-56 ${headerClass.default} text-left`}>
                             <span className="white text-shadow-md px-2 py-2 text-sm font-bold">
                                 Giro rede
                             </span>

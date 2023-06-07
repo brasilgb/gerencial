@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useContext } from "react";
+import React, { useEffect, useState } from "react";
 import AppLayout from "@/layouts";
 import './globals.css';
 import { usePathname } from "next/navigation";
 import { checkIsPublicRoute } from "@/function/check-is-public-route";
 import { AuthProvider } from "@/contexts/auth";
 import PrivateRoute from "@/components/PrivateRoute";
+import SessionTimeout from "@/components/SessionTimeOut";
 
 export default function RootLayout({
   children,
@@ -18,22 +19,28 @@ export default function RootLayout({
 
   const isPublicPage = checkIsPublicRoute(pathname!);
 
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+      setMounted(true)
+  }, [])
+
   return (
     <html lang="en">
-      <head>
-        <title>Grupo Solar - Aplicação Gerencial</title>
-      </head>
       <body>
+
         <AuthProvider>
           {isPublicPage && children}
-          {!isPublicPage &&
+
+          {mounted && !isPublicPage &&
             <PrivateRoute>
               <AppLayout>
                 {children}
               </AppLayout>
+              <SessionTimeout />
             </PrivateRoute>
           }
-        </AuthProvider>
+        </AuthProvider>          
+ 
       </body>
     </html>
   )

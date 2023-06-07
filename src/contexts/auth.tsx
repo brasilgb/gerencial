@@ -1,4 +1,5 @@
 "use client"
+
 import React, { ReactNode, createContext, useCallback, useEffect, useState } from "react";
 import apiphpmysql from "@/app/api/apiphpmysql";
 import { useRouter } from 'next/navigation';
@@ -47,8 +48,7 @@ export const AuthProvider = ({ children }: AuthProps) => {
             push('/login');
             setLoading(false);
             setMessageLogin(false);
-        },500)
-
+        }, 500)
     }, [push]);
 
     const signIn = useCallback(async ({ code, password }: UserProps) => {
@@ -71,14 +71,14 @@ export const AuthProvider = ({ children }: AuthProps) => {
         localStorage.setItem("Auth_user", JSON.stringify(udata));
         setFilialAtiva(response.data.sigIn.user.filial);
         setUser(udata);
-        setLoading(false);
         push('/');
+        setLoading(false);
     }, [push]);
 
     const signOut = (async () => {
+        push('/login');
         localStorage.removeItem("Auth_user");
         setUser(null);
-        push('/login');
     });
 
     return (

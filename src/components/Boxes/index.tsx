@@ -1,5 +1,6 @@
-import React, { Fragment } from 'react';
+"use client"
 
+import React, { Fragment } from 'react';
 interface BoxesProps {
     children: React.ReactNode;
     title: string;
