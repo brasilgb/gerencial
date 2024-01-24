@@ -23,11 +23,6 @@ apiiscobol.interceptors.response.use(
   (  response: any) => response,
   async (_error: any) => {
     console.log('Abrindo sessão com o servidor novamente');
-
-    if (requestCustom.url.includes('(BI_APP_CLOSE_CONNECTION)')) {
-      return;
-    }
-    
     const axiosNew = axios.create({
       baseURL: BASE_URL,
       withCredentials: true

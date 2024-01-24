@@ -3,6 +3,8 @@
 import React, { ReactNode, createContext, useCallback, useEffect, useState } from "react";
 import apiphpmysql from "@/app/api/apiphpmysql";
 import { useRouter } from 'next/navigation';
+import moment from "moment";
+import apiiscobol from "@/app/api/apiiscobol";
 
 export const AuthContext = createContext<any>({} as any);
 interface AuthProps {
@@ -23,6 +25,33 @@ export const AuthProvider = ({ children }: AuthProps) => {
     const [loading, setLoading] = useState(false);
     const [messageLogin, setMessageLogin] = useState(false);
     const [filialAtiva, setFilialAtiva] = useState(8);
+    const [yearExists, setYearExists] = useState(false);
+    const [yearSelected, setYearSelected] = useState<any>(moment().format("YYYY"));
+
+    useEffect(() => {
+        const getYearSelected = async () => {
+            await apiiscobol.post(`(DRE_REL)`,
+                {
+                    "dreidenti": 4,
+                    "dredepto": 0,
+                    "drefilial": 0,
+                    "dreano": yearSelected
+                })
+                .then((response) => {
+                    const { success, bidata } = response.data.bi057;
+                    const exists = bidata.some((val: any) => { return val.Ano === moment().format("YYYY") });
+                    if (!exists) {
+                        setYearExists(exists);
+                        setYearSelected(moment().add(-1, "y").format("YYYY"));
+                        return;
+                    }
+                    setYearSelected(moment().format("YYYY"));
+                }).catch((error) => {
+                    console.log(error);
+                })
+        };
+        getYearSelected();
+    }, []);
 
     useEffect(() => {
         const loadStorage = (async () => {
@@ -89,6 +118,9 @@ export const AuthProvider = ({ children }: AuthProps) => {
             signIn,
             signOut,
             setLoading,
+            setYearSelected,
+            yearSelected,
+            yearExists,
             loading,
             messageLogin,
             filialAtiva,
