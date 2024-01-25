@@ -3,9 +3,8 @@
 import React from 'react'
 import { IconContext } from "react-icons";
 import { CgSpinnerTwo } from "react-icons/cg";
-type Props = {}
 
-const AppLoading = (props: Props) => {
+const AppLoading = () => {
     return (
         <div className="absolute top-0 right-0 bottom-0 left-0 bg-[#0000000] z-10 flex items-center justify-center">
             <IconContext.Provider value={{ className: "" }}>

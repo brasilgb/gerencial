@@ -73,7 +73,7 @@ const Register = () => {
                                         password: ""
                                     }}
                                     onSubmit={handleSubmitForm}>
-                                    {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isValid }) => (
+                                    {({ values, handleChange, handleBlur, handleSubmit, isValid }) => (
                                         <Form onSubmit={handleSubmit} autoComplete="off">
                                             <label htmlFor="name" className="pl-1 text-sm text-gray-600 font-semibold drop-shadow">Nome</label>
                                             <div className="w-full relative mb-6">

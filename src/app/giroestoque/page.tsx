@@ -12,10 +12,8 @@ import { BiRefresh } from 'react-icons/bi';
 import { Pagination } from "@/components/Pagination/Giro";
 import ButtonSearch from "@/components/Buttons";
 import { InputCheck, InputSearch } from "@/components/InputForm";
-import { CgSpinnerTwo } from "react-icons/cg";
 import { AuthContext } from "@/contexts/auth";
 import { listUserAuthenticated } from "@/function/list-user-autenticated";
-import { headers } from "next/dist/client/components/headers";
 
 type Props = {}
 
@@ -44,9 +42,7 @@ const GiroEstoque = (props: Props) => {
       await apiphpmysql.get(`filiaisativas`)
         .then((filiais) => {
           const fsort = filiais.data.sort((a: any, b: any) => a.CodFilial > b.CodFilial ? 1 : -1);
-          setTimeout(() => {
-            setLoadingFilial(false);
-          }, 500);
+          setLoadingFilial(false);
           setAllFiliais(fsort);
         })
         .catch(err => {
@@ -86,18 +82,14 @@ const GiroEstoque = (props: Props) => {
         .then((response) => {
           setMessage(response.data.bi059);
           setGiroSubGrupoFilial(response.data.bi059.bidata.dados);
-          setTimeout(() => {
-            setLoadingPage(false);
-          }, 200);
+          setLoadingPage(false);
           if (searchSubGrupo == '' && !searchGiro) {
             const girsub = response.data.bi059.bidata.dados.filter((gs: any) => (
               gs.giroFilial != 0 &&
               gs.giroRede != 0
             ));
             setGiroSubGrupo(girsub);
-            setTimeout(() => {
-              setLoadingPage(false);
-            }, 200);
+            setLoadingPage(false);
           }
           if (searchSubGrupo != '' && !searchGiro) {
             const girsub = response.data.bi059.bidata.dados.filter((gs: any) => (
@@ -106,9 +98,7 @@ const GiroEstoque = (props: Props) => {
               gs.giroRede != 0
             ));
             setGiroSubGrupo(girsub);
-            setTimeout(() => {
-              setLoadingPage(false);
-            }, 200);
+            setLoadingPage(false);
           }
           if (searchGiro) {
             const girsub = response.data.bi059.bidata.dados.filter((gs: any) => (
@@ -116,9 +106,7 @@ const GiroEstoque = (props: Props) => {
               gs.giroRede == 0
             ));
             setGiroSubGrupo(girsub);
-            setTimeout(() => {
-              setLoadingPage(false);
-            }, 200);
+            setLoadingPage(false);
           }
 
         })
@@ -155,12 +143,12 @@ const GiroEstoque = (props: Props) => {
                   value={filialAtiva}
                 >
                   {loadingFilial && <option className="text-sm font-semibold">Carregando filiais ...</option>}
-                  {allFiliais.map((filial: any, idxFil: any) => (
+                  {allFiliais?.map((filial: any, idxFil: any) => (
                     <option key={idxFil} value={filial.CodFilial} className="text-sm font-medium">{("00" + filial.CodFilial).slice(-2)} - {filial.NomeFilial}</option>
                   ))}
                 </select>
                 : <div className="w-80 flex items-center justify-center bg-solar-gray-dark shadow border border-white h-9 uppercase text-sm font-semibold text-solar-blue-dark focus:ring-0 focus:border-solar-gray-light">
-                  {allFiliais.filter((sf: any) => (sf.CodFilial == atuFiliais)).map((lf: any) => (lf.CodFilial + ' - ' + lf.NomeFilial))}
+                  {allFiliais.filter((sf: any) => (sf.CodFilial == atuFiliais))?.map((lf: any) => (lf.CodFilial + ' - ' + lf.NomeFilial))}
                 </div>
               }
             </div>
@@ -200,7 +188,7 @@ const GiroEstoque = (props: Props) => {
 
             <div className="py-1 flex items-center justify-start">
 
-              {message.success && giroSubGrupo.length === 0 &&
+              {message.success && giroSubGrupo?.length === 0 &&
                 <div className={`w-4/12 flex items-center justify-center py-1 bg-red-500`}>
                   <h1 className="text-sm uppercase text-white font-medium">Não há giro de estoque para a filial de {filialEstoque}!</h1>
                 </div>
@@ -210,7 +198,7 @@ const GiroEstoque = (props: Props) => {
                   <span className="text-sm">Valor do estoque para </span>
                   <span className="text-red-400 text-md ml-1"> {filialEstoque}</span>:
                   <span className="mx-2 text-xl font-bold text-green-600">
-                    <FormatMoney value={subGrupoEstoque.length > 0 ? subGrupoEstoque.map((ve: any) => (ve.valorAtual)) : 0} />
+                    <FormatMoney value={subGrupoEstoque?.length > 0 ? subGrupoEstoque?.map((ve: any) => (ve.valorAtual)) : 0} />
                   </span>
                 </div>
               }

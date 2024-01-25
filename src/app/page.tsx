@@ -1,5 +1,4 @@
-"use client"
-
+"use client";
 import React, { Fragment, useContext, useEffect, useState } from 'react';
 import AnaliseVencidos from "@/components/Charts/Combinations/AnaliseVencidos";
 import ProjecaoVencidos from "@/components/Charts/Lines/ProjecaoVencidos";
@@ -12,9 +11,7 @@ import "animate.css";
 import { AuthContext } from "@/contexts/auth";
 import { listUserAuthenticated } from "@/function/list-user-autenticated";
 
-type Props = {}
-
-const Home = (props: Props) => {
+const Home = () => {
   const { user, filialAtiva, setFilialAtiva } = useContext(AuthContext);
   const [analiseRede, setAnaliseRede] = useState(false);
   const [valuesKpis, setValuesKpis] = useState([]);
@@ -28,6 +25,7 @@ const Home = (props: Props) => {
   const [loadingFilial, setLoadingFilial] = useState(false);
   const userAuthenticated = listUserAuthenticated();
   const atuFiliais = user?.type === "S" ? filialAtiva : userAuthenticated?.filial;
+
   useEffect(() => {
     async function getAllFiliais() {
       setLoadingFilial(true);
@@ -51,9 +49,7 @@ const Home = (props: Props) => {
         .then((kpis) => {
           const kpi = kpis.data.sort((a: any, b: any) => parseInt(a.uid) > parseInt(b.uid) ? 1 : -1);
           setValuesKpis(kpi);
-          setTimeout(() => {
             setLoadingPage(false)
-          }, 200);
         })
         .catch(err => {
           console.log(err);
@@ -70,9 +66,7 @@ const Home = (props: Props) => {
         .then((vencidos) => {
           const venc = vencidos.data.sort((a: any, b: any) => parseInt(a.uid) < parseInt(b.uid) ? 1 : -1);
           setGraficoVencidos(venc);
-          setTimeout(() => {
             setLoadingPage(false)
-          }, 200);
         })
         .catch(err => {
           console.log(err);
@@ -89,9 +83,7 @@ const Home = (props: Props) => {
         .then((projecoes) => {
           const proj = projecoes.data.sort((a: any, b: any) => parseInt(a.uid) < parseInt(b.uid) ? 1 : -1);
           setGraficoProjecao(proj);
-          setTimeout(() => {
             setLoadingPage(false)
-          }, 200);
         })
         .catch(err => {
           console.log(err);
@@ -107,9 +99,7 @@ const Home = (props: Props) => {
       await apiphpmysql.get('analisekpistotal')
         .then((kpis) => {
           setTotalValuesKpis(kpis.data);
-          setTimeout(() => {
             setLoadingPage(false)
-          }, 200);
         })
         .catch(err => {
           console.log(err);
@@ -126,9 +116,7 @@ const Home = (props: Props) => {
         .then((vencidos) => {
           vencidos.data.sort((a: any, b: any) => parseInt(a.uid) < parseInt(b.uid) ? 1 : -1);
           setTotalGraficoVencidos(vencidos.data);
-          setTimeout(() => {
             setLoadingPage(false)
-          }, 200);
         })
         .catch(err => {
           console.log(err);
@@ -145,9 +133,7 @@ const Home = (props: Props) => {
         .then((projecoes) => {
           projecoes.data.sort((a: any, b: any) => parseInt(a.uid) < parseInt(b.uid) ? 1 : -1);
           setTotalGraficoProjecao(projecoes.data);
-          setTimeout(() => {
             setLoadingPage(false)
-          }, 200);
         })
         .catch(err => {
           console.log(err);
@@ -177,12 +163,12 @@ const Home = (props: Props) => {
               >
                 {loadingFilial && <option className="text-sm font-semibold">Carregando filiais ...</option>}
 
-                {allFiliais.map((filial: any, idxFil: any) => (
+                {allFiliais?.map((filial: any, idxFil: any) => (
                   <option key={idxFil} value={filial.CodFilial} className="text-sm font-medium">{("00" + filial.CodFilial).slice(-2)} - {filial.NomeFilial}</option>
                 ))}
               </select>
               : <div className="w-full flex items-center justify-center bg-solar-gray-dark shadow border border-white h-9 ml-2 text-sm font-semibold text-solar-blue-dark focus:ring-0 focus:border-solar-gray-light">
-                {allFiliais.filter((sf: any) => (sf.CodFilial == atuFiliais)).map((lf: any) => (lf.CodFilial + ' - ' + lf.NomeFilial))}
+                {allFiliais.filter((sf: any) => (sf.CodFilial == atuFiliais))?.map((lf: any) => (lf.CodFilial + ' - ' + lf.NomeFilial))}
               </div>
             }
           </div>
@@ -205,7 +191,7 @@ const Home = (props: Props) => {
           }
         </div>
         <div className="bg-solar-blue-light border border-solar-blue-light flex flex-1 items-center justify-center h-9">
-          <h1 className="text-center text-base font-medium drop-shadow-md text-solar-gray-light">Atualização de dados: {(analiseRede ? totalValuesKpis : valuesKpis).map((value: any) => (value.Atualizacao))}</h1>
+          <h1 className="text-center text-base font-medium drop-shadow-md text-solar-gray-light">Atualização de dados: {(analiseRede ? totalValuesKpis : valuesKpis)?.map((value: any) => (value.Atualizacao))}</h1>
         </div>
       </div>
 
@@ -213,7 +199,7 @@ const Home = (props: Props) => {
         ? <AppLoading />
         : <div className="animate__animated animate__fadeIn mb-2">
           {
-            (analiseRede ? totalValuesKpis : valuesKpis).map((value: any, idxKpi: any) => (
+            (analiseRede ? totalValuesKpis : valuesKpis)?.map((value: any, idxKpi: any) => (
               <div key={idxKpi} className="grid grid-cols-6 gap-4 mx-4 my-3">
                 <Kpis classname="" title="Valor Crediário" value={`R$ ${value.ValorCrediario}`} valueColor="text-blue-600" />
                 <Kpis classname="" title="Valor à Vencer" value={`R$ ${value.ValorVencer}`} valueColor="text-green-600" />

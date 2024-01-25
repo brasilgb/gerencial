@@ -20,9 +20,7 @@ const DesempenhoFiliais = (props: Props) => {
       await apiphpmysql.get('conversaofiliais')
         .then((conversao) => {
           setConversaoKpis(conversao.data);
-          setTimeout(() => {
             setLoadingPage(false);
-          }, 200);
         })
         .catch(err => {
           console.log(err);
@@ -57,7 +55,7 @@ const DesempenhoFiliais = (props: Props) => {
 
         </div>
         <div className="bg-solar-blue-light border border-solar-blue-light flex flex-1 items-center justify-center h-9">
-          <h1 className="text-center text-base font-medium drop-shadow-md text-solar-gray-light">Atualização de dados: {conversaoKpis.map((value: any) => (value.Atualizacao))}</h1>
+          <h1 className="text-center text-base font-medium drop-shadow-md text-solar-gray-light">Atualização de dados: {conversaoKpis?.map((value: any) => (value.Atualizacao))}</h1>
         </div>
       </div>
 
@@ -69,7 +67,7 @@ const DesempenhoFiliais = (props: Props) => {
               <BoxAnalise title="Faturamento" textColor="!font-semibold text-solar-blue-dark" borderColor="border-gray-200">
                 <div className="grid gap-2 grid-cols-3">
                   {
-                    conversaoKpis.map((value: any, key: any) => (
+                    conversaoKpis?.map((value: any, key: any) => (
                       <Fragment key={key}>
                         <Kpis
                           title="Maior Faturamento"
@@ -102,7 +100,7 @@ const DesempenhoFiliais = (props: Props) => {
               <BoxAnalise title="Projeção" textColor="!font-semibold text-solar-blue-dark" borderColor="border-gray-200">
                 <div className="grid gap-2 grid-cols-2">
                   {
-                    conversaoKpis.map((value: any, key: any) => (
+                    conversaoKpis?.map((value: any, key: any) => (
                       <Fragment key={key}>
                         <Kpis
                           title="Melhor Projeção"
@@ -132,7 +130,7 @@ const DesempenhoFiliais = (props: Props) => {
               <BoxAnalise title="Desempenho" textColor="!font-semibold text-solar-blue-dark" borderColor="border-gray-200">
                 <div className="grid gap-2 grid-cols-2">
                   {
-                    conversaoKpis.map((value: any, key: any) => (
+                    conversaoKpis?.map((value: any, key: any) => (
                       <Fragment key={key}>
                         <Kpis
                           title="Melhor Desempenho"
@@ -158,7 +156,7 @@ const DesempenhoFiliais = (props: Props) => {
               <BoxAnalise title="Taxa de Juros" textColor="!font-semibold text-solar-blue-dark" borderColor="border-gray-200">
                 <div className="grid gap-2 grid-cols-2">
                   {
-                    conversaoKpis.map((value: any, key: any) => (
+                    conversaoKpis?.map((value: any, key: any) => (
                       <Fragment key={key}>
                         <Kpis
                           title="Taxa de Juros"
@@ -183,7 +181,7 @@ const DesempenhoFiliais = (props: Props) => {
             <BoxAnalise title="Meta Diária" textColor="!font-semibold text-solar-blue-dark" borderColor="border-gray-200">
               <div>
                 {
-                  conversaoKpis.map((value: any, key: any) => (
+                  conversaoKpis?.map((value: any, key: any) => (
                     <Fragment key={key}>
                       <Kpis
                         title="Meta Dia"

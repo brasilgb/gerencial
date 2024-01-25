@@ -1,9 +1,8 @@
 "use client"
 
-import { useRouter, redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useContext, useEffect } from "react"
 import { AuthContext } from "@/contexts/auth";
-import { checkIsPublicRoute } from "@/function/check-is-public-route";
 import { APP_ROUTES } from "@/constants";
 import { IconContext } from "react-icons";
 import { AiOutlineLoading } from "react-icons/ai";

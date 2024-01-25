@@ -38,9 +38,7 @@ const Dre = (props: Props) => {
       await apiphpmysql.get(`filiaisativas`)
         .then((filiais) => {
           const fsort = filiais.data.sort((a: any, b: any) => a.CodFilial > b.CodFilial ? 1 : -1);
-          setTimeout(() => {
             setLoadingFilial(false);
-          }, 500);
           setAllFiliais(fsort);
         })
         .catch(err => {
@@ -56,9 +54,7 @@ const Dre = (props: Props) => {
       await apiiscobol.get(`(DRE_ESTRU)`)
         .then((response) => {
           setDreEstrutura(response.data.bi058.bidata);
-          setTimeout(() => {
             setLoadingPage(false);
-          }, 200);
         }).catch((error) => {
           console.log(error);
         })
@@ -78,9 +74,7 @@ const Dre = (props: Props) => {
         })
         .then((response) => {
           setDreData(response.data.bi057.bidata);
-          setTimeout(() => {
             setLoadingPage(false);
-          }, 200);
         }).catch((error) => {
           console.log(error);
         })
@@ -100,9 +94,7 @@ const Dre = (props: Props) => {
         })
         .then((response) => {
           setDreDataTotal(response.data.bi057.bidata);
-          setTimeout(() => {
             setLoadingPage(false);
-          }, 200);
         }).catch((error) => {
           console.log(error);
         })
@@ -185,12 +177,12 @@ const Dre = (props: Props) => {
               >
                 {loadingFilial && <option className="text-sm font-semibold">Carregando filiais ...</option>}
 
-                {allFiliais.map((filial: any, idxFil: any) => (
+                {allFiliais?.map((filial: any, idxFil: any) => (
                   <option key={idxFil} value={filial.CodFilial} className="text-sm font-medium">{("00" + filial.CodFilial).slice(-2)} - {filial.NomeFilial}</option>
                 ))}
               </select>
               : <div className="w-full flex items-center justify-center bg-solar-gray-dark shadow border border-white h-9 ml-2 text-sm font-semibold text-solar-blue-dark focus:ring-0 focus:border-solar-gray-light">
-                {allFiliais.filter((sf: any) => (sf.CodFilial == atuFiliais)).map((lf: any) => (lf.CodFilial + ' - ' + lf.NomeFilial))}
+                {allFiliais.filter((sf: any) => (sf.CodFilial == atuFiliais))?.map((lf: any) => (lf.CodFilial + ' - ' + lf.NomeFilial))}
               </div>
             }
           </div>
@@ -216,7 +208,7 @@ const Dre = (props: Props) => {
           </ul>
         </div>
         <div className="bg-solar-blue-light border border-solar-blue-light flex flex-1 items-center justify-center h-9">
-          <h1 className="text-center text-base font-medium drop-shadow-md text-solar-gray-light">Atualização de dados: {dreEstrutura.map((value: any) => (value.Atualizacao)).filter((value, index, self) => self.indexOf(value) === index)}</h1>
+          <h1 className="text-center text-base font-medium drop-shadow-md text-solar-gray-light">Atualização de dados: {dreEstrutura?.map((value: any) => (value.Atualizacao)).filter((value, index, self) => self.indexOf(value) === index)}</h1>
         </div>
       </div>
 

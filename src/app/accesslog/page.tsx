@@ -32,9 +32,7 @@ const Dre = (props: Props) => {
       await apiphpmysql.get(`filiaisativas`)
         .then((filiais) => {
           const fsort = filiais.data.sort((a: any, b: any) => a.CodFilial > b.CodFilial ? 1 : -1);
-          setTimeout(() => {
             setLoadingFilial(false);
-          }, 500);
           setAllFiliais(fsort);
         })
         .catch(err => {

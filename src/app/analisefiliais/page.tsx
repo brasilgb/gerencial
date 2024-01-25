@@ -11,7 +11,6 @@ import ProgressBar from "@/components/Charts/ProgressBar";
 import 'animate.css';
 import { AuthContext } from "@/contexts/auth";
 import { listUserAuthenticated } from "@/function/list-user-autenticated";
-import { CgSpinnerTwo } from "react-icons/cg";
 
 type Props = {
 
@@ -27,15 +26,14 @@ const AnaliseFiliais = (props: Props) => {
   const [giroEstoqueKpis, setGiroEstoqueKpis] = useState([]);
   const userAuthenticated = listUserAuthenticated();
   const atuFiliais = user?.type === "S" ? filialAtiva : userAuthenticated?.filial;
+
   useEffect(() => {
     async function getAllFiliais() {
       setLoadingFilial(true)
       await apiphpmysql.get(`filiaisativas`)
         .then((filiais) => {
           const fsort = filiais.data.sort((a: any, b: any) => a.CodFilial > b.CodFilial ? 1 : -1);
-          setTimeout(() => {
             setLoadingFilial(false);
-          }, 500);
           setAllFiliais(fsort);
         })
         .catch(err => {
@@ -53,9 +51,7 @@ const AnaliseFiliais = (props: Props) => {
         .then((analisefiliais) => {
           const venc = analisefiliais.data.sort((a: any, b: any) => parseInt(a.uid) > parseInt(b.uid) ? 1 : -1);
           setAnaliseFiliaisKpis(venc);
-          setTimeout(() => {
             setLoadingPage(false);
-          }, 200);
         })
         .catch(err => {
           console.log(err);
@@ -72,9 +68,7 @@ const AnaliseFiliais = (props: Props) => {
         .then((inadimplencia) => {
           const inad = inadimplencia.data.sort((a: any, b: any) => parseInt(a.uid) > parseInt(b.uid) ? 1 : -1);
           setInadimplenciaKpis(inad);
-          setTimeout(() => {
             setLoadingPage(false);
-          }, 200);
         })
         .catch(err => {
           console.log(err);
@@ -91,9 +85,7 @@ const AnaliseFiliais = (props: Props) => {
         .then((giro) => {
           const gir = giro.data.sort((a: any, b: any) => parseInt(a.uid) > parseInt(b.uid) ? 1 : -1);
           setGiroEstoqueKpis(gir);
-          setTimeout(() => {
             setLoadingPage(false);
-          }, 200);
         })
         .catch(err => {
           console.log(err);
@@ -149,7 +141,7 @@ const AnaliseFiliais = (props: Props) => {
 
         </div>
         <div className="bg-solar-blue-light border border-solar-blue-light flex flex-1 items-center justify-center h-9">
-          <h1 className="text-center text-base font-medium drop-shadow-md text-solar-gray-light">Atualização de dados: {analiseFiliaisKpis.map((value: any) => (value.Atualizacao))}</h1>
+          <h1 className="text-center text-base font-medium drop-shadow-md text-solar-gray-light">Atualização de dados: {analiseFiliaisKpis?.map((value: any) => (value.Atualizacao))}</h1>
         </div>
       </div>
       {loadingPage
@@ -161,7 +153,7 @@ const AnaliseFiliais = (props: Props) => {
               <BoxAnalise title="Faturamento" textColor="!font-semibold text-solar-blue-dark" borderColor="border-gray-200">
                 <div className="grid gap-2 grid-cols-4">
                   {
-                    analiseFiliaisKpis.map((value: any, idxOne: any) => (
+                    analiseFiliaisKpis?.map((value: any, idxOne: any) => (
                       <Fragment key={idxOne}>
 
                         <Kpis
@@ -196,7 +188,7 @@ const AnaliseFiliais = (props: Props) => {
               <BoxAnalise title="Projeção" textColor="!font-semibold text-solar-blue-dark" borderColor="border-gray-200">
                 <div className="grid gap-2 grid-cols-2">
                   {
-                    analiseFiliaisKpis.map((value: any, idxTwo: any) => (
+                    analiseFiliaisKpis?.map((value: any, idxTwo: any) => (
                       <Fragment key={idxTwo}>
                         <Kpis
                           title="Projeção Venda"
@@ -224,7 +216,7 @@ const AnaliseFiliais = (props: Props) => {
               <BoxAnalise title="Faturamento diário" textColor="!font-semibold text-solar-blue-dark" borderColor="border-gray-200">
                 <div className="grid gap-2 grid-cols-3">
                   {
-                    analiseFiliaisKpis.map((value: any, idxThree: any) => (
+                    analiseFiliaisKpis?.map((value: any, idxThree: any) => (
                       <Fragment key={idxThree}>
 
                         <Kpis
@@ -279,7 +271,7 @@ const AnaliseFiliais = (props: Props) => {
             <BoxAnalise title="Taxa de juros" textColor="!font-semibold text-solar-blue-dark" borderColor="border-gray-200">
               <div className="grid gap-2 grid-cols-2">
                 {
-                  analiseFiliaisKpis.map((value: any, idxFour: any) => (
+                  analiseFiliaisKpis?.map((value: any, idxFour: any) => (
                     <Fragment key={idxFour}>
                       <Kpis
                         title="Taxa de juros"
@@ -303,7 +295,7 @@ const AnaliseFiliais = (props: Props) => {
             <BoxAnalise title="Giro Estoque" textColor="!font-semibold text-solar-blue-dark" borderColor="border-gray-200">
               <div className="grid gap-2 grid-cols-2">
                 {
-                  giroEstoqueKpis.map((value: any, idxSix: any) => (
+                  giroEstoqueKpis?.map((value: any, idxSix: any) => (
                     <Fragment key={idxSix}>
                       <Kpis
                         title="Giro estoque Loja"
