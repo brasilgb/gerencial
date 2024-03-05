@@ -38,7 +38,7 @@ const Dre = (props: Props) => {
       await apiphpmysql.get(`filiaisativas`)
         .then((filiais) => {
           const fsort = filiais.data.sort((a: any, b: any) => a.CodFilial > b.CodFilial ? 1 : -1);
-            setLoadingFilial(false);
+          setLoadingFilial(false);
           setAllFiliais(fsort);
         })
         .catch(err => {
@@ -54,7 +54,7 @@ const Dre = (props: Props) => {
       await apiiscobol.get(`(DRE_ESTRU)`)
         .then((response) => {
           setDreEstrutura(response.data.bi058.bidata);
-            setLoadingPage(false);
+          setLoadingPage(false);
         }).catch((error) => {
           console.log(error);
         })
@@ -74,7 +74,7 @@ const Dre = (props: Props) => {
         })
         .then((response) => {
           setDreData(response.data.bi057.bidata);
-            setLoadingPage(false);
+          setLoadingPage(false);
         }).catch((error) => {
           console.log(error);
         })
@@ -94,7 +94,7 @@ const Dre = (props: Props) => {
         })
         .then((response) => {
           setDreDataTotal(response.data.bi057.bidata);
-            setLoadingPage(false);
+          setLoadingPage(false);
         }).catch((error) => {
           console.log(error);
         })
@@ -106,7 +106,7 @@ const Dre = (props: Props) => {
     const getDreDataTotalAnterior = (async () => {
       await apiiscobol.post(`(DRE_REL)`,
         {
-          "dreidenti": 3,
+          "dreidenti": 9,
           "dredepto": 1,
           "drefilial": atuFiliais,
           "dreano": `${yearSelected}`
