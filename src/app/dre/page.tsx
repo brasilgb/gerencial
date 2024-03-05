@@ -106,7 +106,7 @@ const Dre = (props: Props) => {
     const getDreDataTotalAnterior = (async () => {
       await apiiscobol.post(`(DRE_REL)`,
         {
-          "dreidenti": 6,
+          "dreidenti": 3,
           "dredepto": 1,
           "drefilial": atuFiliais,
           "dreano": `${yearSelected}`

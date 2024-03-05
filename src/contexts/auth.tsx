@@ -39,12 +39,13 @@ export const AuthProvider = ({ children }: AuthProps) => {
                 })
                 .then((response) => {
                     const { success, bidata } = response.data.bi057;
-                    const exists = bidata.some((val: any) => { return val.Ano === moment().format("YYYY") });
+                    const exists = bidata.some((val: any) => { return val.Ano == moment().format("YYYY") });
                     if (!exists) {
                         setYearExists(exists);
                         setYearSelected(moment().add(-1, "y").format("YYYY"));
                         return;
                     }
+                    setYearExists(exists);
                     setYearSelected(moment().format("YYYY"));
                 }).catch((error) => {
                     console.log(error);
