@@ -28,7 +28,7 @@ const AnaliseVendedor = (props: Props) => {
       await apiphpmysql.get(`filiaisativas`)
         .then((filiais) => {
           const fsort = filiais.data.sort((a: any, b: any) => a.CodFilial > b.CodFilial ? 1 : -1);
-            setLoadingFilial(false);
+          setLoadingFilial(false);
           setAllFiliais(fsort);
         })
         .catch(err => {
@@ -46,7 +46,7 @@ const AnaliseVendedor = (props: Props) => {
         .then((analisevendedores) => {
           const vend = analisevendedores.data.sort((a: any, b: any) => parseInt(a.ValorVenda) < parseInt(b.ValorVenda) ? 1 : -1);
           setAnaliseVendedoresKpis(vend);
-            setLoadingPage(false);
+          setLoadingPage(false);
         })
         .catch(err => {
           console.log(err);
@@ -63,7 +63,7 @@ const AnaliseVendedor = (props: Props) => {
         .then((cvendedores) => {
           const vend = cvendedores.data.sort((a: any, b: any) => parseInt(a.ValorVenda) < parseInt(b.ValorVenda) ? 1 : -1);
           setConversaoVendedoresKpis(vend);
-            setLoadingPage(false);
+          setLoadingPage(false);
         })
         .catch(err => {
           console.log(err);
@@ -90,7 +90,7 @@ const AnaliseVendedor = (props: Props) => {
         </div>
         <div className="flex-1">
           <div className="flex items-center justify-end">
-          {user?.type === "S" ?
+            {user?.type === "S" ?
               <select
                 className={`w-full duration-300 bg-solar-gray-dark shadow border border-white h-9 ml-2 text-sm font-semibold ${loadingFilial ? 'text-gray-500' : 'text-solar-blue-dark'} focus:ring-0 focus:border-solar-gray-light`}
                 name="cities"
@@ -151,7 +151,7 @@ const AnaliseVendedor = (props: Props) => {
               .map((value: any, key: any) => (
                 <Fragment key={key}>
                   <BoxAnalise title={value.CodigoVendedor + ' - ' + value.NomeVendedor} textColor="!font-semibold text-solar-blue-dark" borderColor="border-gray-200">
-                    <div className="grid gap-2 grid-cols-6">
+                    <div className="grid gap-2 grid-cols-10">
                       <KpiList
                         title="Valor Faturado"
                         value={<FormatMoney value={value.ValorVenda} />}
@@ -171,10 +171,28 @@ const AnaliseVendedor = (props: Props) => {
                         valColor={colorKpi(((value.PercentualVenda) * 100).toFixed())}
                       />
                       <KpiList
-                        title="Margem"
-                        value={`${((value.Margem) * 100).toFixed(2)}%`}
+                        title="Margem Mês"
+                        value={`${((isNaN(value.Margem)?0:value.Margem) * 100).toFixed(2)}%`}
                         titleColor="text-gray-500"
-                        valColor={colorKpi(((value.Margem) * 100).toFixed())}
+                        valColor={colorKpi(((isNaN(value.Margem)?0:value.Margem) * 100).toFixed())}
+                      />
+                      <KpiList
+                      title="Margem Período"
+                      value={`${((value.MargemPeriodo) * 100).toFixed(2)}%`}
+                      titleColor="text-gray-500"
+                      valColor={colorKpi(((value.MargemPeriodo) * 100).toFixed())}
+                    />
+                      <KpiList
+                        title="Juros Mês"
+                        value={`${((value.PercentJurosVendidos) * 100).toFixed(2)}%`}
+                        titleColor="text-gray-500"
+                        valColor={colorKpi(((value.PercentJurosVendidos) * 100).toFixed())}
+                      />
+                      <KpiList
+                        title="Juros Período"
+                        value={`${((value.JurosPeriodo) * 100).toFixed(2)}%`}
+                        titleColor="text-gray-500"
+                        valColor={colorKpi(((value.JurosPeriodo) * 100).toFixed())}
                       />
                       <KpiList
                         title="Juros Vendidos"
@@ -183,8 +201,14 @@ const AnaliseVendedor = (props: Props) => {
                         valColor={colorKpi(((value.PercentJurosVendidos) * 100).toFixed())}
                       />
                       <KpiList
-                        title="Rep. Juros"
-                        value={`${((value.PercentJurosVendidos) * 100).toFixed(2)}%`}
+                        title="Tiket Médio"
+                        value={<FormatMoney value={isNaN(value.TiketMedio)?0:value.TiketMedio} />}
+                        titleColor="text-gray-500"
+                        valColor={colorKpi(((value.PercentJurosVendidos) * 100).toFixed())}
+                      />
+                      <KpiList
+                        title="Vendas Efetuadas"
+                        value={value.QtdNf}
                         titleColor="text-gray-500"
                         valColor={colorKpi(((value.PercentJurosVendidos) * 100).toFixed())}
                       />

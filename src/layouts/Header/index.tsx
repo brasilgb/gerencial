@@ -23,13 +23,13 @@ const Header = (props: Props) => {
     return (
         <>
             {exit && <AppLoading />}
-            <nav className="bg-solar-blue-light px-3 py-2 border-b-2 border-solar-gray-light shadow flex items-center justify-between">
+            <nav className="bg-solar-blue-light px-3 py-1 border-b-2 border-solar-gray-light shadow flex items-center justify-between">
                 <ul className="flex items-center justify-start">
                     <li className="mr-2">
                         <Link
                             href="/"
                         >
-                            <Image alt="Logo Lojas Solar" width={100} height={60} src="/logo/logo_solar.png" className="w-[100px]" />
+                            <Image alt="Logo Lojas Solar" width={100} height={60} src="/logo/logo_solar.png" />
                         </Link>
 
                     </li>
