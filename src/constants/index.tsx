@@ -1,5 +1,6 @@
 export const links = [
     { label: "Análise de Vencidos", url: "/" },
+    { label: "Faturamento", url: "/faturamento" },
     { label: "Análise de Filiais", url: "/analisefiliais" },
     { label: "Desempenho de Filiais", url: "/desempenhofiliais" },
     { label: "Análise de Vendedores", url: "/analisevendedor" },

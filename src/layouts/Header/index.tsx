@@ -1,9 +1,8 @@
 "use client"
-
 import React, { useContext, useRef, useState } from "react";
 import NavLinks from "@/components/NavLinks";
 import { links } from "@/constants";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import { IconContext } from "react-icons";
 import { IoChevronDown, IoExit, IoLogOut, IoPerson, IoTimeOutline, IoTimeSharp } from "react-icons/io5";
 import { AuthContext } from "@/contexts/auth";
@@ -25,13 +24,12 @@ const Header = (props: Props) => {
             {exit && <AppLoading />}
             <nav className="bg-solar-blue-light px-3 py-1 border-b-2 border-solar-gray-light shadow flex items-center justify-between">
                 <ul className="flex items-center justify-start">
-                    <li className="mr-2">
+                    <li className="mr-2 w-28">
                         <Link
                             href="/"
                         >
-                            <Image alt="Logo Lojas Solar" width={100} height={60} src="/logo/logo_solar.png" />
+                            <Image layout="responsive" src="/logo/logo_solar.png" width={84} height={30} alt="Logo Lojas Solar" />
                         </Link>
-
                     </li>
                     {links.map((link: any, index: any) => (
                         <NavLinks

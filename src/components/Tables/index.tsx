@@ -25,7 +25,6 @@ export const STr = ({ children, colorRow, total }: TableProps) => {
         <tr className={`${colorRow > 0 ? "bg-gray-50" : "bg-blue-50"} ${total && "!bg-orange-200 !font-semibold"} hover:bg-orange-50`}>
             {children}
         </tr>
-
     );
 };
 
@@ -34,7 +33,7 @@ export const STh = ({ children, colspan, rowspan, classname }: TableProps) => {
         <th
             colSpan={colspan}
             rowSpan={rowspan}
-            className={`${classname} bg-gray-200 text-gray-600 px-2 py-2 text-sm`}
+            className={`bg-gray-200 text-gray-600 px-2 py-2 text-sm ${classname}`}
         >
             {children}
         </th>

@@ -177,28 +177,28 @@ const AnaliseVendedor = (props: Props) => {
                         valColor={colorKpi(((isNaN(value.Margem)?0:value.Margem) * 100).toFixed())}
                       />
                       <KpiList
-                      title="Margem Período"
-                      value={`${((value.MargemPeriodo) * 100).toFixed(2)}%`}
-                      titleColor="text-gray-500"
-                      valColor={colorKpi(((value.MargemPeriodo) * 100).toFixed())}
-                    />
-                      <KpiList
                         title="Juros Mês"
                         value={`${((value.PercentJurosVendidos) * 100).toFixed(2)}%`}
                         titleColor="text-gray-500"
                         valColor={colorKpi(((value.PercentJurosVendidos) * 100).toFixed())}
                       />
                       <KpiList
-                        title="Juros Período"
-                        value={`${((value.JurosPeriodo) * 100).toFixed(2)}%`}
-                        titleColor="text-gray-500"
-                        valColor={colorKpi(((value.JurosPeriodo) * 100).toFixed())}
-                      />
-                      <KpiList
                         title="Juros Vendidos"
                         value={<FormatMoney value={value.ValorJurosVendidos} />}
                         titleColor="text-gray-500"
                         valColor={colorKpi(((value.PercentJurosVendidos) * 100).toFixed())}
+                      />
+                      <KpiList
+                      title="Margem Período"
+                      value={`${((value.MargemPeriodo) * 100).toFixed(2)}%`}
+                      titleColor="text-gray-500"
+                      valColor={colorKpi(((value.MargemPeriodo) * 100).toFixed())}
+                    />
+                      <KpiList
+                        title="Juros Período"
+                        value={`${((value.JurosPeriodo) * 100).toFixed(2)}%`}
+                        titleColor="text-gray-500"
+                        valColor={colorKpi(((value.JurosPeriodo) * 100).toFixed())}
                       />
                       <KpiList
                         title="Tiket Médio"
