@@ -147,7 +147,6 @@ const Home = () => {
   }
   return (
     <Fragment>
-
       <div className="flex bg-solar-gray-light border border-white p-1 mx-4 mt-2 shadow">
         <div className="bg-solar-blue-light border border-solar-blue-light flex justify-center flex-1 h-9 items-center">
           <h1 className="text-center text-base font-medium drop-shadow-md text-solar-gray-light">Análise de Vencidos e á Vencer x Crediário</h1>

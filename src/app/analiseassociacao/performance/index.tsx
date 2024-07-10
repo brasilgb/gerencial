@@ -52,13 +52,13 @@ const Performance = () => {
             </STr></thead>
           <tbody>
             {resumoFilialTotal.map((total: any, idx: number) => (
-              <STr>
+              <STr key={idx}>
                 <STd>{parseValueMoney(total.MetaMes)}</STd>
                 <STd>{parseValueMoney(total.VendaMes)}</STd>
                 <STd>{parseValueMoney(total.FaltaVenderMes)}</STd>
                 <STd>{parseValuePercent(total.MetaParcMes)}</STd>
                 <STd>{parseValuePercent(total.AtingidoMes)}</STd>
-                <STd>{parseValuePercent(total.PerfAtualMesMes)}</STd>
+                <STd>{parseValuePercent(total.PerfAtualMes)}</STd>
               </STr>
             ))}
           </tbody>
@@ -79,7 +79,7 @@ const Performance = () => {
             </STr></thead>
           <tbody>
             {resumoFilialTotal.map((total: any, idx: number) => (
-              <STr>
+              <STr key={idx}>
                 <STd>{parseValueMoney(total.MetaDia)}</STd>
                 <STd>{parseValueMoney(total.VendaDia)}</STd>
                 <STd>{parseValueMoney(total.FaltaVenderDia)}</STd>

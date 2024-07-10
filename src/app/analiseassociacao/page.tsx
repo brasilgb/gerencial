@@ -10,7 +10,7 @@ import PerfMes from "./perfmes";
 
 type Props = {}
 
-const Faturamento = (props: Props) => {
+const Analiseassociacao = (props: Props) => {
     const { user, filialAtiva, setFilialAtiva } = useContext(AuthContext);
     const [loadingFilial, setLoadingFilial] = useState(false);
     const [allFiliais, setAllFiliais] = useState([]);
@@ -132,4 +132,4 @@ const Faturamento = (props: Props) => {
     )
 }
 
-export default Faturamento
+export default Analiseassociacao

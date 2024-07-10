@@ -1,6 +1,6 @@
 export const links = [
     { label: "Análise de Vencidos", url: "/" },
-    { label: "Faturamento", url: "/faturamento" },
+    { label: "Analise Associação", url: "/analiseassociacao" },
     { label: "Análise de Filiais", url: "/analisefiliais" },
     { label: "Desempenho de Filiais", url: "/desempenhofiliais" },
     { label: "Análise de Vendedores", url: "/analisevendedor" },
@@ -15,6 +15,9 @@ export const APP_ROUTES = {
         },
         analisefiliais: {
             name: '/analisefiliais'
+        },
+        analiseassociacao: {
+            name: '/analiseassociacao'
         },
         desempenhofiliais: {
             name: '/desempenhofiliais'

@@ -68,9 +68,9 @@ const Resumo = () => {
               <STd  classname="!bg-gray-300 font-medium">{parseValuePercent(total.MargemSemana)}</STd>
               <STd  classname="!bg-gray-300 font-medium">{parseValueMoney(total.FatuMes)}</STd>
               <STd  classname="!bg-gray-300 font-medium">{parseValuePercent(total.MargemMes)}</STd>
-              <STd  classname="!bg-gray-300 font-medium"></STd>
               <STd  classname="!bg-gray-300 font-medium">{parseValuePercent(total.RepFatu)}</STd>
-              <STd  classname="!bg-gray-300 font-medium"></STd>
+              <STd  classname="!bg-gray-300 font-medium">{parseValuePercent(total.RepFatu)}</STd>
+              <STd  classname="!bg-gray-300 font-medium">{parseValuePercent(total.RepFatu)}</STd>
               <STd  classname="!bg-gray-300 font-medium">{parseValueMoney(total.JurosSPM)}</STd>
               <STd  classname="!bg-gray-300 font-medium">{parseValuePercent(total.RepSemFatu)}</STd>
             </STr>
