@@ -63,7 +63,7 @@ const PerfMes = () => {
           ))}
         </thead>
         <tbody>
-          {resumoFilialMes.map((filial: any, idx: number) => (
+          {resumoFilialMes.sort((a:any, b:any) => (a.AnoMesNum < b.AnoMesNum ? 1 : -1)).map((filial: any, idx: number) => (
             <STr key={idx}>
               <STd>{filial.MesAno}</STd>
               <STd>{parseValueMoney(filial.Meta)}</STd>

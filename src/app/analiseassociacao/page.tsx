@@ -89,25 +89,25 @@ const Analiseassociacao = (props: Props) => {
                 <div className="flex items-center justify-start gap-4">
                     <button
                         onClick={() => setTipoFaturamento('resumodiario')}
-                        className={`w-52 text-sm py-2 shadow-md rounded border border-white transition-colors duration-300 hover:bg-solar-blue-light hover:text-gray-50 ${tipoFaturamento === 'resumodiario' ? 'bg-solar-blue-light text-gray-50' : 'bg-gray-100 text-solar-blue-dark'}`}
+                        className={`w-52 text-sm py-2 shadow-md rounded border border-white transition-colors duration-300 hover:bg-solar-blue-light hover:text-gray-50 ${tipoFaturamento === 'resumodiario' ? 'bg-solar-blue-light text-gray-50' : 'bg-solar-blue-light/30 text-solar-blue-dark/70'}`}
                     >
                         Resumo diário
                     </button>
                     <button
                         onClick={() => setTipoFaturamento('performance')}
-                        className={`w-52 text-sm py-2 shadow-md rounded border border-white transition-colors duration-300 hover:bg-solar-blue-light hover:text-gray-50 ${tipoFaturamento === 'performance' ? 'bg-solar-blue-light text-gray-50' : 'bg-gray-100 text-solar-blue-dark'}`}
+                        className={`w-52 text-sm py-2 shadow-md rounded border border-white transition-colors duration-300 hover:bg-solar-blue-light hover:text-gray-50 ${tipoFaturamento === 'performance' ? 'bg-solar-blue-light text-gray-50' : 'bg-solar-blue-light/30 text-solar-blue-dark/70'}`}
                     >
                         Performance
                     </button>
                     <button
                         onClick={() => setTipoFaturamento('performassoc')}
-                        className={`w-52 text-sm py-2 shadow-md rounded border border-white transition-colors duration-300 hover:bg-solar-blue-light hover:text-gray-50 ${tipoFaturamento === 'performassoc' ? 'bg-solar-blue-light text-gray-50' : 'bg-gray-100 text-solar-blue-dark'}`}
+                        className={`w-52 text-sm py-2 shadow-md rounded border border-white transition-colors duration-300 hover:bg-solar-blue-light hover:text-gray-50 ${tipoFaturamento === 'performassoc' ? 'bg-solar-blue-light text-gray-50' : 'bg-solar-blue-light/30 text-solar-blue-dark/70'}`}
                     >
                         Performance associação
                     </button>
                     <button
                         onClick={() => setTipoFaturamento('performmes')}
-                        className={`w-52 text-sm py-2 shadow-md rounded border border-white transition-colors duration-300 hover:bg-solar-blue-light hover:text-gray-50 ${tipoFaturamento === 'performmes' ? 'bg-solar-blue-light text-gray-50' : 'bg-gray-100 text-solar-blue-dark'}`}
+                        className={`w-52 text-sm py-2 shadow-md rounded border border-white transition-colors duration-300 hover:bg-solar-blue-light hover:text-gray-50 ${tipoFaturamento === 'performmes' ? 'bg-solar-blue-light text-gray-50' : 'bg-solar-blue-light/30 text-solar-blue-dark/70'}`}
                     >
                         Performance mês
                     </button>

@@ -20,14 +20,13 @@ const DesempenhoFiliais = (props: Props) => {
       await apiphpmysql.get('conversaofiliais')
         .then((conversao) => {
           setConversaoKpis(conversao.data);
-            setLoadingPage(false);
+          setLoadingPage(false);
         })
         .catch(err => {
           console.log(err);
         })
     });
     getConversao();
-
   }, []);
 
   const colorBar = ((value: any) => {
@@ -199,7 +198,6 @@ const DesempenhoFiliais = (props: Props) => {
           </div>
         </div>
       }
-
     </Fragment>
   )
 }

@@ -60,13 +60,13 @@ const PerfAssociacao = () => {
               <STd  classname="!bg-gray-300 font-medium">{parseValueMoney(total.JurSFatAss)}</STd>
               <STd  classname="!bg-gray-300 font-medium">{parseValuePercent(total.RepJurosAss)}</STd>
               <STd  classname="!bg-gray-300 font-medium">{parseValueMoney(total.EstoqueAss)}</STd>
-              <STd  classname="!bg-gray-300 font-medium">{total.GiroAss}</STd>
+              <STd  classname="!bg-gray-300 font-medium">{Math.round(total.GiroAss)}</STd>
               <STd  classname="!bg-gray-300 font-medium">{parseValuePercent(total.RepEstoqueAss)}</STd>
             </STr>
           ))}
       </thead>
       <tbody>
-      {resumoFilialAssoc.map((filial: any, idx: number) => (
+      {resumoFilialAssoc.sort((a:any, b:any) => (a.Faturamento < b.Faturamento ? 1 : -1)).map((filial: any, idx: number) => (
             <STr key={idx}>
               <STd>{filial.Assoc}</STd>
               <STd>{parseValueMoney(filial.Faturamento)}</STd>
@@ -75,7 +75,7 @@ const PerfAssociacao = () => {
               <STd>{parseValueMoney(filial.JurSFat)}</STd>
               <STd>{parseValuePercent(filial.RepJuros)}</STd>
               <STd>{parseValueMoney(filial.Estoque)}</STd>
-              <STd>{filial.Giro}</STd>
+              <STd>{Math.round(filial.Giro)}</STd>
               <STd>{parseValuePercent(filial.RepEstoque)}</STd>
             </STr>
           ))}

@@ -1,5 +1,6 @@
 import apiphpmysql from "@/app/api/apiphpmysql";
 import LFatCombination from "@/components/Charts/LFatCombination";
+import FormatMoney from "@/components/FormatMoney";
 import { STable, STd, STh, STr } from "@/components/Tables";
 import { AuthContext } from "@/contexts/auth";
 import { parseValueMoney, parseValuePercent } from "@/function/valuesConvert";
@@ -84,9 +85,9 @@ const Performance = () => {
                 <STd>{parseValueMoney(total.VendaDia)}</STd>
                 <STd>{parseValueMoney(total.FaltaVenderDia)}</STd>
                 <STd>{parseValuePercent(total.PerfMetaDia)}</STd>
-                <STd>{parseValuePercent(total.JurSParcDia)}</STd>
+                <STd>{parseValueMoney(total.JurSParcDia)}</STd>
                 <STd>{parseValuePercent(total.PerfJurDia)}</STd>
-                <STd>{parseValuePercent(total.MediaDia)}</STd>
+                <STd>{parseValueMoney(total.MediaDia)}</STd>
               </STr>
             ))}
           </tbody>
