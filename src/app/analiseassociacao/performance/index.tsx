@@ -3,17 +3,20 @@ import LFatCombination from "@/components/Charts/LFatCombination";
 import FormatMoney from "@/components/FormatMoney";
 import { STable, STd, STh, STr } from "@/components/Tables";
 import { AuthContext } from "@/contexts/auth";
+import { listUserAuthenticated } from "@/function/list-user-autenticated";
 import { parseValueMoney, parseValuePercent } from "@/function/valuesConvert";
 import React, { Fragment, useContext, useEffect, useState } from 'react'
 
 const Performance = () => {
-  const { filialAtiva } = useContext(AuthContext);
+  const { user, filialAtiva } = useContext(AuthContext);
   const [resumoGrafico, setResumoGrafico] = useState<any>([]);
   const [resumoFilialTotal, setResumoFilialTotal] = useState<any>([]);
+  const userAuthenticated = listUserAuthenticated();
+  const atuFiliais = user?.type === "S" ? filialAtiva : userAuthenticated?.filial;
 
   useEffect(() => {
     const getResumoFilialTotal = async () => {
-      await apiphpmysql.get(`gerfilialfatutotal/${filialAtiva}`)
+      await apiphpmysql.get(`gerfilialfatutotal/${atuFiliais}`)
         .then((result) => {
           setResumoFilialTotal(result.data);
         })
@@ -22,11 +25,11 @@ const Performance = () => {
         })
     };
     getResumoFilialTotal();
-  }, [filialAtiva]);
+  }, [atuFiliais]);
 
   useEffect(() => {
     const getResumoGrafico = async () => {
-      await apiphpmysql.get(`gerfilialgrafico/${filialAtiva}`)
+      await apiphpmysql.get(`gerfilialgrafico/${atuFiliais}`)
         .then((result) => {
           setResumoGrafico(result.data);
         })
@@ -35,7 +38,7 @@ const Performance = () => {
         })
     };
     getResumoGrafico();
-  }, [filialAtiva]);
+  }, [atuFiliais]);
 
   return (
     <Fragment>

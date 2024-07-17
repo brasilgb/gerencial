@@ -3,19 +3,22 @@ import apiphpmysql from "@/app/api/apiphpmysql";
 import FormatMoney from "@/components/FormatMoney";
 import { STable, STd, STh, STr } from "@/components/Tables"
 import { AuthContext } from "@/contexts/auth";
+import { listUserAuthenticated } from "@/function/list-user-autenticated";
 import { parseValueMoney, parseValuePercent } from "@/function/valuesConvert";
 import { totalmem } from "os";
 import React, { useContext, useEffect, useState } from 'react'
 import { IoMdHelpCircle } from "react-icons/io";
 
 const Resumo = () => {
-  const { filialAtiva } = useContext(AuthContext);
+  const { user, filialAtiva } = useContext(AuthContext);
   const [resumoFilial, setResumoFilial] = useState<any>([]);
   const [resumoFilialTotal, setResumoFilialTotal] = useState<any>([]);
+  const userAuthenticated = listUserAuthenticated();
+  const atuFiliais = user?.type === "S" ? filialAtiva : userAuthenticated?.filial;
 
   useEffect(() => {
     const getResumoFilial = async () => {
-      await apiphpmysql.get(`gerfilialfatudia/${filialAtiva}`)
+      await apiphpmysql.get(`gerfilialfatudia/${atuFiliais}`)
         .then((result) => {
           setResumoFilial(result.data);
         })
@@ -24,11 +27,11 @@ const Resumo = () => {
         })
     };
     getResumoFilial();
-  }, [filialAtiva]);
+  }, [atuFiliais]);
 
   useEffect(() => {
     const getResumoFilialTotal = async () => {
-      await apiphpmysql.get(`gerfilialfatutotal/${filialAtiva}`)
+      await apiphpmysql.get(`gerfilialfatutotal/${atuFiliais}`)
         .then((result) => {
           setResumoFilialTotal(result.data);
         })
@@ -37,7 +40,7 @@ const Resumo = () => {
         })
     };
     getResumoFilialTotal();
-  }, [filialAtiva]);
+  }, [atuFiliais]);
 
   return (
     <div className="animate__animated animate__fadeIn">

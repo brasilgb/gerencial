@@ -1,18 +1,21 @@
 import apiphpmysql from "@/app/api/apiphpmysql";
 import { STable, STd, STh, STr } from "@/components/Tables"
 import { AuthContext } from "@/contexts/auth";
+import { listUserAuthenticated } from "@/function/list-user-autenticated";
 import { parseValueMoney, parseValuePercent } from "@/function/valuesConvert";
 import React, { useContext, useEffect, useState } from 'react'
 
 const PerfAssociacao = () => {
-  const { filialAtiva } = useContext(AuthContext);
+  const { user, filialAtiva } = useContext(AuthContext);
   const [resumoGrafico, setResumoGrafico] = useState<any>([]);
   const [resumoFilialTotalAssoc, setResumoFilialTotalAssoc] = useState<any>([]);
   const [resumoFilialAssoc, setResumoFilialAssoc] = useState<any>([]);
+  const userAuthenticated = listUserAuthenticated();
+  const atuFiliais = user?.type === "S" ? filialAtiva : userAuthenticated?.filial;
   
   useEffect(() => {
     const getResumoFilialTotalAssoc = async () => {
-      await apiphpmysql.get(`gerfilialtotalassoc/${filialAtiva}`)
+      await apiphpmysql.get(`gerfilialtotalassoc/${atuFiliais}`)
         .then((result) => {
           setResumoFilialTotalAssoc(result.data);
         })
@@ -21,11 +24,11 @@ const PerfAssociacao = () => {
         })
     };
     getResumoFilialTotalAssoc();
-  }, [filialAtiva]);
+  }, [atuFiliais]);
   
   useEffect(() => {
     const getResumoFilialAssoc = async () => {
-      await apiphpmysql.get(`gerfilialassoc/${filialAtiva}`)
+      await apiphpmysql.get(`gerfilialassoc/${atuFiliais}`)
         .then((result) => {
           setResumoFilialAssoc(result.data);
         })
@@ -34,7 +37,7 @@ const PerfAssociacao = () => {
         })
     };
     getResumoFilialAssoc();
-  }, [filialAtiva]);
+  }, [atuFiliais]);
 
   return (
     <div className="animate__animated animate__fadeIn">

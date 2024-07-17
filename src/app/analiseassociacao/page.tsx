@@ -40,7 +40,7 @@ const Analiseassociacao = (props: Props) => {
 
     useEffect(() => {
         const getResumoFilialTotal = async () => {
-          await apiphpmysql.get(`gerfilialfatutotal/${filialAtiva}`)
+          await apiphpmysql.get(`gerfilialfatutotal/${atuFiliais}`)
             .then((result) => {
               setResumoFilialTotal(result.data);
             })
@@ -49,7 +49,7 @@ const Analiseassociacao = (props: Props) => {
             })
         };
         getResumoFilialTotal();
-      }, [filialAtiva]);
+      }, [atuFiliais]);
 
     return (
         <Fragment>
